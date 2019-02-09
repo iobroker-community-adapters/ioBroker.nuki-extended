@@ -1,0 +1,88 @@
+body, a {
+	font-family: Verdana, Tahoma !important;
+	margin: 0;
+}
+
+.hidden {display: none}
+
+#cd-timeline {
+    margin: 0 auto !important;
+    padding: 0 !important;
+}
+
+#cd-timeline::before {z-index: -1}
+#cd-timeline::after {
+    content: '';
+    height: 30px;
+    width: 30px;
+    background: #d7e4ed;
+    border-radius: 15px;
+    margin: 30px auto 0 auto;
+}
+
+.locks {
+	list-style-type: none;
+	background-color: #7f8c97;
+	margin-top: 0;
+	padding: 10px;
+	text-align: center;
+	border-bottom-right-radius: 3px;
+	border-bottom-left-radius: 3px;
+}
+
+.locks li {
+	display: inline;
+	padding-right: 5px;
+	cursor: pointer;
+	color: #fff;
+}
+
+.locks li:hover {
+	text-decoration: underline;
+}
+
+.title {
+    margin: 0;
+	padding: 10px;
+}
+
+.cd-name {
+	line-height: 60px;
+	margin: 0;
+	padding: 0 0 0 20px; 
+}
+
+.cd-description {
+	font-size: 10px !important;
+	padding: 0 0 10px 20px;
+	margin: 0 !important;
+}
+
+.cd-timeline-block {
+    margin: 2em 0 !important;
+}
+
+.cd-timeline-content {
+	min-height: 60px;
+	padding: 0 !important;
+}
+
+.cd-timeline-img {
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 60% 60%;
+}
+
+.action-UNLOCK {background-color: #75ce66;}
+.action-LOCK {background-color: #c03b44;}
+.action-UNLATCH {background-color: #f0ca45;}
+.action-LOCK_N_GO {background-color: #aa45f0;}
+.action-LOCK_N_GO_WITH_UNLATCH {background-color: #aa45f0;}
+.action-UNKNOWN1 {background-color: #aa45f0;}
+.action-UNKNOWN2 {background-color: #aa45f0;}
+
+.copyright {
+	text-align: center;
+    font-size: 11px;
+	margin: 50px 0 30px 0;
+}

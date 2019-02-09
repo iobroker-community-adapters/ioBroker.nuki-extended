@@ -1,0 +1,274 @@
+<html>
+<head>
+	<!-- these 4 files always have to be included -->
+	<link rel="stylesheet" type="text/css" href="../../lib/css/materialize.css">
+	<link rel="stylesheet" type="text/css" href="../../css/adapter.css"/>
+
+	<script type="text/javascript" src="../../lib/js/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="../../socket.io/socket.io.js"></script>
+
+	<!-- these files always have to be included -->
+	<script type="text/javascript" src="../../js/translate.js"></script>
+	<script type="text/javascript" src="../../lib/js/materialize.js"></script>
+	<script type="text/javascript" src="../../js/adapter-settings.js"></script>
+	
+	<script type="text/javascript" src="words.js"></script>
+	<script type="text/javascript">
+	<!--
+	var bridgeList = [];
+	
+	// load
+	function load(settings, onChange)
+	{
+		bridges = settings.bridges || [];
+		values2table('bridges', bridges, onChange);
+		setBridgeIds(bridges);
+		
+		_load(settings, onChange);
+	}
+	
+	// save
+	function save(callback)
+	{
+		var obj = {bridges: table2values('bridges')};
+		_save(callback, obj);
+	}
+	
+	// set bridge ids
+	function setBridgeIds(bridges)
+	{
+		bridges.forEach(function(bridge, i)
+		{
+			bridgeList.push(parseInt(bridge.bridge_id));
+			setBridgeId(i, bridge.bridge_id);
+		});
+	}
+	
+	// set bridge id
+	function setBridgeId(index, bridge_id)
+	{
+		var entry = $('#bridges [data-index="' + index + '"][data-name="bridge_id"]');
+		var element = $('#bridge_' + index + '-' + bridge_id);
+		
+		if (element.length == 0)
+			entry.after('<input class="values-input" style="width: 100%" type="text" value="' + bridge_id + '" id="bridge_' + index + '-' + bridge_id + '" disabled>');
+		else
+			element.text(bridge_id);
+	}
+	
+	// page loaded
+	var timer;
+	$(window).on('load', function()
+	{
+        $('.modal').modal(); // initialize all modals
+		
+		// set bridge id again when add button is pressed
+		$('body').on('click', '.table-button-add, .values-buttons', function()
+		{
+			clearTimeout(timer);
+			timer = setTimeout(function() {
+				setBridgeIds(table2values('bridges'));
+			}, 150);
+		});
+		
+		// discover bridges
+		$('.button-discover').on('click', function()
+		{
+			$('#modal').modal('open');
+			$('#log').html('');
+			_log(translateWord('message_action-connecting'));
+			
+			// timeout
+			var timeout = setTimeout(function() {_log(translateWord('message_error-noconnection'), 'error');}, 7000);
+			
+			// send request
+			sendTo(null, 'discover', null, function(res)
+			{
+				_log(translateWord('message_info-connected'));
+				_log(translateWord('message_action-getbridges'));
+				clearTimeout(timeout);
+				
+				if (res.result === true)
+				{
+					_log(translateWord('message_success-gotbridges').replace(/%count%/gi, res.bridges.length), 'success');
+					console.log(JSON.stringify(res.bridges));
+					
+					var bridges = table2values('bridges');
+					res.bridges.forEach(function(bridge)
+					{
+						if (bridgeList.indexOf(bridge.bridgeId) > -1)
+						{
+							_log(translateWord('message_info-duplbridge').replace(/%id%/gi, bridge.bridgeId), 'info');
+							return;
+						}
+						
+						bridges.push({
+							'bridge_id': bridge.bridgeId,
+							'bridge_ip': bridge.ip || '',
+							'bridge_port': bridge.port || 8080,
+							'bridge_callback': true,
+							'active': true
+						});
+					});
+					
+					values2table('bridges', bridges);
+					timer = setTimeout(function()
+					{
+						setBridgeIds(bridges);
+						_log(translateWord('message_info-finished'), 'success');
+						$('#port').trigger('change');
+					}, 150);
+				}
+				
+				// error
+				else
+					_log(translateWord('message_error-nobridges')+' ('+res.error+')', 'error');
+			});
+		});
+		
+	});
+	// -->
+	</script>
+	<script type="text/javascript" src="admin.js"></script>
+	<link rel="stylesheet" type="text/css" href="admin.css"/>
+	
+</head>
+<body>
+
+
+<div class="m adapter-container" id="settings">
+	
+	<!-- Modal Structure -->
+	<div id="modal" class="modal">
+		<div class="modal-content">
+			<div class="row">
+				<div class="col s12 m12">
+					<h2 class="translate">status</h2>
+					<ul id="log"></ul>
+				</div>
+			</div>
+			
+		</div>
+		<div class="modal-footer">
+			<a href="#!" class="btn waves-effect waves-green modal-close translate">button_closeModal</a>
+		</div>
+	</div>
+	
+	<div class="row">
+		
+		<!-- TABS -->
+		<div class="col s12">
+			<ul class="tabs">
+				<li class="tab col s3"><a class="translate active" href="#config">tab_config</a></li>
+				<li class="tab col s3"><a target="_blank" class="translate" href="https://github.com/Zefau/ioBroker.nuki#smart-home--alexa-integration-using-iobrokerjavascript">tab_alexa</a></li>
+				<li class="tab col s3"><a target="_blank" class="translate" href="https://github.com/Zefau/ioBroker.nuki#iobrokernuki">tab_info</a></li>
+			</ul>
+		</div>
+		
+		<!-- CONFIG -->
+		<div id="config" class="col s12 m12">
+			
+			<!-- WEB API -->
+			<div class="row" style="margin-bottom: 0">
+				<div class="col s12 m12">
+					<p class="translate title">web</p>
+				</div>
+			<div class="row box">
+				<div class="col s12 m12">
+					<div class="row" style="margin-bottom: 0">
+						<div class="col s12 m12">
+							<p class="subtitle translate">web_info</p>
+						</div>
+					</div>
+					<div class="row">
+						<div class="input-field col s6 m6">
+							<input class="value" id="api_token" type="text" />
+							<label for="api_token" class="translate">api_token</label>
+						</div>
+					</div>
+				
+				</div>
+			</div>
+			
+			<!-- BRIDGE API -->
+			<div class="row" style="margin-bottom: 0">
+				<div class="col s12 m12">
+					<p class="translate title">bridge</p>
+				</div>
+			</div>
+			<div class="row box">
+				<div class="col s12 m12">
+					<div class="row" style="margin-bottom: 0">
+						<div class="col s12 m12">
+							<p class="subtitle translate">bridge_info</p>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col s12" id="bridges">
+						
+							<a class="btn waves-effect waves-light table-button-add"><i class="material-icons">add_circle</i> <span class="translate">add_bridge</span></a>
+							<a class="btn waves-effect waves-light button-discover"><i class="material-icons">search</i> <span class="translate">discover_bridges</span></a>
+							
+							<div class="table-values-div">
+								<table class="table-values">
+									<thead>
+										<tr>
+											<th data-name="bridge_id" data-type="hidden" style="width: 10%" class="translate">bridge_id</th>
+											<th data-name="bridge_name" style="width: 20%" class="translate">bridge_name</th>
+											<th data-name="bridge_ip" style="width: 20%" class="translate">bridge_ip</th>
+											<th data-name="bridge_port" data-type="number" data-default="8080" style="width: 10%" class="translate">bridge_port</th>
+											<th data-name="bridge_token" style="width: 20%" class="translate">bridge_token</th>
+											<th data-name="bridge_callback" data-type="checkbox" data-default="true" style="width: 10%" class="translate">bridge_callback</th>
+											<th data-name="active" data-type="checkbox" data-default="true" style="width: 70px" class="translate">enabled</th>
+											<th data-buttons="delete" style="width: 120px"></th>
+										</tr>
+									</thead>
+								</table>
+							</div>
+						
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<!-- Other -->
+			<div class="row">
+				<div class="col s12 m12">
+					<div class="row" style="margin-bottom: 0">
+						<div class="col s12 m12">
+							<p class="translate title">other</p>
+						</div>
+					</div>
+					<div class="row box">
+						<div class="col s12 m12">
+							<div class="row">
+								<div class="col s6 m6">
+									<p class="subtitle translate">refresh_info</p>
+								</div>
+								<div class="col s6 m6">
+									<p class="subtitle translate">port_info</p>
+								</div>
+							</div>
+							<div class="row">
+								<div class="input-field col s6 m6">
+									<input class="value" id="refresh" type="number" placeholder="0" />
+									<label for="refresh" class="translate">refresh</label>
+								</div>
+								<div class="input-field col s6 m6">
+									<input class="value" id="port" type="number" placeholder="51988" />
+									<label for="port" class="translate">port</label>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		
+	</div>
+
+</div>
+
+</body>
+</html>

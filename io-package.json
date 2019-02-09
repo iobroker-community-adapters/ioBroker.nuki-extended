@@ -1,0 +1,43 @@
+{
+    "common": {
+        "name": "nuki2",
+        "version": "1.0.0",
+        "news": {
+            "1.0.0": {
+                "en": "reworked adapter (auto discovery in admin panel, support for multiple bridges)",
+                "de": "überarbeiteter Adapter (auto discovery und Unterstützung für mehrere Bridges)"
+            }
+        },
+		"title": "Nuki Smart Lock 2.0",
+        "titleLang": {
+            "en": "Nuki Smart Lock 2.0 - Keyless electronic door lock for smart access",
+            "de": "Nuki Smart Lock 2.0 - Elektronisches Türschloss für smarten Zutritt"
+        },
+        "desc": {
+            "en": "This adapter allows to control and monitor the Nuki Smart Lock",
+            "de": "Dieser Adapter ermöglicht die Steuerung und Überwachung des Nuki Smart Lock"
+        },
+        "authors": [
+            "Zefau <zefau@mailbox.org>"
+        ],
+		"license": "MIT",
+        "platform": "Javascript/Node.js",
+        "mode": "daemon",
+        "icon": "nuki-logo.png",
+        "extIcon": "https://raw.githubusercontent.com/Zefau/ioBroker.nuki2/master/admin/nuki-logo.png",
+        "keywords": ["nuki", "smart", "lock"],
+        "readme": "https://github.com/Zefau/ioBroker.nuki2/blob/master/README.md",
+        "docs": "README.md",
+        "loglevel": "info",
+        "type": "hardware",
+        "materialize": true,
+		"compact": true,
+        "enabled": true,
+		"localLink": "%web_protocol%://%ip%:%web_port%/nuki/index.html",
+        "messagebox": true,
+		"subscribe": "messagebox"
+    },
+    "native": {
+    },  
+    "objects": []
+}

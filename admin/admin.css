@@ -1,0 +1,40 @@
+/**
+ * Admin styles.
+ *
+ * @author Zefau <zefau@mailbox.org>
+ * @version 0.3.2
+ *
+ */
+.m select {display: block !important}
+.hidden {display: none}
+.box {
+	padding: 10px 5px 15px 5px !important;
+	margin: 0 !important;
+	background-color: #fff; /*#acd8fa*/
+}
+
+strong {font-weight: bold !important}
+h2 {
+	font-weight: bold !important;
+	font-size: 24px !important;
+}
+
+#log {
+	background-color: #fff;
+	padding: 10px 20px;
+}
+.log.error {color: #a00}
+.log.success {color: #0a0}
+.log.info {color: #00a}
+
+img {margin: 5px}
+a.active {font-weight: bold}
+p.title {margin-bottom: 0}
+p.subtitle {padding: 0}
+p.errorMessage {
+	padding: 0 5px;
+	margin: 0;
+	color: #c00;
+}
+
+.btn {margin: 15px 5px 10px 5px}
