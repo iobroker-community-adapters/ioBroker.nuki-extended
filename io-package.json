@@ -2,42 +2,69 @@
     "common": {
         "name": "nuki2",
         "version": "0.9.0",
+        "title": "Nuki Smart Lock 2.0",
+        "titleLang": {
+            "en": "Nuki Smart Lock 2.0",
+            "de": "Nuki Smart Lock 2.0",
+            "ru": "Nuki Smart Lock 2.0",
+            "pt": "Nuki Smart Lock 2.0",
+            "nl": "Nuki Smart Lock 2.0",
+            "fr": "Nuki Smart Lock 2.0",
+            "it": "Nuki Smart Lock 2.0",
+            "es": "Nuki Smart Lock 2.0",
+            "pl": "Nuki Smart Lock 2.0",
+            "zh-cn": "Nuki Smart Lock 2.0"
+        },
+        "desc": {
+            "en": "Control and monitor your Nuki Smart Lock with ioBroker",
+            "de": "Steuern und überwachen Sie Ihr Nuki Smart Lock mit ioBroker",
+            "ru": "Управляйте и контролируйте свой Nuki Smart Lock с ioBroker",
+            "pt": "Controle e monitore seu Nuki Smart Lock com o ioBroker",
+            "nl": "Bedien en bewaak uw Nuki Smart Lock met ioBroker",
+            "fr": "Contrôlez et surveillez votre Nuki Smart Lock avec ioBroker",
+            "it": "Controlla e monitora il tuo Nuki Smart Lock con ioBroker",
+            "es": "Controle y supervise su Nuki Smart Lock con ioBroker",
+            "pl": "Kontroluj i monitoruj swoją Nuki Smart Lock za pomocą ioBroker",
+            "zh-cn": "使用ioBroker控制和监控Nuki Smart Lock"
+        },
         "news": {
             "0.9.0": {
                 "en": "reworked adapter (auto discovery in admin panel, support for multiple bridges)",
-                "de": "überarbeiteter Adapter (auto discovery und Unterstützung für mehrere Bridges)"
+                "de": "überarbeiteter Adapter (auto discovery und Unterstützung für mehrere Bridges)",
+                "ru": "переработан адаптер (автообнаружение в админ-панели, поддержка нескольких мостов)",
+                "pt": "adaptador retrabalhado (descoberta automática no painel de administração, suporte para várias pontes)",
+                "nl": "herwerkte adapter (auto discovery in admin panel, ondersteuning voor meerdere bridges)",
+                "fr": "adaptateur retravaillé (découverte automatique dans le panneau d'administration, prise en charge de plusieurs ponts)",
+                "it": "adattatore rielaborato (individuazione automatica nel pannello di amministrazione, supporto per più bridge)",
+                "es": "Adaptador reelaborado (descubrimiento automático en el panel de administración, soporte para múltiples puentes)",
+                "pl": "przerobiony adapter (automatyczne wykrywanie w panelu administratora, obsługa wielu mostów)",
+                "zh-cn": "重新设计的适配器（管理面板中的自动发现，支持多个网桥）"
             }
-        },
-	"title": "Nuki Smart Lock 2.0",
-        "titleLang": {
-            "en": "Nuki Smart Lock 2.0 - Keyless electronic door lock for smart access",
-            "de": "Nuki Smart Lock 2.0 - Elektronisches Türschloss für smarten Zutritt"
-        },
-        "desc": {
-            "en": "This adapter allows to control and monitor the Nuki Smart Lock",
-            "de": "Dieser Adapter ermöglicht die Steuerung und Überwachung des Nuki Smart Lock"
         },
         "authors": [
             "Zefau <zefau@mailbox.org>"
         ],
-	"license": "MIT",
+        "license": "MIT",
         "platform": "Javascript/Node.js",
         "mode": "daemon",
         "icon": "nuki-logo.png",
         "extIcon": "https://raw.githubusercontent.com/Zefau/ioBroker.nuki2/master/admin/nuki-logo.png",
-        "keywords": ["nuki", "smart", "lock"],
+        "keywords": [
+            "nuki",
+            "smart",
+            "lock"
+        ],
         "readme": "https://github.com/Zefau/ioBroker.nuki2/blob/master/README.md",
         "docs": "README.md",
         "loglevel": "info",
         "type": "hardware",
         "materialize": true,
-	"compact": true,
+        "compact": true,
         "enabled": true,
-	"localLink": "%web_protocol%://%ip%:%web_port%/nuki/index.html",
+        "localLink": "%web_protocol%://%ip%:%web_port%/nuki/index.html",
         "messagebox": true,
-	"subscribe": "messagebox"
+        "subscribe": "messagebox"
     },
-    "native": {
-    },  
+    "native": {},
     "objects": []
 }

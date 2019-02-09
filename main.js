@@ -2,7 +2,7 @@
 const adapterName = require('./io-package.json').common.name;
 const utils = require(__dirname + '/lib/utils'); // Get common adapter utils
 
-const _request = require('request');
+const _request = require('request-promise');
 const _http = require('express')();
 const _parser = require('body-parser');
 const _ip = require('ip');
@@ -138,22 +138,35 @@ function startAdapter(options)
 			case 'discover':
 				adapter.log.info('Discovering bridges..');
 				
-				_request('https://api.nuki.io/discover/bridges', { json: true }, function(err, res, body)
-				{
-					if (err)
+				_request({ url: 'https://api.nuki.io/discover/bridges', json: true })
+					.then(function(res)
 					{
-						adapter.log.warn('Error while discovering Bridges: ' + err.message);
-						library.msg(msg.from, msg.command, {result: false, error: err.message}, msg.callback);
-					}
-					else
-					{
-						var discovered = body.bridges;
+						var discovered = res.bridges;
 						adapter.log.info('Bridges discovered: ' + discovered.length);
 						adapter.log.debug(JSON.stringify(discovered));
 						
 						library.msg(msg.from, msg.command, {result: true, bridges: discovered}, msg.callback);
-					}
-				});
+					})
+					.catch(function(err)
+					{
+						adapter.log.warn('Error while discovering bridges: ' + err.message);
+						library.msg(msg.from, msg.command, {result: false, error: err.message}, msg.callback);
+					});
+				break;
+			
+			case 'auth':
+				adapter.log.info('Authenticate bridge..');
+				
+				_request({ url: 'http://' + msg.message.bridgeIp + ':' + msg.message.bridgePort + '/auth', json: true })
+					.then(function(res)
+					{
+						library.msg(msg.from, msg.command, {result: true, token: res.token}, msg.callback);
+					})
+					.catch(function(err)
+					{
+						adapter.log.warn('Error while authenticating bridge: ' + err.message);
+						library.msg(msg.from, msg.command, {result: false, error: err.message}, msg.callback);
+					});
 				break;
 		}
 	});
