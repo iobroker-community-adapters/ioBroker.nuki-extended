@@ -1,5 +1,5 @@
 ![Logo](admin/nuki-logo.png)
-# ioBroker.nuki
+# ioBroker.nuki2
 This ioBroker adapter allows to control and monitor the [Nuki Smart Lock](https://nuki.io/de/) by using the [API of the Nuki Bridge](https://developer.nuki.io/page/nuki-bridge-http-api-170/4/#heading--introduction).
 
 [![NPM version](http://img.shields.io/npm/v/iobroker.nuki2.svg)](https://www.npmjs.com/package/iobroker.nuki2)
