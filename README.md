@@ -100,7 +100,7 @@ schedule('0 22 * * *', function()
 
     if (status == '3')
     {
-        setState('nuki.0.door__home_door.action', 2);
+        setState('nuki2.0.door__home_door.action', 2);
         msg += 'Locking door..'
     }
     else
