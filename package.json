@@ -1,7 +1,7 @@
 {
   "name": "iobroker.nuki2",
   "version": "0.9.0",
-  "description": "Nuki Smart Lock 2.0 - Keyless electronic door lock for smart access",
+  "description": "Nuki Smart Lock 2.0",
   "author": {
     "name": "Zefau",
     "email": "zefau@mailbox.org"
