@@ -3,8 +3,8 @@
 This ioBroker adapter allows to control and monitor the [Nuki Smart Lock](https://nuki.io/de/) by using the [API of the Nuki Bridge](https://developer.nuki.io/page/nuki-bridge-http-api-170/4/#heading--introduction).
 
 [![NPM version](http://img.shields.io/npm/v/iobroker.nuki2.svg)](https://www.npmjs.com/package/iobroker.nuki2)
-[![Travis CI](https://travis-ci.org/Zefau/ioBroker.nuki.svg?branch=master)](https://travis-ci.org/Zefau/ioBroker.nuki)
-[![Downloads](https://img.shields.io/npm/dm/iobroker.nuki.svg)](https://www.npmjs.com/package/iobroker.nuki)
+[![Travis CI](https://travis-ci.org/Zefau/ioBroker.nuki2.svg?branch=master)](https://travis-ci.org/Zefau/ioBroker.nuki2)
+[![Downloads](https://img.shields.io/npm/dm/iobroker.nuki2.svg)](https://www.npmjs.com/package/iobroker.nuki2)
 
 [![NPM](https://nodei.co/npm/iobroker.nuki.png?downloads=true)](https://nodei.co/npm/iobroker.nuki/)
 
@@ -88,7 +88,7 @@ Coming soon..
 
 ## Changelog
 
-### 1.0.0
+### 0.9.0
 * (zefau) Using both Bridge API and Web API
 * (zefau) Support for multiple bridges
 * (zefau) Support for discovery within admin panel
