@@ -34,6 +34,19 @@
 		_save(callback, obj);
 	}
 	
+	// get bridge ids
+	function getBridgeIds()
+	{
+		bridgeList = [];
+		var bridges = table2values('bridges');
+		bridges.forEach(function(bridge, i)
+		{
+			bridgeList.push(parseInt(bridge.bridge_id));
+		});
+		
+		return bridgeList;
+	}
+	
 	// set bridge ids
 	function setBridgeIds(bridges)
 	{
@@ -84,6 +97,10 @@
 			// send request
 			sendTo(null, 'discover', null, function(res)
 			{
+				// refresh bridge list
+				bridgeList = getBridgeIds();
+				
+				// get bridges
 				_log(translateWord('message_info-connected'));
 				_log(translateWord('message_action-getbridges'));
 				clearTimeout(timeout);
@@ -96,13 +113,37 @@
 					var bridges = table2values('bridges');
 					res.bridges.forEach(function(bridge)
 					{
+						// check for duplicates
 						if (bridgeList.indexOf(bridge.bridgeId) > -1)
 						{
 							_log(translateWord('message_info-duplbridge').replace(/%id%/gi, bridge.bridgeId), 'info');
 							return;
 						}
 						
+						// error with no IP is given (applies for software bridges)
+						if (bridge.ip === undefined)
+							_log(translateWord('message_error-bridgeip').replace(/%id%/gi, bridge.bridgeId), 'error');
+						
+						// IP is given, trigger bridge auth
+						else
+						{
+							_log(translateWord('message_action-bridgeauth').replace(/%id%/gi, bridge.bridgeId), 'info');
+							sendTo(null, 'auth', {bridgeIp: bridge.ip, bridgePort: bridge.port}, function(res)
+							{
+								if (res.result === true)
+								{
+									_log(translateWord('message_success-gottoken').replace(/%id%/gi, bridge.bridgeId).replace(/%ip%/gi, bridge.ip), 'success');
+									$('[data-id="' + bridge.bridgeId + '"] [data-name="bridge_token"]').val(res.token);
+								}
+								else
+									_log(translateWord('message_error-notoken').replace(/%id%/gi, bridge.bridgeId).replace(/%ip%/gi, bridge.ip), 'error');
+							});
+							
+						}
+						
+						// add to list
 						bridges.push({
+							'id': bridge.bridgeId,
 							'bridge_id': bridge.bridgeId,
 							'bridge_ip': bridge.ip || '',
 							'bridge_port': bridge.port || 8080,
@@ -115,7 +156,7 @@
 					timer = setTimeout(function()
 					{
 						setBridgeIds(bridges);
-						_log(translateWord('message_info-finished'), 'success');
+						//_log(translateWord('message_info-finished'), 'success');
 						$('#port').trigger('change');
 					}, 150);
 				}
@@ -160,8 +201,8 @@
 		<div class="col s12">
 			<ul class="tabs">
 				<li class="tab col s3"><a class="translate active" href="#config">tab_config</a></li>
-				<li class="tab col s3"><a target="_blank" class="translate" href="https://github.com/Zefau/ioBroker.nuki#smart-home--alexa-integration-using-iobrokerjavascript">tab_alexa</a></li>
-				<li class="tab col s3"><a target="_blank" class="translate" href="https://github.com/Zefau/ioBroker.nuki#iobrokernuki">tab_info</a></li>
+				<li class="tab col s3"><a target="_blank" class="translate" href="https://github.com/Zefau/ioBroker.nuki2#smart-home--alexa-integration-using-iobrokerjavascript">tab_alexa</a></li>
+				<li class="tab col s3"><a target="_blank" class="translate" href="https://github.com/Zefau/ioBroker.nuki2#iobrokernuki2">tab_info</a></li>
 			</ul>
 		</div>
 		
