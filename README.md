@@ -6,11 +6,7 @@ This ioBroker adapter allows to control and monitor the [Nuki Smart Lock](https:
 [![Travis CI](https://travis-ci.org/Zefau/ioBroker.nuki2.svg?branch=master)](https://travis-ci.org/Zefau/ioBroker.nuki2)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.nuki2.svg)](https://www.npmjs.com/package/iobroker.nuki2)
 
-[![NPM](https://nodei.co/npm/iobroker.nuki.png?downloads=true)](https://nodei.co/npm/iobroker.nuki/)
-
-**Requirements**
-* A Nuki Smart Lock (obviously) and a Nuki (hardware or software) Bridge.
-* A running instance of ioBroker.
+[![NPM](https://nodei.co/npm/iobroker.nuki2.png?downloads=true)](https://nodei.co/npm/iobroker.nuki2/)
 
 **Table of contents**
 1. [Installation](#installation)
@@ -45,7 +41,7 @@ Callbacks can also be set and removed manually from any browser with following U
 * list all Callbacks: ```http://<bridge_ip>:<bridge_port>/callback/list?token=<bridgeToken>```
 
 ### States
-If you successfully setup ioBroker.nuki, the following channels and states are created:
+If you successfully setup ioBroker.nuki2, the following channels and states are created:
 
 #### Bridges
 A bridge will be created as device with the name pattern ```bridge__<name of bridge>```. The following channels / states will be created in each bridge:
@@ -83,7 +79,38 @@ A lock will be created as device with the name pattern ```door__<name of door>``
 Some examples of a possible integration within your smart home.
 
 ### Lock door at 10pm in the evening
-Coming soon..
+```javascript
+var states = {
+    "0": "uncalibrated",
+    "1": "locked",
+    "2": "unlocking",
+    "3": "unlocked",
+    "4": "locking",
+    "5": "unlatched",
+    "6": "unlocked (lock n go)",
+    "7": "unlatching",
+    "254": "motor blocked",
+    "255": "undefined"
+};
+
+schedule('0 22 * * *', function()
+{
+    var status = (getState('nuki2.0.door__home_door.status.lockState').val);
+    var msg = 'Main Door door is ' + (states[status]) + '. ';
+
+    if (status == '3')
+    {
+        setState('nuki.0.door__home_door.action', 2);
+        msg += 'Locking door..'
+    }
+    else
+        msg += 'No action taken.'
+
+    log(msg, {m: 'Nuki', o: ['msg']});
+});
+```
+
+__Replace `nuki2.0.door__home_door.status.lockState` with the lockState of your lock!__ You may also customize the message via `msg`.
 
 
 ## Changelog
