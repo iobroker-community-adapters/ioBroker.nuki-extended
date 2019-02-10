@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "nuki2",
-        "version": "0.9.0",
+        "version": "0.9.1",
         "title": "Nuki Smart Lock 2.0",
         "titleLang": {
             "en": "Nuki Smart Lock 2.0",
@@ -28,6 +28,18 @@
             "zh-cn": "使用ioBroker控制和监控Nuki Smart Lock"
         },
         "news": {
+            "0.9.1": {
+                "en": "Added Web Interface to view logs",
+                "de": "Die Web-Schnittstelle zum anzeigen der Protokolle",
+                "ru": "Добавлен web-интерфейс для просмотра журналов",
+                "pt": "Adicionado Interface Web para exibir logs",
+                "nl": "Toegevoegd Web Interface om logboeken te bekijken",
+                "fr": "Ajout de l'Interface Web pour afficher les journaux",
+                "it": "Aggiunto Interfaccia Web per visualizzare i log",
+                "es": "Añadido Interfaz de Web para ver los registros de",
+                "pl": "Dodany web-interfejs do przeglądania czasopism",
+                "zh-cn": "加入网络的界面查看记录"
+            },
             "0.9.0": {
                 "en": "reworked adapter (auto discovery in admin panel, support for multiple bridges)",
                 "de": "überarbeiteter Adapter (auto discovery und Unterstützung für mehrere Bridges)",
