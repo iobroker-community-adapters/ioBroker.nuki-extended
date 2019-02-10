@@ -81,9 +81,9 @@ function startAdapter(options)
 		
 		if (state === 'action' && Number.isInteger(action) && action > 0 && object.ack !== true)
 		{
+			adapter.setState(node, 0, true);
 			adapter.getObject(node, function(err, node)
 			{
-				adapter.setState(node, 0, true);
 				var nukiId = node.common.nukiId || false;
 				if (err !== null || !nukiId)
 				{
@@ -190,7 +190,7 @@ function main()
 	
 	else
 	{
-		nuki = new Nuki();
+		nuki = Nuki;
 		nuki.apiKey = adapter.config.api_token;
 		setup.push('web_api');
 		
