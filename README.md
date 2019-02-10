@@ -115,11 +115,16 @@ __Replace `nuki2.0.door__home_door.status.lockState` with the lockState of your 
 
 ## Changelog
 
-### 0.9.0
+### 0.9.1 (2019-02-10)
+* (zefau) Added Web Interface to view logs
+
+### 0.9.0 (2019-02-09)
 * (zefau) Using both Bridge API and Web API
 * (zefau) Support for multiple bridges
 * (zefau) Support for discovery within admin panel
 * (zefau) Additional states for bridges and better separation between software / hardware bridge
+  * retrieve the basic and advanced configuration from your lock
+  * retrieve all users having access to your lock
 
 
 ## Credits
