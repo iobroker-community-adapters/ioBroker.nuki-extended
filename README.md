@@ -110,7 +110,7 @@ A lock will be created as device with the name pattern ```door__<name of door>``
 | config | keypadPaired | True if a keypad is paired with the smartlock |
 | config | homekitState | The homekit state<br>`{"0": 'UNAVAILABLE', "1": 'DISABLED', "2": 'ENABLED', "3": 'ENABLED & PAIRED'}` |
 | config | timezoneId | The timezone id |
-| config.advanced | Advanced Configuration of the lock |
+| config.advanced | - | Advanced Configuration of the lock |
 | config.advanced | totalDegrees | The absolute total position in degrees that has been reached during calibration |
 | config.advanced | unlockedPositionOffsetDegrees | Offset that alters the unlocked position |
 | config.advanced | lockedPositionOffsetDegrees | Offset that alters the locked position |
@@ -125,7 +125,6 @@ A lock will be created as device with the name pattern ```door__<name of door>``
 | config.advanced | unlatchDuration | Duration in seconds for holding the latch in unlatched position |
 | config.advanced | autoLockTimeout | Seconds until the smart lock relocks itself after it has been unlocked. No auto relock if value is 0. |
 | users | - | Users of the lock |
-| users._userName_ | - | User _userName_ |
 | users._userName_ | - | User _userName_ |
 | users._userName_ | name | Name of user |
 | users._userName_ | type | The type of the authorization<br>`{"0": 'APP', "1": 'BRIDGE', "2": 'FOB', "3": 'KEYPAD', "13": 'KEYPAD CODE', "14": 'Z-KEY', "15": 'VIRTUAL'}` |
