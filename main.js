@@ -13,7 +13,7 @@ const _ip = require('ip');
  */
 const Library = require(__dirname + '/lib/library.js');
 const Bridge = require('nuki-bridge-api');
-const Nuki = require('nuki-api');
+const Nuki = require('nuki-web-api');
 
 
 /*
