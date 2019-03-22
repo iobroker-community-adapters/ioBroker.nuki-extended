@@ -28,21 +28,26 @@
   "dependencies": {
     "nuki-web-api": "^1.0.1",
     "nuki-bridge-api": "^1.3.1",
-    "request": "^2.85.0",	
-    "request-promise": "^4.2.2",	
+    "request": "^2.85.0",
+    "request-promise": "^4.2.2",
     "express": "^4.16.3",
     "body-parser": "^1.18.2",
-    "ip": "^1.1.0"
+    "ip": "^1.1.0",
+    "@iobroker/adapter-core": "^1.0.3"
   },
   "devDependencies": {
     "gulp": "^4.0.0",
-    "mocha": "^5.2.0",
+    "mocha": "^6.0.2",
     "chai": "^4.2.0",
-    "axios": "^0.18.0"
+    "axios": "^0.18.0",
+    "@iobroker/testing": "^1.1.10"
   },
   "main": "main.js",
   "scripts": {
-    "test": "node node_modules/mocha/bin/mocha --exit"
+    "test": "npm run test:package && npm run test:unit",
+    "test:package": "mocha test/package --exit",
+    "test:unit": "mocha test/unit --exit",
+    "test:integration": "mocha test/integration --exit"
   },
   "bugs": {
     "url": "https://github.com/Zefau/ioBroker.nuki2/ioBroker.nuki2/issues"
