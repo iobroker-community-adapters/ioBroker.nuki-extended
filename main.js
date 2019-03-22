@@ -60,7 +60,7 @@ function startAdapter(options)
 		try
 		{
 			adapter.log.info('Adapter stopped und unloaded.');
-			if (refresh) clearInterval(refresh);
+			if (refresh) clearTimeout(refresh);
 			callback();
 		}
 		catch(e)
@@ -119,7 +119,7 @@ function startAdapter(options)
 				else if (nuki !== null)
 				{
 					adapter.log.debug('Action applied on Web API.');
-					nuki.setLock(nukiId, action).catch(function(e) {adapter.log.debug(e.message)});
+					nuki.setAction(nukiId, action).catch(function(e) {adapter.log.debug(e.message)});
 				}
 			});
 		}
@@ -190,8 +190,7 @@ function main()
 	
 	else
 	{
-		nuki = Nuki;
-		nuki.apiKey = adapter.config.api_token;
+		nuki = new Nuki(adapter.config.api_token);
 		setup.push('web_api');
 		
 		// get locks
@@ -250,13 +249,16 @@ function main()
 	// periodically refresh settings
 	if (adapter.config.refresh !== undefined && adapter.config.refresh >= 10)
 	{
-		refresh = setInterval(function()
+		refresh = setTimeout(function updater()
 		{
 			// update nuki
 			updateLocks();
 			
 			// update bridge
 			for (var key in bridges) {getBridgeInfo(bridges[key])}
+			
+			// set interval
+			setTimeout(updater(), Math.round(parseInt(adapter.config.refresh)*1000));
 			
 		}, Math.round(parseInt(adapter.config.refresh)*1000));
 	}
@@ -281,7 +283,7 @@ function main()
 			}
 			catch(e)
 			{
-				adapter.log.warn(e.message);
+				adapter.log.warn('main(): ' + e.message);
 			}
 		});
 		
@@ -300,26 +302,26 @@ function getBridgeInfo(bridge)
 	//adapter.log.info('Retrieving Nuki\'s from Bridge ' + bridge.data.bridge_ip + '..');
 	bridge.instance.list().then(function gotNukis(nukis)
 	{
-		nukis.forEach(function(nuki)
+		nukis.forEach(function(n)
 		{
 			// create Nuki
-			nuki.bridge = bridge.data.bridge_id !== '' ? bridge.data.bridge_id : undefined;
-			nuki.state = nuki.lastKnownState;
-			adapter.log.debug('getBridgeInfo(): ' + JSON.stringify(nuki));
-			updateLock(nuki);
+			n.bridge = bridge.data.bridge_id !== '' ? bridge.data.bridge_id : undefined;
+			n.state = n.lastKnownState;
+			adapter.log.debug('getBridgeInfo(): ' + JSON.stringify(n));
+			updateLock(n);
 			
 			// attach callback (NOTE: https is not supported according to API documentation)
 			if (bridge.data.bridge_callback)
 			{
-				nuki.nuki.addCallback(_ip.address(), adapter.config.port)
+				n.nuki.addCallback(_ip.address(), adapter.config.port)
 					.then(function(res)
 					{
-						adapter.log.info('Callback attached to Nuki ' + nuki.name + '.');
+						adapter.log.info('Callback attached to Nuki ' + n.name + '.');
 					})
 					.catch(function(e)
 					{
 						if (e.error.message === 'callback already added')
-							adapter.log.debug('Callback already attached to Nuki ' + nuki.name + '.');
+							adapter.log.debug('Callback already attached to Nuki ' + n.name + '.');
 						
 						else
 						{
@@ -333,7 +335,7 @@ function getBridgeInfo(bridge)
 	.catch(function(e)
 	{
 		adapter.log.warn('Connection settings for bridge incorret' + (bridge.data.bridge_name ? ' with name ' + bridge.data.bridge_name : (bridge.data.bridge_id ? ' with ID ' + bridge.data.bridge_id : (bridge.data.bridge_ip ? ' with ip ' + bridge.data.bridge_ip : ''))) + '! No connection established.');
-		adapter.log.debug(e.message);
+		adapter.log.debug('getBridgeInfo(): ' + e.message);
 	});
 	
 	// get bride info
@@ -378,7 +380,7 @@ function getBridgeInfo(bridge)
 			});
 		});
 	})
-	.catch(function(e) {adapter.log.debug(e.message)});
+	.catch(function(e) {adapter.log.debug('getBridgeInfo(): ' + e.message)});
 }
 
 
@@ -389,7 +391,7 @@ function getBridgeInfo(bridge)
 function updateLocks()
 {
 	//adapter.log.info('Retrieving Nuki\'s from Web API..');
-	nuki.getSmartLocks(true).then(function(smartlocks)
+	nuki.getSmartlocks().then(function(smartlocks)
 	{
 		smartlocks.forEach(function(smartlock)
 		{
@@ -400,7 +402,7 @@ function updateLocks()
 			updateLogs(smartlock.nukiId);
 			
 			// get users
-			nuki.getSmartLockUsers(smartlock.nukiId, true).then(function(users)
+			nuki.getSmartlockAuth(smartlock.nukiId).then(function(users)
 			{
 				users.forEach(function(user)
 				{
@@ -413,10 +415,10 @@ function updateLocks()
 					});
 				});
 				
-			}).catch(function(err) {adapter.log.warn('Error retrieving users: ' + err.message)});
+			}).catch(function(err) {adapter.log.warn('updateLocks(): Error retrieving users: ' + err.message)});
 		});
 		
-	}).catch(function(err) {adapter.log.warn('Error retrieving smartlocks: ' + err.message)});
+	}).catch(function(err) {adapter.log.warn('updateLocks(): Error retrieving smartlocks: ' + err.message)});
 }
 
 
@@ -487,7 +489,7 @@ function setInformation(node, payload)
 					status = status.substr(status.indexOf('.')+1);
 					tmp = tmp[index];
 				}
-				catch(e) {adapter.log.debug(e.message);}
+				catch(e) {adapter.log.debug('setInformation(): ' + e.message);}
 			}
 			
 			// write value
@@ -506,7 +508,7 @@ function setInformation(node, payload)
 		}
 		
 	}
-	catch(e) {adapter.log.warn(JSON.stringify(e.message))}
+	catch(e) {adapter.log.warn('setInformation(): ' + JSON.stringify(e.message))}
 }
 
 
@@ -517,11 +519,11 @@ function setInformation(node, payload)
 function updateLogs(nukiId)
 {
 	//adapter.log.info('Retrieving Nuki Log\'s from Web API..');
-	nuki.getLog(nukiId).then(function(log)
+	nuki.getSmartlockLogs(nukiId, {limit: 1000}).then(function(log)
 	{
 		library.set({node: doors[nukiId].device + '.logs', description: 'Logs / History of Nuki'}, JSON.stringify(log));
 		
-	}).catch(function(e) {adapter.log.debug(e.message)});
+	}).catch(function(e) {adapter.log.debug('updateLogs(): ' + e.message)});
 }
 
 
