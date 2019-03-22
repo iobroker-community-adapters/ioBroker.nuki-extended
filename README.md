@@ -183,6 +183,9 @@ __Replace `nuki2.0.door__home_door.status.lockState` with the lockState of your 
 
 ## Changelog
 
+### 0.9.4 / 0.9.5 (2019-03-22)
+* (zefau) Useless versions to fix incorrect configuration in `io-package.json`
+
 ### 0.9.3 (2019-03-22)
 * (zefau) Limited log retrieval to 1000 entries
 
