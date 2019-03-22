@@ -258,7 +258,7 @@ function main()
 			for (var key in bridges) {getBridgeInfo(bridges[key])}
 			
 			// set interval
-			setTimeout(updater(), Math.round(parseInt(adapter.config.refresh)*1000));
+			refresh = setTimeout(updater, Math.round(parseInt(adapter.config.refresh)*1000));
 			
 		}, Math.round(parseInt(adapter.config.refresh)*1000));
 	}
