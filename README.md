@@ -7,7 +7,8 @@ This ioBroker adapter allows to control and monitor the [Nuki Smart Lock](https:
 [![Downloads](https://img.shields.io/npm/dm/iobroker.nuki2.svg)](https://www.npmjs.com/package/iobroker.nuki2)
 [![Greenkeeper badge](https://badges.greenkeeper.io/Zefau/ioBroker.nuki2.svg)](https://greenkeeper.io/)
 
-[![NPM](https://nodei.co/npm/iobroker.nuki2.png?downloads=true)](https://nodei.co/npm/iobroker.nuki2/) [![Greenkeeper badge](https://badges.greenkeeper.io/Zefau/ioBroker.nuki2.svg)](https://greenkeeper.io/)
+[![NPM](https://nodei.co/npm/iobroker.nuki2.png?downloads=true)](https://nodei.co/npm/iobroker.nuki2/)
+
 
 **Table of contents**
 1. [Installation](#installation)
