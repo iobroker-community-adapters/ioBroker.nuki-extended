@@ -14,6 +14,9 @@ This ioBroker adapter allows to control and monitor the [Nuki Smart Lock](https:
    2. [Callback function](#callback-function)
    3. [States](#states)
 2. [Smart Home / Alexa integration using ioBroker.javascript](#smart-home--alexa-integration-using-iobrokerjavascript)
+   1. [Lock door at 10pm in the evening](#lock-door-at-10pm-in-the-evening)
+   2. [Let Alexa inform you about lock changes](#let-alexa-inform-you-about-lock-changes)
+   3. [Let Telegram inform you about lock changes](#let-telegram-inform-you-about-lock-changes)
 3. [Changelog](#changelog)
 4. [Credits](#credits)
 5. [Licence](#license)
@@ -183,7 +186,7 @@ __Replace `nuki2.0.door__home_door.status.lockState` with the lockState of your 
 ### Let Alexa inform you about lock changes
 This requires the ioBroker adapter ioBroker.alexa2 (https://github.com/Apollon77/ioBroker.alexa2).
 
-In order to use the voice output of Alexa we define a function say. Place the following function in a script in the "global" folder of ioBroker.javascript. IMPORTANT: Replace #YOUR ALEXA ID# (also replace #) with your Alexa ID. You may find the Alexa ID in the Objects tree of ioBroker ```alexa2.0.Echo-Devices```.
+In order to use the voice output of Alexa we define a function ```say```. Place the following function in a script in the "global" folder of ioBroker.javascript. IMPORTANT: Replace #YOUR ALEXA ID# (also replace #) with your Alexa ID. You may find the Alexa ID in the Objects tree of ioBroker ```alexa2.0.Echo-Devices```.
 
 ```javascript
 /**
@@ -229,6 +232,117 @@ on({id: '#LOCK STATE ID#', change: 'any'}, function(obj)
 {
     if (obj !== undefined && obj.state !== undefined)
       say('Door is ' + DOOR_STATES[obj.state.val] + '!')
+});
+```
+
+### Let Telegram inform you about lock changes
+This requires the ioBroker adapter ioBroker.telegram (https://github.com/iobroker-community-adapters/ioBroker.telegram).
+
+In order to use the message output of Telegram we define a function ```msg``` and ```messenger```. Place the following function in a script in the "global" folder of ioBroker.javascript:
+
+```javascript
+/**
+ * Send something via telegram.
+ * 
+ * @param       {string}        message         Message to print
+ * @param       {string|array}  receiver        Users to send the message to
+ * @return      void
+ * 
+ */
+function msg(message, receiver = 'ALL')
+{
+    if (receiver == 'ALL')
+        messenger(message);
+    
+    else
+    {
+        receiver = typeof receiver == 'string' ? [receiver] : receiver;
+        receiver.forEach(function(user)
+        {
+            messenger(message, user);
+        });
+    }
+}
+```
+
+```javascript
+/**
+ * Sends a message / text.
+ * 
+ * @param   {string}            content         Message to send
+ * @param   {string}            user            (optional) Specific user to send the message to (defaults to all registered users)
+ * @return  void
+ * 
+ */
+function messenger(content, user = '')
+{
+    var config = {
+        text: content,
+        parse_mode: 'HTML',
+        reply_markup: {
+            resize_keyboard: true,
+            one_time_keyboard: false
+        }
+    };
+    
+    sendTo('telegram', user ? Object.assign({user: user}, config) : config);
+}
+```
+You can use this function within ioBroker.javascript to send anything to Telegram via ```msg('Hello World')``` (to all users) or ```msg('Hello World', 'Zefau')``` (to specific users).
+
+Create a script in the "common" folder of ioBroker.javascript and add the following listener to it. IMPORTANT: Replace #LOCK STATE ID# (also replace #) with the state holding the lock status (e.g. ```nuki2.0.door__home_door.status.lockState```):
+
+```javascript
+const DOOR_STATES = {
+    "0": "uncalibrated",
+    "1": "locked",
+    "2": "unlocking",
+    "3": "unlocked",
+    "4": "locking",
+    "5": "unlatched",
+    "6": "unlocked (lock n go)",
+    "7": "unlatching",
+    "254": "motor blocked",
+    "255": "undefined"
+};
+
+/*
+ * LISTEN TO CHANGES TO LOCK STATE
+ * 
+ */
+on({id: '#LOCK STATE ID#', change: 'any'}, function(obj)
+{
+    if (obj !== undefined && obj.state !== undefined)
+      msg('Door is ' + DOOR_STATES[obj.state.val] + '!')
+});
+```
+
+NOTE: If you are using both the Alexa and the Telegram script, you may only define one listener for both actions:
+```javascript
+const DOOR_STATES = {
+    "0": "uncalibrated",
+    "1": "locked",
+    "2": "unlocking",
+    "3": "unlocked",
+    "4": "locking",
+    "5": "unlatched",
+    "6": "unlocked (lock n go)",
+    "7": "unlatching",
+    "254": "motor blocked",
+    "255": "undefined"
+};
+
+/*
+ * LISTEN TO CHANGES TO LOCK STATE
+ * 
+ */
+on({id: '#LOCK STATE ID#', change: 'any'}, function(obj)
+{
+    if (obj !== undefined && obj.state !== undefined)
+    {
+      say('Door is ' + DOOR_STATES[obj.state.val] + '!')
+      msg('Door is ' + DOOR_STATES[obj.state.val] + '!')
+    }
 });
 ```
 
