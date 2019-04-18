@@ -180,6 +180,59 @@ schedule('0 22 * * *', function()
 
 __Replace `nuki2.0.door__home_door.status.lockState` with the lockState of your lock!__ You may also customize the message via `msg`.
 
+### Let Alexa inform you about lock changes
+This requires the ioBroker adapter ioBroker.alexa2 (https://github.com/Apollon77/ioBroker.alexa2).
+
+In order to use the voice output of Alexa we define a function say. Place the following function in a script in the "global" folder of ioBroker.javascript. IMPORTANT: Replace #YOUR ALEXA ID# (also replace #) with your Alexa ID. You may find the Alexa ID in the Objects tree of ioBroker ```alexa2.0.Echo-Devices```.
+
+```javascript
+/**
+ * Say something with Alexa.
+ * 
+ * @param       {string}        message         Message to say
+ * @param       {string|array}  alexas          Alexa Device to say the voice message
+ * @return      void
+ * 
+ */
+function say(message, alexas = '#YOUR ALEXA ID#') // use alexas = ['#YOUR ALEXA ID 1#', '#YOUR ALEXA ID 2#'] for default voice output from multiple devices (also replace #)
+{
+    alexas = typeof alexas === 'string' ? [alexas] : alexas;
+    alexas.forEach(function(alexa)
+    {
+        setState('alexa2.0.Echo-Devices.' + alexa + '.Commands.speak', message);
+    });
+}
+```
+You can use this function within ioBroker.javascript to say a phrase using Alexa ```say('Hello World')``` or ```say('Hello World', ['#YOUR ALEXA ID 1#', '#YOUR ALEXA ID 2#'])``` for voice output from multiple devices.
+
+Create a script in the "common" folder of ioBroker.javascript and add the following listener to it. IMPORTANT: Replace #LOCK STATE ID# (also replace #) with the state holding the lock status (e.g. ```nuki2.0.door__home_door.status.lockState```):
+
+```javascript
+const DOOR_STATES = {
+    "0": "uncalibrated",
+    "1": "locked",
+    "2": "unlocking",
+    "3": "unlocked",
+    "4": "locking",
+    "5": "unlatched",
+    "6": "unlocked (lock n go)",
+    "7": "unlatching",
+    "254": "motor blocked",
+    "255": "undefined"
+};
+
+/*
+ * LISTEN TO CHANGES TO LOCK STATE
+ * 
+ */
+on({id: '#LOCK STATE ID#', change: 'any'}, function(obj)
+{
+    if (obj !== undefined && obj.state !== undefined)
+      say('Door is ' + DOOR_STATES[obj.state.val] + '!')
+});
+```
+
+
 
 ## Changelog
 
@@ -207,7 +260,7 @@ __Replace `nuki2.0.door__home_door.status.lockState` with the lockState of your 
 ## Credits
 Thanks to [@Mik13](https://github.com/Mik13) for the [Nuki Bridge API implementation](https://github.com/Mik13/nuki-bridge-api#nuki-bridge-api).
 
-   Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a> ([Essential Set](https://www.flaticon.com/packs/essential-set-2)) and <a href="https://www.freepik.com/" title="Freepik">Freepik</a> ([Doors](https://www.flaticon.com/packs/doors)) from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
+Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a> ([Essential Set](https://www.flaticon.com/packs/essential-set-2)) and <a href="https://www.freepik.com/" title="Freepik">Freepik</a> ([Doors](https://www.flaticon.com/packs/doors)) from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
 
 
 ## License
