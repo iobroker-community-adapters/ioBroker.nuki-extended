@@ -100,16 +100,34 @@
 				{
 					servConn.getChildren(servConn.namespace, function(err, _locks)
 					{
+						if (err !== null)
+						{
+							alert(err);
+							return;
+						}
+						
 						_locks.forEach(function(lock)
 						{
 							if (lock.indexOf('.door__') === -1) return; // only doors, no bridges
 							
 							servConn.getStates(states.map(function(state) {return lock+'.'+state}), function(err, _states)
 							{
+								if (err !== null)
+								{
+									alert(err);
+									return;
+								}
+								
 								if (_states !== null && _states !== undefined)
 								{
 									for (var key in _states)
 									{
+										if (!_states[key] || !_states[key].val)
+										{
+											alert('Please activate Nuki Web API to retrieve log entries!');
+											return;
+										}
+										
 										var content = _states[key].val;
 										var node = key.replace(lock+'.', '');
 										

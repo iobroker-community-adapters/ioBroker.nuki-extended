@@ -37,7 +37,7 @@ module.exports.LOCK = {
 		{'state': 'status.trigger', 'description': 'The state trigger', 'status': 'state.trigger', 'type': 'number', 'role': 'value', 'common': {'states': {"0": 'SYSTEM', "1": 'MANUAL', "2": 'BUTTON', "3": 'AUTOMATIC', "4": 'WEB', "5": 'APP'}}},
 		
 		// CONFIG
-		{'state': 'config', 'description': 'Configuration of %name%', 'role': 'channel'},
+		{'state': 'config', 'description': 'Configuration of %name%', 'status': 'state.mode', 'role': 'channel'},
 		{'state': 'config.gpsLatitude', 'description': 'Latitude', 'status': 'config.latitude', 'role': 'gps.latitude'},
 		{'state': 'config.gpsLongitude', 'description': 'Longitude', 'status': 'config.longitude', 'role': 'gps.longitude'},
 		{'state': 'config.autoUnlatch', 'description': 'True if the door should be unlatched on unlocking (knob)', 'status': 'config.autoUnlatch', 'role': 'indicator'},
@@ -56,7 +56,7 @@ module.exports.LOCK = {
 		{'state': 'config.timezoneId', 'description': 'The timezone id', 'status': 'config.timezoneId', 'role': 'value'},
 		
 		// ADVANCED CONFIG
-		{'state': 'config.advanced', 'description': 'Advanced Configuration of %name%', 'role': 'channel'},
+		{'state': 'config.advanced', 'description': 'Advanced Configuration of %name%', 'status': 'state.mode', 'role': 'channel'},
 		{'state': 'config.advanced.totalDegrees', 'description': 'The absolute total position in degrees that has been reached during calibration', 'status': 'advancedConfig.totalDegrees', 'role': 'value'},
 		{'state': 'config.advanced.unlockedPositionOffsetDegrees', 'description': 'Offset that alters the unlocked position', 'status': 'advancedConfig.unlockedPositionOffsetDegrees', 'role': 'value'},
 		{'state': 'config.advanced.lockedPositionOffsetDegrees', 'description': 'Offset that alters the locked position', 'status': 'advancedConfig.lockedPositionOffsetDegrees', 'role': 'value'},

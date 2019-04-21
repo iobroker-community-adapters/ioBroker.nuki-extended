@@ -186,7 +186,7 @@ function main()
 	 *
 	 */
 	if (!adapter.config.api_token)
-		adapter.log.info('No API token provided.');
+		adapter.log.info('No Nuki Web API token provided.');
 	
 	else
 	{
@@ -334,7 +334,7 @@ function getBridgeInfo(bridge)
 	})
 	.catch(function(e)
 	{
-		adapter.log.warn('Connection settings for bridge incorret' + (bridge.data.bridge_name ? ' with name ' + bridge.data.bridge_name : (bridge.data.bridge_id ? ' with ID ' + bridge.data.bridge_id : (bridge.data.bridge_ip ? ' with ip ' + bridge.data.bridge_ip : ''))) + '! No connection established.');
+		adapter.log.warn('Connection settings for bridge incorrect' + (bridge.data.bridge_name ? ' with name ' + bridge.data.bridge_name : (bridge.data.bridge_id ? ' with ID ' + bridge.data.bridge_id : (bridge.data.bridge_ip ? ' with ip ' + bridge.data.bridge_ip : ''))) + '! No connection established. See debug log for more details.');
 		adapter.log.debug('getBridgeInfo(): ' + e.message);
 	});
 	
