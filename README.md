@@ -353,6 +353,7 @@ on({id: '#LOCK STATE ID#', change: 'any'}, function(obj)
 ## Changelog
 
 ### 1.0.0 (2019-04-xx) [IN DEVELOPMENT]
+- support for hashed token for hardware bridges (see https://developer.nuki.io/page/nuki-bridge-http-api-180/4/#heading--token) in the [nuki-bridge-api](https://github.com/Mik13/nuki-bridge-api/pull/9)
 - bump to stable release
 
 ### 0.9.4 / 0.9.5 (2019-03-22)
