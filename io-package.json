@@ -73,6 +73,11 @@
         "materialize": true,
         "compact": true,
         "enabled": true,
+        "dependencies": [
+            {
+                "web": ">=1.7.1"
+            }
+	    ],
         "localLink": "%web_protocol%://%ip%:%web_port%/nuki2/index.html",
         "messagebox": true,
         "subscribe": "messagebox"
