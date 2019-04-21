@@ -1,6 +1,6 @@
 ![Logo](admin/nuki-logo.png)
 # ioBroker.nuki2
-This ioBroker adapter allows to control and monitor the [Nuki Smart Lock](https://nuki.io/de/) by using both the [Nuki Bridge API](https://developer.nuki.io/page/nuki-bridge-http-api-170/4/#heading--introduction) and the [Nuki Web API](https://developer.nuki.io/page/nuki-web-api-111/3/).
+This ioBroker adapter allows to control and monitor the [Nuki Smart Lock](https://nuki.io/de/) by using both the [Nuki Bridge API (v1.8.0,  06.03.2019)](https://developer.nuki.io/page/nuki-bridge-http-api-170/4/#heading--introduction) and the [Nuki Web API (v1.1.1, 30.08.2018)](https://developer.nuki.io/page/nuki-web-api-111/3/).
 
 ![Number of Installations](http://iobroker.live/badges/nuki2-installed.svg) ![Stable Version](http://iobroker.live/badges/nuki2-stable.svg) [![NPM version](http://img.shields.io/npm/v/iobroker.nuki2.svg)](https://www.npmjs.com/package/iobroker.nuki2)
 [![Travis CI](https://travis-ci.org/Zefau/ioBroker.nuki2.svg?branch=master)](https://travis-ci.org/Zefau/ioBroker.nuki2)
@@ -351,6 +351,9 @@ on({id: '#LOCK STATE ID#', change: 'any'}, function(obj)
 
 
 ## Changelog
+
+### 1.0.0 (2019-04-xx) [IN DEVELOPMENT]
+- bump to stable release
 
 ### 0.9.4 / 0.9.5 (2019-03-22)
 * (zefau) Useless versions to fix incorrect configuration in `io-package.json`
