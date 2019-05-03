@@ -38,10 +38,10 @@ How to get your bridges token:
     }```
 
 ### Callback function
-If the callback function is being used, the adapter will try to automatically set the callback on the Nuki bridge when the instance is being saved. All Nuki states will be kept up-to-date by the Nuki bridge while callback is activated.
+If the callback function is being used, the adapter will try to automatically set the callback on the Nuki bridge when the instance is being saved. Respective Nuki states ([see below](#locks-with-nuki-bridge-api)) will be kept up-to-date by the Nuki bridge while callback is activated.
 Callbacks can also be set and removed manually from any browser with following URLs:
 
-* set Callback: ```http://<bridge_ip>:<bridge_port>/callback/add?url=http%3A%2F%2F<host_ip>%3A<host_port>%2Fapi%2Fnuki&token=<bridgeToken>```
+* set Callback: ```http://<bridge_ip>:<bridge_port>/callback/add?url=http%3A%2F%2F<host_ip>%3A<host_port>%2Fnuki-api-bridge&token=<bridgeToken>```
 * remove Callback: ```http://<bridge_ip>:<bridge_port>/callback/remove?id=<callback_id>&token=<bridgeToken>```
 * list all Callbacks: ```http://<bridge_ip>:<bridge_port>/callback/list?token=<bridgeToken>```
 
@@ -75,10 +75,12 @@ A lock will be created as device with the name pattern ```door__<name of door>``
 | - | id | ID of the Nuki |
 | - | name | Name of the Nuki |
 | status | - | Current status of the lock |
-| status | batteryCritical | States critical battery level |
-| status | lockState | Current lock-state of the Nuki |
-| status | locked | Indication if door is locked |
-| status | refreshed | Timestamp of last update |
+| status | batteryCritical** | States critical battery level |
+| status | lockState** | Current lock-state of the Nuki |
+| status | locked** | Indication if door is locked |
+| status | refreshed** | Timestamp of last update |
+
+_** marked states will be updated on a Nuki action if callback is set_
 
 #### Locks (with Nuki Web API)
 A lock will be created as device with the name pattern ```door__<name of door>```. The following channels / states will be created in each lock (when using the Nuki Web API):
