@@ -19,15 +19,16 @@ const Nuki = require('nuki-web-api');
 /*
  * variables initiation
  */
-var adapter;
-var library;
+let adapter;
+let library;
 
 const LOCK = require(__dirname + '/LOCK.js');
 const NODES = require(__dirname + '/NODES.js');
 
-var setup = [];
-var nuki = null, bridges = {}, doors = {}, listeners = {};
-var callback = false, refresh = null;
+let setup = [];
+let nuki = null, bridges = {}, doors = {}, listeners = {};
+let callback = false, refresh = null;
+let callbacks = [];
 
 
 /*
@@ -76,15 +77,15 @@ function startAdapter(options)
 	adapter.on('stateChange', function(node, object)
 	{
 		adapter.log.debug('State of ' + node + ' has changed ' + JSON.stringify(object) + '.');
-		var state = node.substr(node.lastIndexOf('.')+1);
-		var action = object !== undefined && object !== null ? object.val : 0;
+		let state = node.substr(node.lastIndexOf('.')+1);
+		let action = object !== undefined && object !== null ? object.val : 0;
 		
 		if (state === 'action' && Number.isInteger(action) && action > 0 && object.ack !== true)
 		{
 			adapter.setState(node, 0, true);
 			adapter.getObject(node, function(err, node)
 			{
-				var nukiId = node.common.nukiId || false;
+				let nukiId = node.common.nukiId || false;
 				if (err !== null || !nukiId)
 				{
 					adapter.log.warn('Error triggering action -' + LOCK.ACTIONS[action] + '- on the Nuki: ' + err.message);
@@ -95,7 +96,7 @@ function startAdapter(options)
 				adapter.log.info('Triggered action -' + LOCK.ACTIONS[action] + '- on Nuki ' + doors[nukiId].name + '.');
 				
 				// try bridge API
-				var bridge = bridges[doors[nukiId].bridge] !== undefined ? bridges[doors[nukiId].bridge].instance : null;
+				let bridge = bridges[doors[nukiId].bridge] !== undefined ? bridges[doors[nukiId].bridge].instance : null;
 				if (bridge !== null)
 				{
 					adapter.log.debug('Action applied on Bridge API.');
@@ -141,7 +142,7 @@ function startAdapter(options)
 				_request({ url: 'https://api.nuki.io/discover/bridges', json: true })
 					.then(function(res)
 					{
-						var discovered = res.bridges;
+						let discovered = res.bridges;
 						adapter.log.info('Bridges discovered: ' + discovered.length);
 						adapter.log.debug(JSON.stringify(discovered));
 						
@@ -232,7 +233,7 @@ function main()
 				callback = true;
 			
 			// initialize Nuki Bridge class
-			var bridge = {
+			let bridge = {
 				'data': device,
 				'instance': new Bridge.Bridge(device.bridge_ip, device.bridge_port || 8080, device.bridge_token)
 			};
@@ -255,7 +256,7 @@ function main()
 			updateLocks();
 			
 			// update bridge
-			for (var key in bridges) {getBridgeInfo(bridges[key])}
+			for (let key in bridges) {getBridgeInfo(bridges[key])}
 			
 			// set interval
 			refresh = setTimeout(updater, Math.round(parseInt(adapter.config.refresh)*1000));
@@ -275,7 +276,7 @@ function main()
 		_http.post('/nuki-api-bridge', function(req, res)
 		{
 			adapter.log.debug('Received payload via callback: ' + JSON.stringify(req.body));
-			var payload;
+			let payload;
 			try
 			{
 				payload = req.body;
@@ -311,8 +312,12 @@ function getBridgeInfo(bridge)
 			updateLock(n);
 			
 			// attach callback (NOTE: https is not supported according to API documentation)
-			if (bridge.data.bridge_callback)
+			if (bridge.data.bridge_callback && callbacks.indexOf(n.bridge) === -1)
 			{
+				// remember that callback has been set on this bridge
+				callbacks.push(n.bridge);
+				
+				// set callback on bridge
 				n.nuki.addCallback(_ip.address(), adapter.config.port)
 					.then(function(res)
 					{
@@ -370,7 +375,7 @@ function getBridgeInfo(bridge)
 			bridges[bridge.data.bridge_id] = bridge;
 		
 		// create bridge
-		var device = 'bridge__' + (bridge.data.bridge_name ? bridge.data.bridge_name.replace(/ /gi, '_').toLowerCase() : bridge.data.bridge_id);
+		let device = 'bridge__' + (bridge.data.bridge_name ? bridge.data.bridge_name.replace(/ /gi, '_').toLowerCase() : bridge.data.bridge_id);
 		adapter.createDevice(device, {name: 'Bridge (' + bridge.data.bridge_ip + ')'}, {}, function(err)
 		{
 			NODES.BRIDGE.forEach(function(node)
@@ -406,7 +411,7 @@ function updateLocks()
 			{
 				users.forEach(function(user)
 				{
-					var nodePath = doors[smartlock.nukiId].device + '.users.' + user.name.toLowerCase().replace(/ /gi, '_');
+					let nodePath = doors[smartlock.nukiId].device + '.users.' + user.name.toLowerCase().replace(/ /gi, '_');
 					library.set({node: nodePath, description: 'User ' + user.name});
 					
 					NODES.LOCK.USERS.forEach(function(node)
@@ -429,7 +434,7 @@ function updateLocks()
 function updateLock(payload)
 {
 	// index Nuki
-	var device;
+	let device;
 	if (doors[payload.nukiId] === undefined)
 	{
 		device = 'door__' + payload.name.toLowerCase().replace(/ /gi, '_');
@@ -462,7 +467,7 @@ function updateLock(payload)
  */
 function setInformation(node, payload)
 {
-	var tmp = {}, status = '', index = '';
+	let tmp = {}, status = '', index = '';
 	try
 	{
 		// action
