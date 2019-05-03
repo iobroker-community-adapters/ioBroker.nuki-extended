@@ -362,7 +362,7 @@ on({id: '#LOCK STATE ID#', change: 'any'}, function(obj)
 - (zefau) added Web Adapter as dependency
 - (zefau) add Warning when opening web / log view but Nuki Web API has not been setup
 - (zefau) removed empty folders when Nuki Web API has not been setup 
-- (zefau) fixed an issue with Webhook when time for refreshing all settings was set
+- (zefau) fixed an issue with Webhook when time for refreshing all settings was set ([#9](https://github.com/Zefau/ioBroker.nuki2/issues/9))
 
 ### 0.9.4 / 0.9.5 (2019-03-22)
 * (zefau) Useless versions to fix incorrect configuration in `io-package.json`
