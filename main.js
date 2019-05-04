@@ -102,7 +102,7 @@ function startAdapter(options)
 					adapter.log.debug('Action applied on Bridge API.');
 					bridge.get(nukiId).then(function(device)
 					{
-						device.lockAction(action)
+						library.wait(250, device.lockAction(action)
 							.then(function()
 							{
 								adapter.log.info('Successfully triggered action -' + LOCK.ACTIONS[action] + '- on Nuki ' + doors[nukiId].name + '.');
@@ -112,7 +112,8 @@ function startAdapter(options)
 							{
 								adapter.log.warn('Error triggering action -' + LOCK.ACTIONS[action] + '- on Nuki ' + doors[nukiId].name + '. See debug log for details.');
 								adapter.log.debug(e.message);
-							});
+							})
+						);
 					});
 				}
 				
