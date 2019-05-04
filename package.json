@@ -1,30 +1,39 @@
 {
-  "name": "iobroker.nuki2",
-  "version": "0.9.6",
-  "description": "Nuki Smart Lock 2.0",
+  "_from": "https://github.com/Zefau/ioBroker.nuki2/tarball/master",
+  "_id": "iobroker.nuki2@0.9.6",
+  "_inBundle": false,
+  "_integrity": "sha512-BLyE5IQIbblhaGY7mMxTa5f++Dt9MAAJfFy36KqjMjP5OP8Fls8r/m73og+ffk8xWaO44NGZEOhC9eVtF2QCCQ==",
+  "_location": "/iobroker.nuki2",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "remote",
+    "raw": "https://github.com/Zefau/ioBroker.nuki2/tarball/master",
+    "rawSpec": "https://github.com/Zefau/ioBroker.nuki2/tarball/master",
+    "saveSpec": "https://github.com/Zefau/ioBroker.nuki2/tarball/master",
+    "fetchSpec": "https://github.com/Zefau/ioBroker.nuki2/tarball/master"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://github.com/Zefau/ioBroker.nuki2/tarball/master",
+  "_shasum": "41f385036f0fd4782c7d882bb0ac17b50627084b",
+  "_spec": "https://github.com/Zefau/ioBroker.nuki2/tarball/master",
+  "_where": "/root",
   "author": {
     "name": "Zefau",
     "email": "zefau@mailbox.org"
   },
+  "bugs": {
+    "url": "https://github.com/Zefau/ioBroker.nuki2/ioBroker.nuki2/issues"
+  },
+  "bundleDependencies": false,
   "contributors": [
     {
       "name": "Zefau",
       "email": "zefau@mailbox.org"
     }
   ],
-  "homepage": "https://github.com/Zefau/ioBroker.nuki2/ioBroker.nuki2",
-  "license": "MIT",
-  "keywords": [
-    "ioBroker",
-    "Nuki",
-    "Smart Lock",
-    "Smart Home",
-    "home automation"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Zefau/ioBroker.nuki2/ioBroker.nuki2"
-  },
   "dependencies": {
     "@iobroker/adapter-core": "^1.0.3",
     "body-parser": "^1.19.0",
@@ -35,22 +44,35 @@
     "request": "^2.88.0",
     "request-promise": "^4.2.4"
   },
+  "deprecated": false,
+  "description": "Nuki Smart Lock 2.0",
   "devDependencies": {
-    "gulp": "^4.0.1",
-    "mocha": "^6.1.4",
-    "chai": "^4.2.0",
+    "@iobroker/testing": "^1.2.0",
     "axios": "^0.18.0",
-    "@iobroker/testing": "^1.2.0"
+    "chai": "^4.2.0",
+    "gulp": "^4.0.1",
+    "mocha": "^6.1.4"
   },
+  "homepage": "https://github.com/Zefau/ioBroker.nuki2/ioBroker.nuki2",
+  "keywords": [
+    "ioBroker",
+    "Nuki",
+    "Smart Lock",
+    "Smart Home",
+    "home automation"
+  ],
+  "license": "MIT",
   "main": "main.js",
+  "name": "iobroker.nuki2",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Zefau/ioBroker.nuki2/ioBroker.nuki2"
+  },
   "scripts": {
     "test": "npm run test:package && npm run test:unit",
+    "test:integration": "mocha test/integration --exit",
     "test:package": "mocha test/package --exit",
-    "test:unit": "mocha test/unit --exit",
-    "test:integration": "mocha test/integration --exit"
+    "test:unit": "mocha test/unit --exit"
   },
-  "bugs": {
-    "url": "https://github.com/Zefau/ioBroker.nuki2/ioBroker.nuki2/issues"
-  },
-  "readmeFilename": "README.md"
+  "version": "0.9.7"
 }

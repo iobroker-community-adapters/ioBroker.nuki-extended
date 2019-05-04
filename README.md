@@ -358,9 +358,12 @@ on({id: '#LOCK STATE ID#', change: 'any'}, function(obj)
 - (zefau) support for hashed token for hardware bridges (see https://developer.nuki.io/page/nuki-bridge-http-api-180/4/#heading--token) in the [nuki-bridge-api](https://github.com/Mik13/nuki-bridge-api/pull/9)
 - (zefau) bump to stable release
 
+### 0.9.7 (2019-05-05)
+- (zefau) added verification if callback URL is already added on Nuki Bridge
+
 ### 0.9.6 (2019-05-03)
 - (zefau) added Web Adapter as dependency
-- (zefau) add Warning when opening web / log view but Nuki Web API has not been setup
+- (zefau) add warning when opening web / log view but Nuki Web API has not been setup
 - (zefau) removed empty folders when Nuki Web API has not been setup 
 - (zefau) fixed an issue with Webhook when time for refreshing all settings was set ([#9](https://github.com/Zefau/ioBroker.nuki2/issues/9))
 
