@@ -228,15 +228,15 @@ function main()
 				return;
 			}
 			
-			// check for enabled callback
-			if (device.bridge_callback)
-				callback = true;
-			
 			// initialize Nuki Bridge class
 			let bridge = {
 				'data': device,
 				'instance': new Bridge.Bridge(device.bridge_ip, device.bridge_port || 8080, device.bridge_token)
 			};
+			
+			// check for enabled callback
+			if (device.bridge_callback)
+				callback = true;
 			
 			// get bridge info
 			getBridgeInfo(bridge);
@@ -311,22 +311,33 @@ function getBridgeInfo(bridge)
 			adapter.log.debug('getBridgeInfo(): ' + JSON.stringify(n));
 			updateLock(n);
 			
-			// attach callback (NOTE: https is not supported according to API documentation)
-			if (bridge.data.bridge_callback && callbacks.indexOf(n.bridge) === -1)
+			// get current callback URLs
+			if (callbacks.length == 0)
 			{
-				// remember that callback has been set on this bridge
-				callbacks.push(n.bridge);
-				
+				n.nuki.getCallbacks().then(function(cbs)
+				{
+					cbs.forEach(function(cb)
+					{
+						callbacks.push(cb.url);
+					});
+				});
+			}
+			
+			// attach callback (NOTE: https is not supported according to API documentation)
+			let url = 'http://' + _ip.address() + ':' + adapter.config.port + '/nuki-api-bridge';
+			if (bridge.data.bridge_callback && callbacks.indexOf(url) === -1)
+			{
 				// set callback on bridge
 				n.nuki.addCallback(_ip.address(), adapter.config.port)
 					.then(function(res)
 					{
 						adapter.log.info('Callback attached to Nuki ' + n.name + '.');
+						callbacks.push(url); // remember URL
 					})
 					.catch(function(e)
 					{
 						if (e.error.message === 'callback already added')
-							adapter.log.debug('Callback already attached to Nuki ' + n.name + '.');
+							adapter.log.debug('Callback (with URL ' + url + ') already attached to Nuki ' + n.name + '.');
 						
 						else
 						{
@@ -335,6 +346,8 @@ function getBridgeInfo(bridge)
 						}
 					});
 			}
+			else
+				adapter.log.debug('Callback (with URL ' + url + ') already attached to Nuki ' + n.name + '.');
 		});
 	})
 	.catch(function(e)
