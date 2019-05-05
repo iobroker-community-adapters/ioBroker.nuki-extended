@@ -358,8 +358,11 @@ on({id: '#LOCK STATE ID#', change: 'any'}, function(obj)
 - (zefau) support for hashed token for hardware bridges (see https://developer.nuki.io/page/nuki-bridge-http-api-180/4/#heading--token) in the [nuki-bridge-api](https://github.com/Mik13/nuki-bridge-api/pull/9)
 - (zefau) bump to stable release
 
-### 0.9.8 (2019-05-xx) [IN DEVELOPMENT]
+### 0.9.8 (2019-05-05)
+Thanks to [@systemofapwne](https://github.com/systemofapwne) for testing and identifying quite a few bugs.
+
 - (zefau) added delay between requests / actions applied on the Nuki Bridge (to prevent overload, see [#9](https://github.com/Zefau/ioBroker.nuki2/issues/9))
+- (zefau) fixed an issue causing the adapter to crash when polling was enabled, but Web API is not used (see [#10](https://github.com/Zefau/ioBroker.nuki2/issues/10))
 
 ### 0.9.7 (2019-05-05)
 - (zefau) added verification if callback URL is already added on Nuki Bridge (see [#9](https://github.com/Zefau/ioBroker.nuki2/issues/9))
