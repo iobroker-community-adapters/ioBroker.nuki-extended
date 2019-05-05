@@ -358,6 +358,9 @@ on({id: '#LOCK STATE ID#', change: 'any'}, function(obj)
 - (zefau) support for hashed token for hardware bridges (see https://developer.nuki.io/page/nuki-bridge-http-api-180/4/#heading--token) in the [nuki-bridge-api](https://github.com/Mik13/nuki-bridge-api/pull/9)
 - (zefau) bump to stable release
 
+### 0.9.9 (2019-05-05)
+- (zefau) updated dependency of `nuki-bridge-api` to v1.4.0
+
 ### 0.9.8 (2019-05-05)
 Thanks to [@systemofapwne](https://github.com/systemofapwne) for testing and identifying quite a few bugs.
 
