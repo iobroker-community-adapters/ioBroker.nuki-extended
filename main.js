@@ -409,6 +409,8 @@ function getBridgeInfo(bridge)
  */
 function updateLocks()
 {
+	if (!nuki) return;
+	
 	//adapter.log.info('Retrieving Nuki\'s from Web API..');
 	nuki.getSmartlocks().then(function(smartlocks)
 	{
@@ -537,6 +539,8 @@ function setInformation(node, payload)
  */
 function updateLogs(nukiId)
 {
+	if (!nuki) return;
+	
 	//adapter.log.info('Retrieving Nuki Log\'s from Web API..');
 	nuki.getSmartlockLogs(nukiId, {limit: 1000}).then(function(log)
 	{
