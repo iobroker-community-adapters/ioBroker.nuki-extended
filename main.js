@@ -6,6 +6,7 @@ const _request = require('request-promise');
 const _http = require('express')();
 const _parser = require('body-parser');
 const _ip = require('ip');
+const _uuid = require('uuid/v5');
 
 
 /*
@@ -27,8 +28,8 @@ const NODES = require(__dirname + '/NODES.js');
 
 let setup = [];
 let nuki = null, bridges = {}, doors = {}, listeners = {};
-let callback = false, refresh = null;
-let callbacks = [];
+let listener = false, refresh = null;
+let callbacks = {};
 
 
 /*
@@ -77,9 +78,45 @@ function startAdapter(options)
 	adapter.on('stateChange', function(node, object)
 	{
 		adapter.log.debug('State of ' + node + ' has changed ' + JSON.stringify(object) + '.');
+		
 		let state = node.substr(node.lastIndexOf('.')+1);
 		let action = object !== undefined && object !== null ? object.val : 0;
 		
+		// apply an action on the callback
+		if (state === '_delete' && object && object.ack !== true)
+		{
+			adapter.getObject(node, function(err, node)
+			{
+				// get bridge ID and callback ID
+				let bridgeId = node.common.bridgeId || false;
+				let url = node.common.url || false;
+				
+				// error
+				if (err !== null || !bridgeId || !url || url == '{}')
+				{
+					adapter.log.warn('Error deleting callback with URL ' + url + ': ' + (err ? err.message : 'No Callback ID given!'));
+					return;
+				}
+				
+				// delete callback
+				url = JSON.parse(url);
+				let callbackIndex = callbacks[bridgeId].findIndex(cb => cb.url === url);
+				if (callbackIndex > -1)
+				{
+					callbacks[bridgeId][callbackIndex].remove().then(function()
+					{
+						adapter.log.info('Deleted callback with URL ' + url + '.');
+						
+						let path = bridges[bridgeId].data.path + '.callbacks.' + _uuid(url, _uuid.URL);
+						library.del(path, true);
+					});
+				}
+				else
+					adapter.log.warn('Error deleting callback with URL ' + url + ': ' + (err ? err.message : 'No Callback ID given!'));
+			});
+		}
+		
+		// apply an action on the door
 		if (state === 'action' && Number.isInteger(action) && action > 0 && object.ack !== true)
 		{
 			adapter.setState(node, 0, true);
@@ -88,11 +125,11 @@ function startAdapter(options)
 				let nukiId = node.common.nukiId || false;
 				if (err !== null || !nukiId)
 				{
-					adapter.log.warn('Error triggering action -' + LOCK.ACTIONS[action] + '- on the Nuki: ' + err.message);
+					adapter.log.warn('Error triggering action -' + LOCK.ACTIONS[action] + '- on the Nuki: ' + (err ? err.message : 'No Nuki ID given!'));
 					return;
 				}
 				
-				// retrieve Nuki and apply action
+				// log
 				adapter.log.info('Triggered action -' + LOCK.ACTIONS[action] + '- on Nuki ' + doors[nukiId].name + '.');
 				
 				// try bridge API
@@ -102,7 +139,7 @@ function startAdapter(options)
 					adapter.log.debug('Action applied on Bridge API.');
 					bridge.get(nukiId).then(function(device)
 					{
-						library.wait(250, device.lockAction(action)
+						device.lockAction(action)
 							.then(function()
 							{
 								adapter.log.info('Successfully triggered action -' + LOCK.ACTIONS[action] + '- on Nuki ' + doors[nukiId].name + '.');
@@ -112,8 +149,7 @@ function startAdapter(options)
 							{
 								adapter.log.warn('Error triggering action -' + LOCK.ACTIONS[action] + '- on Nuki ' + doors[nukiId].name + '. See debug log for details.');
 								adapter.log.debug(e.message);
-							})
-						);
+							});
 					});
 				}
 				
@@ -215,33 +251,84 @@ function main()
 		// go through bridges
 		adapter.config.bridges.forEach(function(device, i)
 		{
+			let bridge_ident = device.bridge_name ? 'with name ' + device.bridge_name : (device.bridge_id ? 'with ID ' + device.bridge_id : 'with index ' + i);
+			
 			// check if Bridge is enabled in settings
 			if (!device.active)
 			{
-				adapter.log.info('Bridge ' + (device.bridge_name ? 'with name ' + device.bridge_name : (device.bridge_id ? 'with ID ' + device.bridge_id : 'with index ' + i)) + ' is disabled in adapter settings. Thus, ignored.');
+				adapter.log.info('Bridge ' + bridge_ident + ' is disabled in adapter settings. Thus, ignored.');
 				return;
 			}
 			
 			// check if API settings are set
 			if (!device.bridge_ip || !device.bridge_token)
 			{
-				adapter.log.warn('IP or API token missing for bridge ' + (device.bridge_name ? 'with name ' + device.bridge_name : (device.bridge_id ? 'with ID ' + device.bridge_id : 'with index ' + i)) + '! Please go to settings and fill in IP and the API token first!');
+				adapter.log.warn('IP or API token missing for bridge ' + bridge_ident + '! Please go to settings and fill in IP and the API token first!');
 				return;
 			}
 			
 			// initialize Nuki Bridge class
+			device.path = 'bridge__' + (device.bridge_name ? device.bridge_name.replace(/ /gi, '_').toLowerCase() : device.bridge_id);
 			let bridge = {
 				'data': device,
 				'instance': new Bridge.Bridge(device.bridge_ip, device.bridge_port || 8080, device.bridge_token)
 			};
 			
+			// index bridge
+			bridges[bridge.data.bridge_id] = bridge;
+			
+			// get current callback URLs
+			callbacks[device.bridge_id] = [];
+			bridge.instance.getCallbacks().then(function(cbs)
+			{
+				// index URLs
+				callbacks[device.bridge_id] = [];
+				cbs.forEach(function(cb)
+				{
+					callbacks[device.bridge_id].push(cb);
+				});
+				
+				setCallbackNodes(device.bridge_id);
+			});
+			
 			// check for enabled callback
 			if (device.bridge_callback)
-				callback = true;
+			{
+				let url = 'http://' + _ip.address() + ':' + adapter.config.port + '/nuki-api-bridge';
+				listener = true;
+				
+				// attach callback
+				// NOTE: https is not supported according to API documentation
+				if (callbacks[device.bridge_id].findIndex(cb => cb.url === url) === -1)
+				{
+					// set callback on bridge
+					bridge.instance.addCallback(_ip.address(), adapter.config.port, false)
+						.then(function(res)
+						{
+							adapter.log.info('Callback (with URL ' + res.url + ') attached to Nuki Bridge ' + bridge_ident + '.');
+							callbacks[device.bridge_id].push(res);
+							setCallbackNodes(device.bridge_id);
+						})
+						.catch(function(e)
+						{
+							if (e.error.message === 'callback already added')
+								adapter.log.debug('Callback (with URL ' + url + ') already attached to Nuki Bridge ' + bridge_ident + '.');
+							
+							else
+							{
+								adapter.log.warn('Callback not attached due to error. See debug log for details.');
+								adapter.log.debug(e.message);
+							}
+						});
+				}
+				else
+					adapter.log.debug('Callback (with URL ' + url + ') already attached to Nuki Bridge ' + bridge_ident + '.');
+			}
 			
 			// get bridge info
 			getBridgeInfo(bridge);
 		});
+		
 	}
 	
 	// exit if no API is given
@@ -265,8 +352,9 @@ function main()
 		}, Math.round(parseInt(adapter.config.refresh)*1000));
 	}
 	
-	// attach server to listen (@see https://stackoverflow.com/questions/9304888/how-to-get-data-passed-from-a-form-in-express-node-js/38763341#38763341)
-	if (callback)
+	// attach server to listen
+	// @see https://stackoverflow.com/questions/9304888/how-to-get-data-passed-from-a-form-in-express-node-js/38763341#38763341
+	if (listener)
 	{
 		adapter.config.port = adapter.config.port !== undefined && adapter.config.port > 1024 && adapter.config.port <= 65535 ? adapter.config.port : 51988;
 		adapter.log.info('Listening for Nuki events on port ' + adapter.config.port + '.');
@@ -300,6 +388,20 @@ function main()
  */
 function getBridgeInfo(bridge)
 {
+	// get current callback URLs
+	callbacks[bridge.data.bridge_id] = [];
+	bridge.instance.getCallbacks().then(function(cbs)
+	{
+		// index URLs
+		callbacks[bridge.data.bridge_id] = [];
+		cbs.forEach(function(cb)
+		{
+			callbacks[bridge.data.bridge_id].push(cb);
+		});
+		
+		setCallbackNodes(bridge.data.bridge_id);
+	});
+	
 	// get nuki's
 	//adapter.log.info('Retrieving Nuki\'s from Bridge ' + bridge.data.bridge_ip + '..');
 	bridge.instance.list().then(function gotNukis(nukis)
@@ -309,46 +411,9 @@ function getBridgeInfo(bridge)
 			// create Nuki
 			n.bridge = bridge.data.bridge_id !== '' ? bridge.data.bridge_id : undefined;
 			n.state = n.lastKnownState;
+			
 			adapter.log.debug('getBridgeInfo(): ' + JSON.stringify(n));
 			updateLock(n);
-			
-			// get current callback URLs
-			if (callbacks.length == 0)
-			{
-				n.nuki.getCallbacks().then(function(cbs)
-				{
-					cbs.forEach(function(cb)
-					{
-						callbacks.push(cb.url);
-					});
-				});
-			}
-			
-			// attach callback (NOTE: https is not supported according to API documentation)
-			let url = 'http://' + _ip.address() + ':' + adapter.config.port + '/nuki-api-bridge';
-			if (bridge.data.bridge_callback && callbacks.indexOf(url) === -1)
-			{
-				// set callback on bridge
-				n.nuki.addCallback(_ip.address(), adapter.config.port)
-					.then(function(res)
-					{
-						adapter.log.info('Callback attached to Nuki ' + n.name + '.');
-						callbacks.push(url); // remember URL
-					})
-					.catch(function(e)
-					{
-						if (e.error.message === 'callback already added')
-							adapter.log.debug('Callback (with URL ' + url + ') already attached to Nuki ' + n.name + '.');
-						
-						else
-						{
-							adapter.log.warn('Callback not attached due to error. See debug log for details.');
-							adapter.log.debug(e.message);
-						}
-					});
-			}
-			else
-				adapter.log.debug('Callback (with URL ' + url + ') already attached to Nuki ' + n.name + '.');
 		});
 	})
 	.catch(function(e)
@@ -357,7 +422,7 @@ function getBridgeInfo(bridge)
 		adapter.log.debug('getBridgeInfo(): ' + e.message);
 	});
 	
-	// get bride info
+	// get bridge info
 	bridge.instance.info().then(function gotInfo(info)
 	{
 		//
@@ -384,22 +449,45 @@ function getBridgeInfo(bridge)
 			});
 		}
 		
-		// index bridge
-		if (bridges[bridge.data.bridge_id] === undefined)
-			bridges[bridge.data.bridge_id] = bridge;
-		
 		// create bridge
-		let device = 'bridge__' + (bridge.data.bridge_name ? bridge.data.bridge_name.replace(/ /gi, '_').toLowerCase() : bridge.data.bridge_id);
-		adapter.createDevice(device, {name: 'Bridge (' + bridge.data.bridge_ip + ')'}, {}, function(err)
+		adapter.createDevice(bridge.data.path, {name: 'Bridge '+(bridge.data.bridge_name ? bridge.data.bridge_name+' ' : '')+'(' + bridge.data.bridge_ip + ')'}, {}, function(err)
 		{
+			// create generell states
 			NODES.BRIDGE.forEach(function(node)
 			{
-				node.node = device + '.' + node.state;
+				node.node = bridge.data.path + '.' + node.state;
 				setInformation(node, info);
 			});
 		});
 	})
 	.catch(function(e) {adapter.log.debug('getBridgeInfo(): ' + e.message)});
+}
+
+
+/**
+ * Refresh Callbacks of the Nuki Bridge.
+ *
+ */
+function setCallbackNodes(bridgeId)
+{
+	let path = bridges[bridgeId].data.path + '.callbacks';
+	library.del(path, true, function()
+	{
+		let urls = [];
+		callbacks[bridgeId].forEach(function(cb)
+		{
+			let node = path + '.' + _uuid(cb.url, _uuid.URL);
+			urls.push(cb.url);
+			
+			library.set({node: node, description: 'Callback', role: 'channel'});
+			library.set({node: node + '.url', description: 'URL of the callback', role: 'text'}, cb.url);
+			library.set({node: node + '._delete', description: 'Delete the callback', role: 'button', common: {bridgeId: bridgeId, url: JSON.stringify(cb.url)}});
+			adapter.subscribeStates(node + '._delete'); // attach state listener
+		});
+		
+		library.set({node: path, description: 'Callbacks of the Bridge', role: 'channel'});
+		library.set({node: path + '.list', description: 'List of callbacks', role: 'json'}, JSON.stringify(urls));
+	});
 }
 
 
@@ -428,7 +516,7 @@ function updateLocks()
 				users.forEach(function(user)
 				{
 					let nodePath = doors[smartlock.nukiId].device + '.users.' + user.name.toLowerCase().replace(/ /gi, '_');
-					library.set({node: nodePath, description: 'User ' + user.name});
+					library.set({node: nodePath, description: 'User ' + user.name, role: 'channel'});
 					
 					NODES.LOCK.USERS.forEach(function(node)
 					{

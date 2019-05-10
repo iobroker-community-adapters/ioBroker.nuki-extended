@@ -39,10 +39,11 @@
     "body-parser": "^1.19.0",
     "express": "^4.16.4",
     "ip": "^1.1.5",
-    "nuki-bridge-api": "^1.4.0",
+    "nuki-bridge-api": "^1.5.0",
     "nuki-web-api": "^2.0.1",
     "request": "^2.88.0",
-    "request-promise": "^4.2.4"
+    "request-promise": "^4.2.4",
+    "uuid": "^3.3.2"
   },
   "deprecated": false,
   "description": "Nuki Smart Lock 2.0",
@@ -74,5 +75,5 @@
     "test:package": "mocha test/package --exit",
     "test:unit": "mocha test/unit --exit"
   },
-  "version": "0.9.9"
+  "version": "0.9.10"
 }
