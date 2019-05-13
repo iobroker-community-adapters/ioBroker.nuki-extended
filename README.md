@@ -358,6 +358,9 @@ on({id: '#LOCK STATE ID#', change: 'any'}, function(obj)
 - (zefau) support for hashed token for hardware bridges (see https://developer.nuki.io/page/nuki-bridge-http-api-180/4/#heading--token) in the [nuki-bridge-api](https://github.com/Mik13/nuki-bridge-api/pull/9)
 - (zefau) bump to stable release
 
+### 0.9.11 (2019-05-13)
+- (zefau) added info-message when setting refresh rate to less than 10 seconds
+
 ### 0.9.10 (2019-05-10)
 - (zefau) added states to reflect current callbacks set on the Nuki Bridge as well as action to delete the callbacks
 - (zefau) updated dependency of `nuki-bridge-api` to v1.5.0

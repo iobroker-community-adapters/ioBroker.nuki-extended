@@ -336,7 +336,16 @@ function main()
 	
 	
 	// periodically refresh settings
-	if (adapter.config.refresh !== undefined && adapter.config.refresh >= 10)
+	if (adapter.config.refresh === undefined || adapter.config.refresh === null)
+		adapter.config.refresh = 0;
+	
+	else if (adapter.config.refresh > 0 && adapter.config.refresh < 10)
+	{
+		adapter.log.info('Due to performance reasons, the refresh rate can not be set to less than 10 seconds. Using 10 seconds now.');
+		adapter.config.refresh = 10;
+	}
+	
+	if (adapter.config.refresh > 0)
 	{
 		refresh = setTimeout(function updater()
 		{
