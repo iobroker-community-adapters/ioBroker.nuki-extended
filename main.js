@@ -107,9 +107,15 @@ function startAdapter(options)
 					{
 						adapter.log.info('Deleted callback with URL ' + url + '.');
 						
+						// delete objects
 						let path = bridges[bridgeId].data.path + '.callbacks.' + _uuid(url, _uuid.URL);
 						library.del(path, true);
-					});
+						
+						// update callback list
+						callbacks[bridgeId].splice(callbackIndex, 1);
+						library._setValue(bridges[bridgeId].data.path + '.callbacks.list', JSON.stringify(callbacks[bridgeId]));
+					})
+					.catch(function(err) {adapter.log.debug('Error removing callback (' + JSON.stringify(err) + ')!')});
 				}
 				else
 					adapter.log.warn('Error deleting callback with URL ' + url + ': ' + (err ? err.message : 'No Callback ID given!'));
@@ -288,42 +294,43 @@ function main()
 					callbacks[device.bridge_id].push(cb);
 				});
 				
+				// create nodes
 				setCallbackNodes(device.bridge_id);
-			});
 			
-			// check for enabled callback
-			if (device.bridge_callback)
-			{
-				let url = 'http://' + _ip.address() + ':' + adapter.config.port + '/nuki-api-bridge';
-				listener = true;
-				
-				// attach callback
-				// NOTE: https is not supported according to API documentation
-				if (callbacks[device.bridge_id].findIndex(cb => cb.url === url) === -1)
+				// check for enabled callback
+				if (device.bridge_callback)
 				{
-					// set callback on bridge
-					bridge.instance.addCallback(_ip.address(), adapter.config.port, false)
-						.then(function(res)
-						{
-							adapter.log.info('Callback (with URL ' + res.url + ') attached to Nuki Bridge ' + bridge_ident + '.');
-							callbacks[device.bridge_id].push(res);
-							setCallbackNodes(device.bridge_id);
-						})
-						.catch(function(e)
-						{
-							if (e.error.message === 'callback already added')
-								adapter.log.debug('Callback (with URL ' + url + ') already attached to Nuki Bridge ' + bridge_ident + '.');
-							
-							else
+					let url = 'http://' + _ip.address() + ':' + adapter.config.port + '/nuki-api-bridge';
+					listener = true;
+					
+					// attach callback
+					// NOTE: https is not supported according to API documentation
+					if (callbacks[device.bridge_id].findIndex(cb => cb.url === url) === -1)
+					{
+						// set callback on bridge
+						bridge.instance.addCallback(_ip.address(), adapter.config.port, false)
+							.then(function(res)
 							{
-								adapter.log.warn('Callback not attached due to error. See debug log for details.');
-								adapter.log.debug(e.message);
-							}
-						});
+								adapter.log.info('Callback (with URL ' + res.url + ') attached to Nuki Bridge ' + bridge_ident + '.');
+								callbacks[device.bridge_id].push(res);
+								setCallbackNodes(device.bridge_id);
+							})
+							.catch(function(e)
+							{
+								if (e.error.message === 'callback already added')
+									adapter.log.debug('Callback (with URL ' + url + ') already attached to Nuki Bridge ' + bridge_ident + '.');
+								
+								else
+								{
+									adapter.log.warn('Callback not attached due to error. See debug log for details.');
+									adapter.log.debug(e.message);
+								}
+							});
+					}
+					else
+						adapter.log.debug('Callback (with URL ' + url + ') already attached to Nuki Bridge ' + bridge_ident + '.');
 				}
-				else
-					adapter.log.debug('Callback (with URL ' + url + ') already attached to Nuki Bridge ' + bridge_ident + '.');
-			}
+			});
 			
 			// get bridge info
 			getBridgeInfo(bridge);
