@@ -53,6 +53,11 @@ A bridge will be created as device with the name pattern ```bridge__<name of bri
 
 | Channel | State | Description |
 |:------- |:----- |:----------- |
+| callbacks | - | Callbacks of the Bridge |
+| callbacks | list | List of a callbacks (in JSON format) |
+| callbacks._\<UniqueIdOfCallback\>_ | - | Callback |
+| callbacks._\<UniqueIdOfCallback\>_ | \_delete | Action to remove callback from Bridge |
+| callbacks._\<UniqueIdOfCallback\>_ | url | URL of the callback |
 | - | \_connected | Flag indicating whether or not the bridge is connected to the Nuki server |
 | - | bridgeId | ID of the bridge / server |
 | - | bridgeIp | IP address of the bridge |
