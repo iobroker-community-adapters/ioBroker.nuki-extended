@@ -223,7 +223,7 @@ function startAdapter(options)
  * Main function
  *
  */
-function main()
+async function main()
 {
 	/*
 	 * WEB API
@@ -255,7 +255,7 @@ function main()
 		setup.push('bridge_api');
 		
 		// go through bridges
-		adapter.config.bridges.forEach(async function(device, i)
+		let listener = adapter.config.bridges.map(async function setupBridge(device, i)
 		{
 			let bridge_ident = device.bridge_name ? 'with name ' + device.bridge_name : (device.bridge_id ? 'with ID ' + device.bridge_id : 'with index ' + i);
 			
@@ -263,14 +263,14 @@ function main()
 			if (!device.active)
 			{
 				adapter.log.info('Bridge ' + bridge_ident + ' is disabled in adapter settings. Thus, ignored.');
-				return;
+				return false;
 			}
 			
 			// check if API settings are set
 			if (!device.bridge_ip || !device.bridge_token)
 			{
 				adapter.log.warn('IP or API token missing for bridge ' + bridge_ident + '! Please go to settings and fill in IP and the API token first!');
-				return;
+				return false;
 			}
 			
 			// initialize Nuki Bridge class
@@ -287,11 +287,13 @@ function main()
 			callbacks[device.bridge_id] = await getCallbacks(bridge);
 			setCallbackNodes(device.bridge_id);
 			
+			// get bridge info
+			getBridgeInfo(bridge);
+			
 			// check for enabled callback
 			if (device.bridge_callback)
 			{
 				let url = 'http://' + _ip.address() + ':' + adapter.config.port + '/nuki-api-bridge';
-				listener = true;
 				
 				// attach callback
 				// NOTE: https is not supported according to API documentation
@@ -319,12 +321,43 @@ function main()
 				}
 				else
 					adapter.log.debug('Callback (with URL ' + url + ') already attached to Nuki Bridge ' + bridge_ident + '.');
+				
+				return true;
 			}
-			
-			// get bridge info
-			getBridgeInfo(bridge);
 		});
 		
+		// attach server to listen
+		// @see https://stackoverflow.com/questions/9304888/how-to-get-data-passed-from-a-form-in-express-node-js/38763341#38763341
+		Promise.all(listener).then(function(values)
+		{
+			if (values.findIndex(el => el === true) > -1)
+			{
+				adapter.config.port = adapter.config.port !== undefined && adapter.config.port !== null && adapter.config.port != '' && adapter.config.port > 1024 && adapter.config.port <= 65535 ? adapter.config.port : 51988;
+				adapter.log.info('Listening for Nuki events on port ' + adapter.config.port + '.');
+				
+				_http.use(_parser.json());
+				_http.use(_parser.urlencoded({extended: false}));
+				
+				_http.post('/nuki-api-bridge', function(req, res)
+				{
+					adapter.log.debug('Received payload via callback: ' + JSON.stringify(req.body));
+					let payload;
+					try
+					{
+						payload = req.body;
+						updateLock({'nukiId': payload.nukiId, 'state': {'state': payload.state, 'batteryCritical': payload.batteryCritical, 'timestamp': new Date()}});
+					}
+					catch(e)
+					{
+						adapter.log.warn('main(): ' + e.message);
+					}
+				});
+				
+				_http.listen(adapter.config.port);
+			}
+			else
+				adapter.log.info('Not listening for Nuki events.');
+		});
 	}
 	
 	// exit if no API is given
@@ -355,34 +388,6 @@ function main()
 			refresh = setTimeout(updater, Math.round(parseInt(adapter.config.refresh)*1000));
 			
 		}, Math.round(parseInt(adapter.config.refresh)*1000));
-	}
-	
-	// attach server to listen
-	// @see https://stackoverflow.com/questions/9304888/how-to-get-data-passed-from-a-form-in-express-node-js/38763341#38763341
-	if (listener)
-	{
-		adapter.config.port = adapter.config.port !== undefined && adapter.config.port !== null && adapter.config.port != '' && adapter.config.port > 1024 && adapter.config.port <= 65535 ? adapter.config.port : 51988;
-		adapter.log.info('Listening for Nuki events on port ' + adapter.config.port + '.');
-		
-		_http.use(_parser.json());
-		_http.use(_parser.urlencoded({extended: false}));
-		
-		_http.post('/nuki-api-bridge', function(req, res)
-		{
-			adapter.log.debug('Received payload via callback: ' + JSON.stringify(req.body));
-			let payload;
-			try
-			{
-				payload = req.body;
-				updateLock({'nukiId': payload.nukiId, 'state': {'state': payload.state, 'batteryCritical': payload.batteryCritical, 'timestamp': new Date()}});
-			}
-			catch(e)
-			{
-				adapter.log.warn('main(): ' + e.message);
-			}
-		});
-		
-		_http.listen(adapter.config.port);
 	}
 }
 
