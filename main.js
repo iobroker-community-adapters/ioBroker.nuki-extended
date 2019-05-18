@@ -223,7 +223,7 @@ function startAdapter(options)
  * Main function
  *
  */
-async function main()
+function main()
 {
 	/*
 	 * WEB API
@@ -252,10 +252,11 @@ async function main()
 	
 	else
 	{
+		adapter.config.port = adapter.config.port !== undefined && adapter.config.port !== null && adapter.config.port != '' && adapter.config.port > 1024 && adapter.config.port <= 65535 ? adapter.config.port : 51988;
 		setup.push('bridge_api');
 		
 		// go through bridges
-		let listener = adapter.config.bridges.map(async function setupBridge(device, i)
+		let listener = adapter.config.bridges.map(function setupBridge(device, i)
 		{
 			let bridge_ident = device.bridge_name ? 'with name ' + device.bridge_name : (device.bridge_id ? 'with ID ' + device.bridge_id : 'with index ' + i);
 			
@@ -263,14 +264,14 @@ async function main()
 			if (!device.active)
 			{
 				adapter.log.info('Bridge ' + bridge_ident + ' is disabled in adapter settings. Thus, ignored.');
-				return false;
+				return Promise.resolve(false);
 			}
 			
 			// check if API settings are set
 			if (!device.bridge_ip || !device.bridge_token)
 			{
 				adapter.log.warn('IP or API token missing for bridge ' + bridge_ident + '! Please go to settings and fill in IP and the API token first!');
-				return false;
+				return Promise.resolve(false);
 			}
 			
 			// initialize Nuki Bridge class
@@ -283,56 +284,60 @@ async function main()
 			// index bridge
 			bridges[device.bridge_id] = bridge;
 			
-			// get current callback URLs
-			callbacks[device.bridge_id] = await getCallbacks(bridge);
-			setCallbackNodes(device.bridge_id);
-			
 			// get bridge info
 			getBridgeInfo(bridge);
 			
-			// check for enabled callback
-			if (device.bridge_callback)
+			// get current callback URLs
+			return bridge.instance.getCallbacks().then(function(cbs)
 			{
-				let url = 'http://' + _ip.address() + ':' + adapter.config.port + '/nuki-api-bridge';
+				callbacks[device.bridge_id] = cbs;
+				setCallbackNodes(device.bridge_id);
 				
-				// attach callback
-				// NOTE: https is not supported according to API documentation
-				if (callbacks[device.bridge_id].findIndex(cb => cb.url === url) === -1)
+				// check for enabled callback
+				if (device.bridge_callback)
 				{
-					// set callback on bridge
-					bridge.instance.addCallback(_ip.address(), adapter.config.port, false)
-						.then(function(res)
-						{
-							adapter.log.info('Callback (with URL ' + res.url + ') attached to Nuki Bridge ' + bridge_ident + '.');
-							callbacks[device.bridge_id].push(res);
-							setCallbackNodes(device.bridge_id);
-						})
-						.catch(function(e)
-						{
-							if (e.error.message === 'callback already added')
-								adapter.log.debug('Callback (with URL ' + url + ') already attached to Nuki Bridge ' + bridge_ident + '.');
-							
-							else
+					let url = 'http://' + _ip.address() + ':' + adapter.config.port + '/nuki-api-bridge';
+					
+					// attach callback
+					// NOTE: https is not supported according to API documentation
+					if (callbacks[device.bridge_id].findIndex(cb => cb.url === url) === -1)
+					{
+						// set callback on bridge
+						bridge.instance.addCallback(_ip.address(), adapter.config.port, false)
+							.then(function(res)
 							{
-								adapter.log.warn('Callback not attached due to error. See debug log for details.');
-								adapter.log.debug(e.message);
-							}
-						});
+								adapter.log.info('Callback (with URL ' + res.url + ') attached to Nuki Bridge ' + bridge_ident + '.');
+								callbacks[device.bridge_id].push(res);
+								setCallbackNodes(device.bridge_id);
+							})
+							.catch(function(e)
+							{
+								if (e.error.message === 'callback already added')
+									adapter.log.debug('Callback (with URL ' + url + ') already attached to Nuki Bridge ' + bridge_ident + '.');
+								
+								else
+								{
+									adapter.log.warn('Callback not attached due to error. See debug log for details.');
+									adapter.log.debug(e.message);
+								}
+							});
+					}
+					else
+						adapter.log.debug('Callback (with URL ' + url + ') already attached to Nuki Bridge ' + bridge_ident + '.');
+					
+					return Promise.resolve(true);
 				}
-				else
-					adapter.log.debug('Callback (with URL ' + url + ') already attached to Nuki Bridge ' + bridge_ident + '.');
 				
-				return true;
-			}
+				return Promise.resolve(false);
+			});
 		});
 		
-		// attach server to listen
+		// attach server to listen (only one listener for all Nuki Bridges)
 		// @see https://stackoverflow.com/questions/9304888/how-to-get-data-passed-from-a-form-in-express-node-js/38763341#38763341
 		Promise.all(listener).then(function(values)
 		{
 			if (values.findIndex(el => el === true) > -1)
 			{
-				adapter.config.port = adapter.config.port !== undefined && adapter.config.port !== null && adapter.config.port != '' && adapter.config.port > 1024 && adapter.config.port <= 65535 ? adapter.config.port : 51988;
 				adapter.log.info('Listening for Nuki events on port ' + adapter.config.port + '.');
 				
 				_http.use(_parser.json());
@@ -393,24 +398,17 @@ async function main()
 
 
 /**
- * Get callbacks from Nuki Bridge.
- *
- */
-function getCallbacks(bridge)
-{
-	return bridge.instance.getCallbacks();
-}
-
-
-/**
  * Retrieve Nuki's.
  *
  */
-async function getBridgeInfo(bridge)
+function getBridgeInfo(bridge)
 {
 	// get current callback URLs
-	callbacks[bridge.data.bridge_id] = await getCallbacks(bridge);
-	setCallbackNodes(bridge.data.bridge_id);
+	bridge.instance.getCallbacks().then(function(cbs)
+	{
+		callbacks[device.bridge_id] = cbs;
+		setCallbackNodes(bridge.data.bridge_id);
+	});
 	
 	// get nuki's
 	//adapter.log.info('Retrieving Nuki\'s from Bridge ' + bridge.data.bridge_ip + '..');
