@@ -1,10 +1,17 @@
 {
   "_from": "https://github.com/Zefau/ioBroker.nuki2/tarball/master",
-  "_id": "iobroker.nuki2@0.9.6",
+  "_id": "iobroker.nuki2@0.9.12",
   "_inBundle": false,
-  "_integrity": "sha512-BLyE5IQIbblhaGY7mMxTa5f++Dt9MAAJfFy36KqjMjP5OP8Fls8r/m73og+ffk8xWaO44NGZEOhC9eVtF2QCCQ==",
+  "_integrity": "sha512-WJmuKvMoUcfZqN6fe+QWwM5flTdOza/acoFYVIyNGO1IkNzJDhm8oVtTFFYvPlFA1DIry5Ad+5TSJU/K/LOitQ==",
   "_location": "/iobroker.nuki2",
-  "_phantomChildren": {},
+  "_phantomChildren": {
+    "bluebird": "3.5.4",
+    "body-parser": "1.19.0",
+    "express": "4.16.4",
+    "request": "2.88.0",
+    "request-promise": "4.2.4",
+    "url-parse": "1.4.7"
+  },
   "_requested": {
     "type": "remote",
     "raw": "https://github.com/Zefau/ioBroker.nuki2/tarball/master",
@@ -17,7 +24,7 @@
     "/"
   ],
   "_resolved": "https://github.com/Zefau/ioBroker.nuki2/tarball/master",
-  "_shasum": "41f385036f0fd4782c7d882bb0ac17b50627084b",
+  "_shasum": "d5585826ae79a16ee7eaa01b0583fb238e1898b1",
   "_spec": "https://github.com/Zefau/ioBroker.nuki2/tarball/master",
   "_where": "/root",
   "author": {
@@ -48,7 +55,7 @@
   "deprecated": false,
   "description": "Nuki Smart Lock 2.0",
   "devDependencies": {
-    "@iobroker/testing": "^1.2.0",
+    "@iobroker/testing": "^1.2.5",
     "axios": "^0.18.0",
     "chai": "^4.2.0",
     "gulp": "^4.0.1",
