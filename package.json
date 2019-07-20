@@ -44,7 +44,7 @@
   "dependencies": {
     "@iobroker/adapter-core": "^1.0.3",
     "body-parser": "^1.19.0",
-    "express": "^4.16.4",
+    "express": "^4.17.1",
     "ip": "^1.1.5",
     "nuki-bridge-api": "^1.5.0",
     "nuki-web-api": "^2.0.1",
@@ -59,7 +59,7 @@
     "axios": "^0.19.0",
     "chai": "^4.2.0",
     "gulp": "^4.0.1",
-    "mocha": "^6.1.4"
+    "mocha": "^6.2.0"
   },
   "homepage": "https://github.com/Zefau/ioBroker.nuki2/ioBroker.nuki2",
   "keywords": [
@@ -82,5 +82,5 @@
     "test:package": "mocha test/package --exit",
     "test:unit": "mocha test/unit --exit"
   },
-  "version": "0.9.12"
+  "version": "0.9.13"
 }

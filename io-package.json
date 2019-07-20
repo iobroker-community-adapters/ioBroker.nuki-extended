@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "nuki2",
-        "version": "0.9.12",
+        "version": "0.9.13",
         "title": "Nuki Smart Lock 2.0",
         "titleLang": {
             "en": "Nuki Smart Lock 2.0",
