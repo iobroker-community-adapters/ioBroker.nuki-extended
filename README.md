@@ -354,9 +354,8 @@ on({id: '#LOCK STATE ID#', change: 'any'}, function(obj)
 
 ## Changelog
 
-### 1.0.0 (2019-05-xx) [IN DEVELOPMENT]
-- (Zefau) support for hashed token for hardware bridges (see https://developer.nuki.io/page/nuki-bridge-http-api-180/4/#heading--token) in the [nuki-bridge-api](https://github.com/Mik13/nuki-bridge-api/pull/9)
-- (Zefau) bump to stable release
+### 1.0.0 (2019-08-03)
+- (Zefau) bump to stable release (no changes)
 
 ### 0.9.13 (2019-07-20)
 - (Zefau) updated dependencies to fix security vulnerabilities in depending packages

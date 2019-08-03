@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "nuki2",
-        "version": "0.9.13",
+        "version": "1.0.0",
         "title": "Nuki Smart Lock 2.0",
         "titleLang": {
             "en": "Nuki Smart Lock 2.0",
@@ -28,6 +28,9 @@
             "zh-cn": "使用ioBroker控制和监控Nuki Smart Lock"
         },
         "news": {
+            "1.0.0": {
+				"en": "bump to stable release (no changes)"
+			},
             "0.9.1": {
                 "en": "Added Web Interface to view logs",
                 "de": "Die Web-Schnittstelle zum anzeigen der Protokolle",
