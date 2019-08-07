@@ -26,20 +26,23 @@ This ioBroker adapter allows to control and monitor the [Nuki Smart Lock](https:
 
 ## Installation
 ### Get a API token
-How to get your bridges token:
+How to get your hardware bridge token (does not work for software bridges):
 
-1. Call ```http://<bridge_ip>:<bridge_port>/auth``` from any browser in your network
-2. The bridge turns on its LED
-2. Press the button of the bridge within 30 seconds
-3. Result of the browser call should be something like this: ```
+1. Call ```http://<bridge_ip>:<bridge_port>/auth``` from any browser in your network. The bridge turns on its LED.
+2. Press the button of the bridge within 30 seconds.
+3. Result of the browser call should be something like this:
+   ```
     {
-    "token": “token123”,
+    "token": "token123",
     "success": true
-    }```
+    }
+   ```
+4. Use the generated token in the Nuki2 adapter.
 
-### Callback function
-If the callback function is being used, the adapter will try to automatically set the callback on the Nuki bridge when the instance is being saved. Respective Nuki states ([see below](#locks-with-nuki-bridge-api)) will be kept up-to-date by the Nuki bridge while callback is activated.
-Callbacks can also be set and removed manually from any browser with following URLs:
+### Manually set callback (optionally)
+If the callback function is being used, the adapter will automatically set the callback on the Nuki bridge when the instance is being saved. Respective Nuki states ([see below](#locks-with-nuki-bridge-api)) will be kept up-to-date by the Nuki bridge while callback is activated.
+
+Callbacks can also be set and removed __manually__ from any browser with following URLs:
 
 * set Callback: ```http://<bridge_ip>:<bridge_port>/callback/add?url=http%3A%2F%2F<host_ip>%3A<host_port>%2Fnuki-api-bridge&token=<bridgeToken>```
 * remove Callback: ```http://<bridge_ip>:<bridge_port>/callback/remove?id=<callback_id>&token=<bridgeToken>```
