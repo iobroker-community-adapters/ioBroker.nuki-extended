@@ -32,6 +32,8 @@
     "status": "Dziennik stanu",
     "tab_alexa": "Integracja z Alexą",
     "tab_config": "Konfiguracja",
+    "tab_config_bridge": "Przednia Konfiguracji Нуки ",
+    "tab_config_nuki": "Konfiguracji Sieci Нуки ",
     "tab_info": "Informacja",
     "web": "Ustawienia połączenia z Nuki Smart Locks (opcjonalnie)",
     "web_info": "Ustawienia połączenia dla Nuki Smart Locks (przy użyciu <a href='https://developer.nuki.io/page/nuki-web-api-111/3/'> oficjalnego interfejsu internetowego Nuki </a>). "

@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "nuki2",
-        "version": "1.0.0",
+        "version": "1.0.1",
         "title": "Nuki Smart Lock 2.0",
         "titleLang": {
             "en": "Nuki Smart Lock 2.0",
@@ -28,9 +28,30 @@
             "zh-cn": "使用ioBroker控制和监控Nuki Smart Lock"
         },
         "news": {
+            "1.0.1": {
+                "en": "Performance improvements",
+                "de": "Performance-Verbesserungen",
+                "ru": "Улучшения производительности ",
+                "pt": "Melhorias de desempenho",
+                "nl": "Performance verbeteringen",
+                "fr": "Des améliorations de performances",
+                "it": "Miglioramenti delle prestazioni",
+                "es": "Mejoras de rendimiento",
+                "pl": "Ulepszenia wydajności ",
+                "zh-cn": "性能的改进"
+            },
             "1.0.0": {
-				"en": "bump to stable release (no changes)"
-			},
+                "en": "bump to stable release (no changes)",
+                "de": "bump zum stable-release (keine änderungen)",
+                "ru": "поднять до стабильного релиза (без изменений)",
+                "pt": "a colisão a versão estável (sem alterações)",
+                "nl": "bump naar 'stable' release (geen wijzigingen)",
+                "fr": "bump pour la version stable (aucun changement)",
+                "it": "bump del rilascio stabile (nessuna modifica)",
+                "es": "golpe a la versión estable (sin cambios)",
+                "pl": "podnieść do stabilnego wydania (bez zmian)",
+                "zh-cn": "碰到稳定释放(没有变化)"
+            },
             "0.9.1": {
                 "en": "Added Web Interface to view logs",
                 "de": "Die Web-Schnittstelle zum anzeigen der Protokolle",
@@ -80,7 +101,7 @@
             {
                 "web": ">=1.7.1"
             }
-	    ],
+        ],
         "localLink": "%web_protocol%://%ip%:%web_port%/nuki2/index.html",
         "messagebox": true,
         "subscribe": "messagebox"

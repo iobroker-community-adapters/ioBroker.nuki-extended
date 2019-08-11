@@ -32,6 +32,8 @@
     "status": "Registro di stato",
     "tab_alexa": "Integrazione con Alexa",
     "tab_config": "Configurazione",
+    "tab_config_bridge": "Configurazione Nuki Ponte",
+    "tab_config_nuki": "Configurazione Nuki Web",
     "tab_info": "Informazione",
     "web": "Impostazioni di connessione di Nuki Smart Locks (opzionale)",
     "web_info": "Le impostazioni di connessione per Nuki Smart Locks (utilizzando la <a href='https://developer.nuki.io/page/nuki-web-api-111/3/'> API Web Nuki ufficiale </a>). "

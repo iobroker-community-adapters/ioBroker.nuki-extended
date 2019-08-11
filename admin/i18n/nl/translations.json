@@ -32,6 +32,8 @@
     "status": "Statuslog",
     "tab_alexa": "Alexa-integratie",
     "tab_config": "Configuratie",
+    "tab_config_bridge": "Configuratie Nuki Brug",
+    "tab_config_nuki": "Configuratie Nuki Web",
     "tab_info": "Informatie",
     "web": "Verbindingsinstellingen van de Nuki Smart Locks (optioneel)",
     "web_info": "De verbindingsinstellingen voor de Nuki Smart Locks (met behulp van de <a href='https://developer.nuki.io/page/nuki-web-api-111/3/'> officiële Nuki Web API </a>). "

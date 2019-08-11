@@ -32,6 +32,8 @@
     "status": "状态日志",
     "tab_alexa": "Alexa整合",
     "tab_config": "组态",
+    "tab_config_bridge": "配置Nuki桥",
+    "tab_config_nuki": "配置Nuki网",
     "tab_info": "信息",
     "web": "Nuki Smart Locks的连接设置（可选）",
     "web_info": "Nuki Smart Locks的连接设置（使用<a href='https://developer.nuki.io/page/nuki-web-api-111/3/'>官方Nuki Web API </a>）。 "

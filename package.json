@@ -70,7 +70,7 @@
     "home automation"
   ],
   "license": "MIT",
-  "main": "main.js",
+  "main": "nuki2.js",
   "name": "iobroker.nuki2",
   "repository": {
     "type": "git",
@@ -82,5 +82,5 @@
     "test:package": "mocha test/package --exit",
     "test:unit": "mocha test/unit --exit"
   },
-  "version": "1.0.0"
+  "version": "1.0.1"
 }

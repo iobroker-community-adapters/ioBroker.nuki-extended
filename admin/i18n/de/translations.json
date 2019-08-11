@@ -32,6 +32,8 @@
     "status": "Status Protokollierung",
     "tab_alexa": "Alexa Integration",
     "tab_config": "Einstellungen",
+    "tab_config_bridge": "Konfiguration Nuki Bridge",
+    "tab_config_nuki": "Konfiguration Web Nuki",
     "tab_info": "Informationen",
     "web": "Verbindungseinstellungen der Nuki Smart Locks (optional)",
     "web_info": "Die Verbindungseinstellungen für die Nuki Smart Locks (mit der <a href='https://developer.nuki.io/page/nuki-web-api-111/3/'>offiziellen Nuki Web API</a>).<br /><br /><strong>Bitte auf <a href='https://web.nuki.io/de/#/admin/web-api'>web.nuki.io</a> einen API Token erstellen!</strong>"

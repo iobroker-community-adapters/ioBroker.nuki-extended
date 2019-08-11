@@ -32,6 +32,8 @@
     "status": "Journal d'état",
     "tab_alexa": "Intégration Alexa",
     "tab_config": "Configuration",
+    "tab_config_bridge": "Configuration Nuki Pont",
+    "tab_config_nuki": "Configuration Nuki Web",
     "tab_info": "Information",
     "web": "Paramètres de connexion des verrous intelligents Nuki (facultatif)",
     "web_info": "Les paramètres de connexion pour les verrous intelligents Nuki (à l'aide de la <a href='https://developer.nuki.io/page/nuki-web-api-111/3/'> API Web officielle de Nuki </a>). "

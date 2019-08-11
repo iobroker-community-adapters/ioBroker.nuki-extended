@@ -32,6 +32,8 @@
     "status": "Журнал состояния",
     "tab_alexa": "Интеграция Alexa",
     "tab_config": "конфигурация",
+    "tab_config_bridge": "Мост Конфигурации Нуки ",
+    "tab_config_nuki": "Конфигурации Веб-Нуки ",
     "tab_info": "Информация",
     "web": "Настройки подключения Nuki Smart Locks (опционально)",
     "web_info": "Параметры подключения для смарт-замков Nuki (с использованием <a href='https://developer.nuki.io/page/nuki-web-api-111/3/'> официального веб-API Nuki </a>). "
