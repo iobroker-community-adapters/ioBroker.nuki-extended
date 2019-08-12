@@ -301,18 +301,20 @@ function main()
 			// get current callback URLs
 			return bridge.instance.getCallbacks().then(function(cbs)
 			{
+				adapter.log.debug('Retrieved current callbacks from Nuki Bridge ' + bridge_ident + ': ' + JSON.stringify(cbs));
 				callbacks[device.bridge_id] = cbs;
 				setCallbackNodes(device.bridge_id);
 				
 				// check for enabled callback
 				if (device.bridge_callback)
 				{
-					let url = 'http://' + _ip.address() + ':' + adapter.config.port + '/nuki-api-bridge';
+					let url = 'http://' + _ip.address() + ':' + adapter.config.port + '/nuki-api-bridge'; // NOTE: https is not supported according to API documentation
 					
 					// attach callback
-					// NOTE: https is not supported according to API documentation
 					if (callbacks[device.bridge_id].findIndex(cb => cb.url === url) === -1)
 					{
+						adapter.log.debug('Adding callback with URL ' + url + ' to Nuki Bridge ' + bridge_ident + '.');
+						
 						// set callback on bridge
 						bridge.instance.addCallback(_ip.address(), adapter.config.port, false)
 							.then(function(res)
@@ -338,6 +340,8 @@ function main()
 					
 					return Promise.resolve(true);
 				}
+				else
+					adapter.log.debug('Callback deactivated for Nuki Bridge ' + bridge_ident + '.');
 				
 				return Promise.resolve(false);
 			});
