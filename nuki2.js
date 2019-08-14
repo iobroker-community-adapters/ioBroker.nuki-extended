@@ -236,6 +236,13 @@ function startAdapter(options)
  */
 function main()
 {
+	// Check port
+	if (adapter.config.callbackPort === undefined || adapter.config.callbackPort === null || adapter.config.callbackPort == '' || adapter.config.callbackPort < 10000 || adapter.config.callbackPort > 65535)
+	{
+		adapter.log.warn('The callback port (' + adapter.config.callbackPort + ') is incorrect. Provide a port between 10.000 and 65.535! Using port 51988 now.');
+		adapter.config.port = 51988;
+	}
+		
 	/*
 	 * WEB API
 	 *
@@ -263,7 +270,6 @@ function main()
 	
 	else
 	{
-		adapter.config.port = adapter.config.port !== undefined && adapter.config.port !== null && adapter.config.port != '' && adapter.config.port > 1024 && adapter.config.port <= 65535 ? adapter.config.port : 51988;
 		setup.push('bridge_api');
 		
 		// go through bridges
@@ -325,13 +331,13 @@ function main()
 							})
 							.catch(function(e)
 							{
-								if (e.error.message === 'callback already added')
+								if (e && e.error && e.error.message === 'callback already added')
 									adapter.log.debug('Callback (with URL ' + url + ') already attached to Nuki Bridge ' + bridge_ident + '.');
 								
 								else
 								{
 									adapter.log.warn('Callback not attached due to error. See debug log for details.');
-									adapter.log.debug(e.message);
+									adapter.log.debug(JSON.stringify(e));
 								}
 							});
 					}
@@ -577,8 +583,12 @@ function updateLock(payload)
 	if (payload.bridge !== undefined) doors[payload.nukiId].bridge = payload.bridge;
 	
 	// create / update device
+	adapter.log.debug('Updating lock ' + device + ' with payload: ' + JSON.stringify(payload));
 	adapter.createDevice(device, {name: payload.name}, {}, function(err)
 	{
+		if (err)
+			adapter.log.warn('updateLock(): Error setting smartlock: '+err.message);
+		
 		_NODES.LOCK.STATES.forEach(function(node)
 		{
 			node.node = device + '.' + node.state;

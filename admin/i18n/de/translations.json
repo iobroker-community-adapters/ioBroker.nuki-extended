@@ -26,7 +26,7 @@
     "message_success-gottoken": "Token für Brücke %id% mit IP-Adresse %ip% erfolgreich abgerufen.",
     "other": "Weitere Einstellungen",
     "port": "Port",
-    "port_info": "Port angeben, um Events zu abonnieren und Benachrichtigungen von Nuki zu empfangen.",
+    "port_info": "Port um Events zu abonnieren und Benachrichtigungen von Nuki zu empfangen. Port muss zwischen 10.000 und 65.535 liegen und sollte nur in Ausnahmefällen geändert werden!",
     "refresh": "Aktualisierung (in Sekunden)",
     "refresh_info": "Intervall in Sekunden, nach dem alle Einstellungen / Informationen aktualisiert werden. Wenn auf 0 eingestellt, werden Einstellungen nur bei einem Adapter-Start aktualisiert.",
     "status": "Status Protokollierung",
