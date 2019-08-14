@@ -237,7 +237,10 @@ function startAdapter(options)
 function main()
 {
 	// Check port
-	if (adapter.config.callbackPort === undefined || adapter.config.callbackPort === null || adapter.config.callbackPort == '' || adapter.config.callbackPort < 10000 || adapter.config.callbackPort > 65535)
+	if (adapter.config.callbackPort === undefined || adapter.config.callbackPort === null || adapter.config.callbackPort == '')
+		adapter.config.port = 51988;
+	
+	if (adapter.config.callbackPort < 10000 || adapter.config.callbackPort > 65535)
 	{
 		adapter.log.warn('The callback port (' + adapter.config.callbackPort + ') is incorrect. Provide a port between 10.000 and 65.535! Using port 51988 now.');
 		adapter.config.port = 51988;
@@ -411,7 +414,8 @@ function main()
 			//for (let key in bridges) {getBridgeInfo(bridges[key])} // do not update Nuki Bridges in refresh. This is done via callback.
 			
 			// set interval
-			refreshCycle = setTimeout(updater, Math.round(parseInt(adapter.config.refresh)*1000));
+			if (!unloaded)
+				refreshCycle = setTimeout(updater, Math.round(parseInt(adapter.config.refresh)*1000));
 			
 		}, Math.round(parseInt(adapter.config.refresh)*1000));
 	}
