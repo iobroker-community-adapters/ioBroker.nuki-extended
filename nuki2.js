@@ -47,7 +47,7 @@ function startAdapter(options)
 	});
 	
 	adapter = new utils.Adapter(options);
-	library = new Library(adapter, { nodes: _NODES });
+	library = new Library(adapter, { updatesInLog: true });
 	unloaded = false;
 	
 	/*
