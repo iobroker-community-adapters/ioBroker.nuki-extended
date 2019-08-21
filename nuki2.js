@@ -237,13 +237,13 @@ function startAdapter(options)
 function main()
 {
 	// Check port
-	if (adapter.config.callbackPort === undefined || adapter.config.callbackPort === null || adapter.config.callbackPort == '')
-		adapter.config.port = 51988;
+	if (!adapter.config.callbackPort)
+		adapter.config.callbackPort = 51988;
 	
 	if (adapter.config.callbackPort < 10000 || adapter.config.callbackPort > 65535)
 	{
 		adapter.log.warn('The callback port (' + adapter.config.callbackPort + ') is incorrect. Provide a port between 10.000 and 65.535! Using port 51988 now.');
-		adapter.config.port = 51988;
+		adapter.config.callbackPort = 51988;
 	}
 		
 	/*
@@ -269,7 +269,7 @@ function main()
 	 */
 	// check if bridges have been defined
 	if (adapter.config.bridges === undefined || adapter.config.bridges.length == 0)
-		library.terminate('No bridges have been defined in settings so far!');
+		return library.terminate('No bridges have been defined in settings so far!');
 	
 	else
 	{
@@ -317,7 +317,7 @@ function main()
 				// check for enabled callback
 				if (device.bridge_callback)
 				{
-					let url = 'http://' + _ip.address() + ':' + adapter.config.port + '/nuki-api-bridge'; // NOTE: https is not supported according to API documentation
+					let url = 'http://' + _ip.address() + ':' + adapter.config.callbackPort + '/nuki-api-bridge'; // NOTE: https is not supported according to API documentation
 					
 					// attach callback
 					if (callbacks[device.bridge_id].findIndex(cb => cb.url === url) === -1)
@@ -325,7 +325,7 @@ function main()
 						adapter.log.debug('Adding callback with URL ' + url + ' to Nuki Bridge ' + bridge_ident + '.');
 						
 						// set callback on bridge
-						bridge.instance.addCallback(_ip.address(), adapter.config.port, false)
+						bridge.instance.addCallback(_ip.address(), adapter.config.callbackPort, false)
 							.then(function(res)
 							{
 								adapter.log.info('Callback (with URL ' + res.url + ') attached to Nuki Bridge ' + bridge_ident + '.');
@@ -362,7 +362,7 @@ function main()
 		{
 			if (values.findIndex(el => el === true) > -1)
 			{
-				adapter.log.info('Listening for Nuki events on port ' + adapter.config.port + '.');
+				adapter.log.info('Listening for Nuki events on port ' + adapter.config.callbackPort + '.');
 				
 				_http.use(_parser.json());
 				_http.use(_parser.urlencoded({extended: false}));
@@ -382,7 +382,7 @@ function main()
 					}
 				});
 				
-				_http.listen(adapter.config.port);
+				_http.listen(adapter.config.callbackPort);
 			}
 			else
 				adapter.log.info('Not listening for Nuki events.');
@@ -391,10 +391,11 @@ function main()
 	
 	// exit if no API is given
 	if (setup.length == 0) return;
+	library.set(Library.CONNECTION, true);
 	
 	
 	// periodically refresh settings
-	if (adapter.config.refresh === undefined || adapter.config.refresh === null)
+	if (!adapter.config.refresh)
 		adapter.config.refresh = 0;
 	
 	else if (adapter.config.refresh > 0 && adapter.config.refresh < 10)
