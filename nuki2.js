@@ -489,10 +489,9 @@ function getBridgeInfo(bridge)
 		adapter.createDevice(bridge.data.path, {name: 'Bridge '+(bridge.data.bridge_name ? bridge.data.bridge_name+' ' : '')+'(' + bridge.data.bridge_ip + ')'}, {}, function(err)
 		{
 			// create generell states
-			_NODES.BRIDGE.forEach(function(node)
+			_NODES.BRIDGE.forEach(node =>
 			{
-				node.node = bridge.data.path + '.' + node.state;
-				setInformation(node, info);
+				setInformation(Object.assign({}, node, { node: bridge.data.path + '.' + node.state }), info);
 			});
 		});
 	})
@@ -557,7 +556,7 @@ function updateLocks()
 					
 					_NODES.LOCK.USERS.forEach(function(node)
 					{
-						setInformation(Object.assign({}, node, {node: nodePath + '.' + node.state}), user);
+						setInformation(Object.assign({}, node, { node: nodePath + '.' + node.state }), user);
 					});
 				});
 				
@@ -579,7 +578,7 @@ function updateLock(payload)
 	if (doors[payload.nukiId] === undefined)
 	{
 		device = 'door__' + payload.name.toLowerCase().replace(/ /gi, '_');
-		doors[payload.nukiId] = {device: device, name: payload.name, state: payload.state.state, bridge: null};
+		doors[payload.nukiId] = { device: device, name: payload.name, state: payload.state.state, bridge: null };
 	}
 	
 	// retrieve Nuki name
@@ -596,11 +595,9 @@ function updateLock(payload)
 		if (err)
 			adapter.log.warn('updateLock(): Error setting smartlock: '+err.message);
 		
-		_NODES.LOCK.STATES.forEach(function(node)
+		_NODES.LOCK.STATES.forEach(node =>
 		{
-			node.node = device + '.' + node.state;
-			node.description = node.description.replace(/%id%/gi, payload.nukiId).replace(/%name%/gi, payload.name);
-			setInformation(node, payload);
+			setInformation(Object.assign({}, node, { node: device + '.' + node.state, description: node.description.replace(/%id%/gi, payload.nukiId).replace(/%name%/gi, payload.name) }), payload);
 		});
 	});
 }
