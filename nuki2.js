@@ -375,9 +375,11 @@ function main()
 					{
 						payload = req.body;
 						updateLock({'nukiId': payload.nukiId, 'state': {'state': payload.state, 'batteryCritical': payload.batteryCritical, 'timestamp': new Date()}});
+						res.sendStatus(200);
 					}
 					catch(e)
 					{
+						res.sendStatus(500);
 						adapter.log.warn('main(): ' + e.message);
 					}
 				});
