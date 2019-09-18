@@ -411,10 +411,12 @@ function main()
 		refreshCycle = setTimeout(function updater()
 		{
 			// update nuki
-			updateLocks();
+			if (setup.indexOf('web_api') > -1)
+				updateLocks();
 			
 			// update bridge
-			//for (let key in bridges) {getBridgeInfo(bridges[key])} // do not update Nuki Bridges in refresh. This is done via callback.
+			if (setup.indexOf('bridge_api') > -1)
+				for (let key in bridges) {getBridgeInfo(bridges[key])} // https://forum.iobroker.net/topic/12819/neuer-adapter-nuki/124
 			
 			// set interval
 			if (!unloaded)
