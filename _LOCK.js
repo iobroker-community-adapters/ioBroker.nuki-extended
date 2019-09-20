@@ -1,5 +1,4 @@
-module.exports.STATES =
-{
+module.exports.STATES = {
 	"0": "UNCALIBRATED",
 	"1": "LOCKED",
 	"2": "UNLOCKING",
@@ -12,16 +11,6 @@ module.exports.STATES =
 	"255": "UNDEFINED"
 };
 
-module.exports.DOOR =
-{
-	"0": "UNAVAILABLE",
-	"1": "DEACTIVATED",
-	"2": "DOOR_CLOSED",
-	"3": "DOOR_OPENED",
-	"4": "DOOR_STATE_UNKNOWN",
-	"5": "CALIBRATING"
-};
-
 module.exports.ACTIONS =
 {
 	"0": "NO_ACTION",
@@ -30,6 +19,16 @@ module.exports.ACTIONS =
 	"3": "UNLATCH",
 	"4": "LOCK_N_GO",
 	"5": "LOCK_N_GO_WITH_UNLATCH"
+};
+
+module.exports.DOOR =
+{
+	"0": "UNAVAILABLE",
+	"1": "DEACTIVATED",
+	"2": "DOOR_CLOSED",
+	"3": "DOOR_OPENED",
+	"4": "DOOR_STATE_UNKNOWN",
+	"5": "CALIBRATING"
 };
 
 module.exports.BUTTON =

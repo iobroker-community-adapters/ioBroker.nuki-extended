@@ -1,9 +1,9 @@
 {
-  "_from": "https://github.com/Zefau/ioBroker.nuki2/tarball/master",
-  "_id": "iobroker.nuki2@0.9.12",
+  "_from": "https://github.com/Zefau/ioBroker.nuki-extended/tarball/master",
+  "_id": "iobroker.nuki-extended@0.9.12",
   "_inBundle": false,
   "_integrity": "sha512-WJmuKvMoUcfZqN6fe+QWwM5flTdOza/acoFYVIyNGO1IkNzJDhm8oVtTFFYvPlFA1DIry5Ad+5TSJU/K/LOitQ==",
-  "_location": "/iobroker.nuki2",
+  "_location": "/iobroker.nuki-extended",
   "_phantomChildren": {
     "bluebird": "3.5.4",
     "body-parser": "1.19.0",
@@ -14,25 +14,25 @@
   },
   "_requested": {
     "type": "remote",
-    "raw": "https://github.com/Zefau/ioBroker.nuki2/tarball/master",
-    "rawSpec": "https://github.com/Zefau/ioBroker.nuki2/tarball/master",
-    "saveSpec": "https://github.com/Zefau/ioBroker.nuki2/tarball/master",
-    "fetchSpec": "https://github.com/Zefau/ioBroker.nuki2/tarball/master"
+    "raw": "https://github.com/Zefau/ioBroker.nuki-extended/tarball/master",
+    "rawSpec": "https://github.com/Zefau/ioBroker.nuki-extended/tarball/master",
+    "saveSpec": "https://github.com/Zefau/ioBroker.nuki-extended/tarball/master",
+    "fetchSpec": "https://github.com/Zefau/ioBroker.nuki-extended/tarball/master"
   },
   "_requiredBy": [
     "#USER",
     "/"
   ],
-  "_resolved": "https://github.com/Zefau/ioBroker.nuki2/tarball/master",
+  "_resolved": "https://github.com/Zefau/ioBroker.nuki-extended/tarball/master",
   "_shasum": "d5585826ae79a16ee7eaa01b0583fb238e1898b1",
-  "_spec": "https://github.com/Zefau/ioBroker.nuki2/tarball/master",
+  "_spec": "https://github.com/Zefau/ioBroker.nuki-extended/tarball/master",
   "_where": "/root",
   "author": {
     "name": "Zefau",
     "email": "zefau@mailbox.org"
   },
   "bugs": {
-    "url": "https://github.com/Zefau/ioBroker.nuki2/ioBroker.nuki2/issues"
+    "url": "https://github.com/Zefau/ioBroker.nuki-extended/ioBroker.nuki-extended/issues"
   },
   "bundleDependencies": false,
   "contributors": [
@@ -47,7 +47,7 @@
     "express": "^4.17.1",
     "ip": "^1.1.5",
     "nuki-bridge-api": "^1.5.0",
-    "nuki-web-api": "^2.0.1",
+    "nuki-web-api": "^2.1.1",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
     "uuid": "^3.3.2"
@@ -61,7 +61,7 @@
     "gulp": "^4.0.1",
     "mocha": "^6.2.0"
   },
-  "homepage": "https://github.com/Zefau/ioBroker.nuki2/ioBroker.nuki2",
+  "homepage": "https://github.com/Zefau/ioBroker.nuki-extended/ioBroker.nuki-extended",
   "keywords": [
     "ioBroker",
     "Nuki",
@@ -70,11 +70,11 @@
     "home automation"
   ],
   "license": "MIT",
-  "main": "nuki2.js",
-  "name": "iobroker.nuki2",
+  "main": "nuki-extended.js",
+  "name": "iobroker.nuki-extended",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Zefau/ioBroker.nuki2/ioBroker.nuki2"
+    "url": "https://github.com/Zefau/ioBroker.nuki-extended/ioBroker.nuki-extended"
   },
   "scripts": {
     "test": "npm run test:package && npm run test:unit",
@@ -82,5 +82,5 @@
     "test:package": "mocha test/package --exit",
     "test:unit": "mocha test/unit --exit"
   },
-  "version": "1.0.4"
+  "version": "2.0.0"
 }

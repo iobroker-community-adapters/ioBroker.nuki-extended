@@ -1,12 +1,13 @@
-![Logo](admin/nuki-logo.png)
-# ioBroker.nuki2
+![Logo](admin/nuki-extended.png)
+# ioBroker.nuki-extended
 This ioBroker adapter allows to control and monitor the [Nuki Smart Lock](https://nuki.io/de/) by using both the [Nuki Bridge API (v1.8.0,  06.03.2019)](https://developer.nuki.io/page/nuki-bridge-http-api-170/4/#heading--introduction) and the [Nuki Web API (v1.1.1, 30.08.2018)](https://developer.nuki.io/page/nuki-web-api-111/3/).
 
-![Number of Installations](http://iobroker.live/badges/nuki2-installed.svg) ![Stable Version](http://iobroker.live/badges/nuki2-stable.svg) [![NPM version](http://img.shields.io/npm/v/iobroker.nuki2.svg)](https://www.npmjs.com/package/iobroker.nuki2)
-[![Travis CI](https://travis-ci.org/Zefau/ioBroker.nuki2.svg?branch=master)](https://travis-ci.org/Zefau/ioBroker.nuki2)
-[![Downloads](https://img.shields.io/npm/dm/iobroker.nuki2.svg)](https://www.npmjs.com/package/iobroker.nuki2)
+![Number of Installations](http://iobroker.live/badges/nuki-extended-installed.svg) ![Stable Version](http://iobroker.live/badges/nuki-extended-stable.svg) [![NPM version](http://img.shields.io/npm/v/iobroker.nuki-extended.svg)](https://www.npmjs.com/package/iobroker.nuki-extended)
+[![Travis CI](https://travis-ci.org/Zefau/ioBroker.nuki-extended.svg?branch=master)](https://travis-ci.org/Zefau/ioBroker.nuki-extended)
+[![Downloads](https://img.shields.io/npm/dm/iobroker.nuki-extended.svg)](https://www.npmjs.com/package/iobroker.nuki-extended)
+[![Greenkeeper badge](https://badges.greenkeeper.io/Zefau/ioBroker.nuki-extended.svg)](https://greenkeeper.io/)
 
-[![NPM](https://nodei.co/npm/iobroker.nuki2.png?downloads=true)](https://nodei.co/npm/iobroker.nuki2/)
+[![NPM](https://nodei.co/npm/iobroker.nuki-extended.png?downloads=true)](https://nodei.co/npm/iobroker.nuki-extended/)
 
 
 **Table of contents**
@@ -36,7 +37,7 @@ How to get your hardware bridge token (does not work for software bridges):
     "success": true
     }
    ```
-4. Use the generated token in the Nuki2 adapter.
+4. Use the generated token in the nuki-extended adapter.
 
 ### Manually set callback (optionally)
 If the callback function is being used, the adapter will automatically set the callback on the Nuki bridge when the instance is being saved. Respective Nuki states ([see below](#locks-with-nuki-bridge-api)) will be kept up-to-date by the Nuki bridge while callback is activated.
@@ -48,7 +49,7 @@ Callbacks can also be set and removed __manually__ from any browser with followi
 * list all Callbacks: ```http://<bridge_ip>:<bridge_port>/callback/list?token=<bridgeToken>```
 
 ### States
-If you successfully setup ioBroker.nuki2, the following channels and states are created:
+If you successfully setup ioBroker.nuki-extended, the following channels and states are created:
 
 #### Bridges (with Nuki Bridge API)
 A bridge will be created as device with the name pattern ```bridge__<name of bridge>```. The following channels / states will be created in each bridge:
@@ -172,12 +173,12 @@ var states = {
 
 schedule('0 22 * * *', function()
 {
-    var status = (getState('nuki2.0.door__home_door.status.lockState').val);
+    var status = (getState('nuki-extended.0.door__home_door.status.lockState').val);
     var msg = 'Main Door door is ' + (states[status]) + '. ';
 
     if (status == '3')
     {
-        setState('nuki2.0.door__home_door.action', 2);
+        setState('nuki-extended.0.door__home_door.action', 2);
         msg += 'Locking door..'
     }
     else
@@ -187,7 +188,7 @@ schedule('0 22 * * *', function()
 });
 ```
 
-__Replace `nuki2.0.door__home_door.status.lockState` with the lockState of your lock!__ You may also customize the message via `msg`.
+__Replace `nuki-extended.0.door__home_door.status.lockState` with the lockState of your lock!__ You may also customize the message via `msg`.
 
 ### Let Alexa inform you about lock changes
 This requires the ioBroker adapter ioBroker.alexa2 (https://github.com/Apollon77/ioBroker.alexa2).
@@ -214,7 +215,7 @@ function say(message, alexas = '#YOUR ALEXA ID#') // use alexas = ['#YOUR ALEXA 
 ```
 You can use this function within ioBroker.javascript to say a phrase using Alexa ```say('Hello World')``` or ```say('Hello World', ['#YOUR ALEXA ID 1#', '#YOUR ALEXA ID 2#'])``` for voice output from multiple devices.
 
-Create a script in the "common" folder of ioBroker.javascript and add the following listener to it. IMPORTANT: Replace #LOCK STATE ID# (also replace #) with the state holding the lock status (e.g. ```nuki2.0.door__home_door.status.lockState```):
+Create a script in the "common" folder of ioBroker.javascript and add the following listener to it. IMPORTANT: Replace #LOCK STATE ID# (also replace #) with the state holding the lock status (e.g. ```nuki-extended.0.door__home_door.status.lockState```):
 
 ```javascript
 const DOOR_STATES = {
@@ -296,7 +297,7 @@ function messenger(content, user = '')
 ```
 You can use this function within ioBroker.javascript to send anything to Telegram via ```msg('Hello World')``` (to all users) or ```msg('Hello World', 'Zefau')``` (to specific users).
 
-Create a script in the "common" folder of ioBroker.javascript and add the following listener to it. IMPORTANT: Replace #LOCK STATE ID# (also replace #) with the state holding the lock status (e.g. ```nuki2.0.door__home_door.status.lockState```):
+Create a script in the "common" folder of ioBroker.javascript and add the following listener to it. IMPORTANT: Replace #LOCK STATE ID# (also replace #) with the state holding the lock status (e.g. ```nuki-extended.0.door__home_door.status.lockState```):
 
 ```javascript
 const DOOR_STATES = {
@@ -371,7 +372,7 @@ on({id: '#LOCK STATE ID#', change: 'any'}, function(obj)
 - (Zefau) updated dependencies to fix security vulnerabilities in depending packages
 
 ### 0.9.12 (2019-05-16)
-- (Zefau) fixed an issue causing the same callback set multiple times (see [#9](https://github.com/Zefau/ioBroker.nuki2/issues/9#issuecomment-493148883))
+- (Zefau) fixed an issue causing the same callback set multiple times (see [#9](https://github.com/Zefau/ioBroker.nuki-extended/issues/9#issuecomment-493148883))
 
 ### 0.9.11 (2019-05-13)
 - (Zefau) added info-message when setting refresh rate to less than 10 seconds
@@ -386,17 +387,17 @@ on({id: '#LOCK STATE ID#', change: 'any'}, function(obj)
 ### 0.9.8 (2019-05-05)
 Thanks to [@systemofapwne](https://github.com/systemofapwne) for testing and identifying quite a few bugs.
 
-- (Zefau) added delay between requests / actions applied on the Nuki Bridge (to prevent overload, see [#9](https://github.com/Zefau/ioBroker.nuki2/issues/9))
-- (Zefau) fixed an issue causing the adapter to crash when polling was enabled, but Web API is not used (see [#10](https://github.com/Zefau/ioBroker.nuki2/issues/10))
+- (Zefau) added delay between requests / actions applied on the Nuki Bridge (to prevent overload, see [#9](https://github.com/Zefau/ioBroker.nuki-extended/issues/9))
+- (Zefau) fixed an issue causing the adapter to crash when polling was enabled, but Web API is not used (see [#10](https://github.com/Zefau/ioBroker.nuki-extended/issues/10))
 
 ### 0.9.7 (2019-05-05)
-- (Zefau) added verification if callback URL is already added on Nuki Bridge (see [#9](https://github.com/Zefau/ioBroker.nuki2/issues/9))
+- (Zefau) added verification if callback URL is already added on Nuki Bridge (see [#9](https://github.com/Zefau/ioBroker.nuki-extended/issues/9))
 
 ### 0.9.6 (2019-05-03)
 - (Zefau) added Web Adapter as dependency
 - (Zefau) add warning when opening web / log view but Nuki Web API has not been setup
 - (Zefau) removed empty folders when Nuki Web API has not been setup 
-- (Zefau) fixed an issue with Webhook when time for refreshing all settings was set ([#9](https://github.com/Zefau/ioBroker.nuki2/issues/9))
+- (Zefau) fixed an issue with Webhook when time for refreshing all settings was set ([#9](https://github.com/Zefau/ioBroker.nuki-extended/issues/9))
 
 ### 0.9.4 / 0.9.5 (2019-03-22)
 - (Zefau) Useless versions to fix incorrect configuration in `io-package.json`

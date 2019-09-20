@@ -1,7 +1,7 @@
 {
     "common": {
-        "name": "nuki2",
-        "version": "1.0.4",
+        "name": "nuki-extended",
+        "version": "2.0.0",
         "title": "Nuki Smart Lock 2.0",
         "titleLang": {
             "en": "Nuki Smart Lock 2.0",
@@ -83,14 +83,14 @@
         "license": "MIT",
         "platform": "Javascript/Node.js",
         "mode": "daemon",
-        "icon": "nuki-logo.png",
-        "extIcon": "https://raw.githubusercontent.com/Zefau/ioBroker.nuki2/master/admin/nuki-logo.png",
+        "icon": "nuki-extended.png",
+        "extIcon": "https://raw.githubusercontent.com/Zefau/ioBroker.nuki-extended/master/admin/nuki-extended.png",
         "keywords": [
             "nuki",
             "smart",
             "lock"
         ],
-        "readme": "https://github.com/Zefau/ioBroker.nuki2/blob/master/README.md",
+        "readme": "https://github.com/Zefau/ioBroker.nuki-extended/blob/master/README.md",
         "docs": "README.md",
         "loglevel": "info",
         "type": "hardware",
@@ -102,7 +102,7 @@
                 "web": ">=1.7.1"
             }
         ],
-        "localLink": "%web_protocol%://%ip%:%web_port%/nuki2/index.html",
+        "localLink": "%web_protocol%://%ip%:%web_port%/nuki-extended/index.html",
         "messagebox": true,
         "subscribe": "messagebox"
     },
