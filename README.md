@@ -1,6 +1,6 @@
 ![Logo](admin/nuki-extended.png)
 # ioBroker.nuki-extended
-This ioBroker adapter allows to control and monitor the [Nuki Smart Lock](https://nuki.io/de/) by using both the [Nuki Bridge API (v1.8.0,  06.03.2019)](https://developer.nuki.io/page/nuki-bridge-http-api-170/4/#heading--introduction) and the [Nuki Web API (v1.1.1, 30.08.2018)](https://developer.nuki.io/page/nuki-web-api-111/3/).
+This ioBroker adapter (formerly ioBroker.Nuki2) allows to control and monitor the [Nuki Smart Lock](https://nuki.io/de/) by using both the [Nuki Bridge API (v1.9.0, 06.05.2019)](https://developer.nuki.io/page/nuki-bridge-http-api-170/4/#heading--introduction) and the [Nuki Web API (v1.2.0, 31.05.2019)](https://developer.nuki.io/page/nuki-web-api-111/3/).
 
 ![Number of Installations](http://iobroker.live/badges/nuki-extended-installed.svg) ![Stable Version](http://iobroker.live/badges/nuki-extended-stable.svg) [![NPM version](http://img.shields.io/npm/v/iobroker.nuki-extended.svg)](https://www.npmjs.com/package/iobroker.nuki-extended)
 [![Travis CI](https://travis-ci.org/Zefau/ioBroker.nuki-extended.svg?branch=master)](https://travis-ci.org/Zefau/ioBroker.nuki-extended)
@@ -11,17 +11,22 @@ This ioBroker adapter allows to control and monitor the [Nuki Smart Lock](https:
 
 
 **Table of contents**
-1. [Installation](#installation)
+1. [Features](#features)
+2. [Installation](#installation)
    1. [Get a API token](#get-a-api-token)
    2. [Callback function](#callback-function)
-   3. [States](#states)
-2. [Smart Home / Alexa integration using ioBroker.javascript](#smart-home--alexa-integration-using-iobrokerjavascript)
+3. [Channels & States](#3-channels--states)
+4. [Smart Home / Alexa integration using ioBroker.javascript](#smart-home--alexa-integration-using-iobrokerjavascript)
    1. [Lock door at 10pm in the evening](#lock-door-at-10pm-in-the-evening)
    2. [Let Alexa inform you about lock changes](#let-alexa-inform-you-about-lock-changes)
    3. [Let Telegram inform you about lock changes](#let-telegram-inform-you-about-lock-changes)
-3. [Changelog](#changelog)
-4. [Credits](#credits)
-5. [Licence](#license)
+5. [Changelog](#changelog)
+6. [Credits](#credits)
+7. [Licence](#license)
+
+
+## Features
+tbd
 
 
 ## Installation
@@ -48,10 +53,10 @@ Callbacks can also be set and removed __manually__ from any browser with followi
 * remove Callback: ```http://<bridge_ip>:<bridge_port>/callback/remove?id=<callback_id>&token=<bridgeToken>```
 * list all Callbacks: ```http://<bridge_ip>:<bridge_port>/callback/list?token=<bridgeToken>```
 
-### States
+## Channels & States
 If you successfully setup ioBroker.nuki-extended, the following channels and states are created:
 
-#### Bridges (with Nuki Bridge API)
+### Bridges (with Nuki Bridge API)
 A bridge will be created as device with the name pattern ```bridge__<name of bridge>```. The following channels / states will be created in each bridge:
 
 | Channel | State | Description |
@@ -68,7 +73,7 @@ A bridge will be created as device with the name pattern ```bridge__<name of bri
 | - | versWifi | Version of the WiFi modules firmware (hardware bridge only) |
 | - | versApp | Version of the bridge app (software bridge only) |
 
-#### Locks (with Nuki Bridge API)
+### Smartlocks and Opener (with Nuki Bridge API)
 A lock will be created as device with the name pattern ```door__<name of door>```. The following channels / states will be created in each lock (when using the Nuki Bridge API):
 
 | Channel | State | Description |
@@ -85,7 +90,7 @@ A lock will be created as device with the name pattern ```door__<name of door>``
 
 _** marked states will be updated on a Nuki action if callback is set_
 
-#### Locks (with Nuki Web API)
+### Smartlocks and Opener (with Nuki Web API)
 A lock will be created as device with the name pattern ```door__<name of door>```. The following channels / states will be created in each lock (when using the Nuki Web API):
 
 | Channel | State | Description (possbile Values) |
@@ -357,67 +362,8 @@ on({id: '#LOCK STATE ID#', change: 'any'}, function(obj)
 
 ## Changelog
 
-### 1.0.2 (2019-08-14)
+### 2.0.0 (2019-xx-xx)
 - (Zefau) Fixed Bug with incorrect callbacks
-
-### 1.0.1 (2019-08-11)
-- (Zefau) Performance improvements
-- (Zefau) Small re-design of admin panel
-- (Zefau) Fixed Bug within user retrieval
-
-### 1.0.0 (2019-08-03)
-- (Zefau) bump to stable release (no changes)
-
-### 0.9.13 (2019-07-20)
-- (Zefau) updated dependencies to fix security vulnerabilities in depending packages
-
-### 0.9.12 (2019-05-16)
-- (Zefau) fixed an issue causing the same callback set multiple times (see [#9](https://github.com/Zefau/ioBroker.nuki-extended/issues/9#issuecomment-493148883))
-
-### 0.9.11 (2019-05-13)
-- (Zefau) added info-message when setting refresh rate to less than 10 seconds
-
-### 0.9.10 (2019-05-10)
-- (Zefau) added states to reflect current callbacks set on the Nuki Bridge as well as action to delete the callbacks
-- (Zefau) updated dependency of `nuki-bridge-api` to v1.5.0
-
-### 0.9.9 (2019-05-05)
-- (Zefau) updated dependency of `nuki-bridge-api` to v1.4.0
-
-### 0.9.8 (2019-05-05)
-Thanks to [@systemofapwne](https://github.com/systemofapwne) for testing and identifying quite a few bugs.
-
-- (Zefau) added delay between requests / actions applied on the Nuki Bridge (to prevent overload, see [#9](https://github.com/Zefau/ioBroker.nuki-extended/issues/9))
-- (Zefau) fixed an issue causing the adapter to crash when polling was enabled, but Web API is not used (see [#10](https://github.com/Zefau/ioBroker.nuki-extended/issues/10))
-
-### 0.9.7 (2019-05-05)
-- (Zefau) added verification if callback URL is already added on Nuki Bridge (see [#9](https://github.com/Zefau/ioBroker.nuki-extended/issues/9))
-
-### 0.9.6 (2019-05-03)
-- (Zefau) added Web Adapter as dependency
-- (Zefau) add warning when opening web / log view but Nuki Web API has not been setup
-- (Zefau) removed empty folders when Nuki Web API has not been setup 
-- (Zefau) fixed an issue with Webhook when time for refreshing all settings was set ([#9](https://github.com/Zefau/ioBroker.nuki-extended/issues/9))
-
-### 0.9.4 / 0.9.5 (2019-03-22)
-- (Zefau) Useless versions to fix incorrect configuration in `io-package.json`
-
-### 0.9.3 (2019-03-22)
-- (Zefau) Limited log retrieval to 1000 entries
-
-### 0.9.2 (2019-02-11)
-- (Zefau) Updated dependency
-
-### 0.9.1 (2019-02-10)
-- (Zefau) Added Web Interface to view logs
-
-### 0.9.0 (2019-02-09)
-- (Zefau) Using both Bridge API and Web API
-- (Zefau) Support for multiple bridges
-- (Zefau) Support for discovery within admin panel
-- (Zefau) Additional states for bridges and better separation between software / hardware bridge
-  - retrieve the basic and advanced configuration from your lock
-  - retrieve all users having access to your lock
 
 
 ## Credits
