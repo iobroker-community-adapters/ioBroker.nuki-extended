@@ -2,30 +2,22 @@
     "common": {
         "name": "nuki-extended",
         "version": "2.0.0",
-        "title": "Nuki Smart Lock 2.0",
+        "title": "Nuki Lock & Opener",
         "titleLang": {
-            "en": "Nuki Smart Lock 2.0",
-            "de": "Nuki Smart Lock 2.0",
-            "ru": "Nuki Smart Lock 2.0",
-            "pt": "Nuki Smart Lock 2.0",
-            "nl": "Nuki Smart Lock 2.0",
-            "fr": "Nuki Smart Lock 2.0",
-            "it": "Nuki Smart Lock 2.0",
-            "es": "Nuki Smart Lock 2.0",
-            "pl": "Nuki Smart Lock 2.0",
-            "zh-cn": "Nuki Smart Lock 2.0"
+            "en": "Nuki Lock & Opener",
+            "de": "Nuki Lock & Opener",
+            "ru": "Nuki Lock & Opener",
+            "pt": "Nuki Lock & Opener",
+            "nl": "Nuki Lock & Opener",
+            "fr": "Nuki Lock & Opener",
+            "it": "Nuki Lock & Opener",
+            "es": "Nuki Lock & Opener",
+            "pl": "Nuki Lock & Opener",
+            "zh-cn": "Nuki Lock & Opener"
         },
         "desc": {
-            "en": "Control and monitor your Nuki Smart Lock with ioBroker",
-            "de": "Steuern und überwachen Sie Ihr Nuki Smart Lock mit ioBroker",
-            "ru": "Управляйте и контролируйте свой Nuki Smart Lock с ioBroker",
-            "pt": "Controle e monitore seu Nuki Smart Lock com o ioBroker",
-            "nl": "Bedien en bewaak uw Nuki Smart Lock met ioBroker",
-            "fr": "Contrôlez et surveillez votre Nuki Smart Lock avec ioBroker",
-            "it": "Controlla e monitora il tuo Nuki Smart Lock con ioBroker",
-            "es": "Controle y supervise su Nuki Smart Lock con ioBroker",
-            "pl": "Kontroluj i monitoruj swoją Nuki Smart Lock za pomocą ioBroker",
-            "zh-cn": "使用ioBroker控制和监控Nuki Smart Lock"
+            "en": "Control and monitor your Nuki Smartlock and Nuki Opener with ioBroker",
+            "de": "Steuern und überwachen des Nuki Smartlocks und des Nuki Openers mit ioBroker"
         },
         "news": {
             "1.0.1": {
@@ -88,7 +80,8 @@
         "keywords": [
             "nuki",
             "smart",
-            "lock"
+            "lock",
+			"opener"
         ],
         "readme": "https://github.com/Zefau/ioBroker.nuki-extended/blob/master/README.md",
         "docs": "README.md",
