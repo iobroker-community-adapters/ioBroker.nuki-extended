@@ -94,7 +94,7 @@
     "Smart Lock",
     "Smart Home",
     "home automation",
-	"Opener"
+    "Opener"
   ],
   "license": "MIT",
   "main": "nuki-extended.js",

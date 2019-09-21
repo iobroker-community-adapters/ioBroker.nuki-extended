@@ -61,12 +61,12 @@ function startAdapter(options)
 		
 		// Check port
 		if (!adapter.config.callbackPort)
-			adapter.config.callbackPort = 51988;
+			adapter.config.callbackPort = 51989;
 		
 		if (adapter.config.callbackPort < 10000 || adapter.config.callbackPort > 65535)
 		{
-			adapter.log.warn('The callback port (' + adapter.config.callbackPort + ') is incorrect. Provide a port between 10.000 and 65.535! Using port 51988 now.');
-			adapter.config.callbackPort = 51988;
+			adapter.log.warn('The callback port (' + adapter.config.callbackPort + ') is incorrect. Provide a port between 10.000 and 65.535! Using port 51989 now.');
+			adapter.config.callbackPort = 51989;
 		}
 		
 		// retrieve all values from states to avoid message "Unsubscribe from all states, except system's, because over 3 seconds the number of events is over 200 (in last second 0)"
@@ -367,8 +367,6 @@ function initNukiAPIs()
 		{
 			if (values.findIndex(el => el === true) > -1)
 			{
-				adapter.log.info('Listening for Nuki events on port ' + adapter.config.callbackPort + '.');
-				
 				_http.use(_parser.json());
 				_http.use(_parser.urlencoded({extended: false}));
 				
@@ -393,14 +391,7 @@ function initNukiAPIs()
 					}
 				});
 				
-				try
-				{
-					_http.listen(adapter.config.callbackPort);
-				}
-				catch(err)
-				{
-					library.terminate('Port ' + adapter.config.callbackPort + ' already taken! Choose another port.');
-				}
+				_http.listen(adapter.config.callbackPort, () => adapter.log.info('Listening for Nuki events on port ' + adapter.config.callbackPort + '.'));
 			}
 			else
 				adapter.log.info('Not listening for Nuki events.');
@@ -616,12 +607,12 @@ function updateLock(payload)
 {
 	// index Nuki
 	let type, path;
-	if (DEVICES[payload.nukiId] === undefined && payload.deviceType !== undefined)
+	if (DEVICES[payload.nukiId] === undefined)
 	{
 		let actions = null;
 		
 		// Nuki Smartlock
-		if (payload.deviceType == 0)
+		if (payload.deviceType == 0 || !payload.deviceType)
 		{
 			library.set(library.getNode('smartlocks'));
 			type = 'Smartlock';
