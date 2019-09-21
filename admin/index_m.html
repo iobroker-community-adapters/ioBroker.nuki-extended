@@ -145,7 +145,6 @@
 							'bridge_id': bridge.bridgeId,
 							'bridge_ip': bridge.ip || '',
 							'bridge_port': bridge.port || 8080,
-							'bridge_callback': true,
 							'active': true
 						});
 					});
@@ -198,11 +197,40 @@
 		<!-- TABS -->
 		<div class="col s12">
 			<ul class="tabs">
+				<li class="tab col s3"><a class="translate active" href="#donate">tab_donate</a></li>
 				<li class="tab col s3"><a class="translate active" href="#tab_config_bridge">tab_config_bridge</a></li>
 				<li class="tab col s3"><a class="translate" href="#tab_config_nuki">tab_config_nuki</a></li>
 				<li class="tab col s3"><a target="_blank" class="translate" href="https://github.com/Zefau/ioBroker.nuki2#smart-home--alexa-integration-using-iobrokerjavascript">tab_alexa</a></li>
 				<li class="tab col s3"><a target="_blank" class="translate" href="https://github.com/Zefau/ioBroker.nuki2#iobrokernuki2">tab_info</a></li>
 			</ul>
+		</div>
+		
+		<!-- DONATE -->
+		<div id="donate" class="col s12">
+		
+			<!-- Donation -->
+			<div class="row">
+				<div class="col s12 m12">
+					<div class="row" style="margin-bottom: 0">
+						<div class="col s12 m12">
+							<p class="translate title">donateTitle</p>
+						</div>
+					</div>
+					<div class="row box">
+						<p class="subtitle translate">donateInformation</p>
+						
+						<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin: 10 0 0 30">
+							<input type="hidden" name="cmd" value="_s-xclick" />
+							<input type="hidden" name="hosted_button_id" value="DJR9PHP53L8Q2" />
+							<input type="image" src="https://www.paypalobjects.com/webstatic/de_DE/i/de-pp-logo-200px.png" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+							<img alt="" border="0" src="https://www.paypal.com/en_DE/i/scr/pixel.gif" width="1" height="1" />
+						</form>
+						
+					</div>
+					
+				</div>
+			</div>
+			
 		</div>
 		
 		<!-- CONFIG NUKI -->
@@ -236,7 +264,7 @@
 				<div class="col s12 m12">
 					<div class="row" style="margin-bottom: 0">
 						<div class="col s12 m12">
-							<p class="translate title">other</p>
+							<p class="translate title">refreshSettings</p>
 						</div>
 					</div>
 					<div class="row box">
@@ -248,8 +276,8 @@
 							</div>
 							<div class="row">
 								<div class="input-field col s4 m4">
-									<input class="value" id="refresh" type="number" placeholder="0" />
-									<label for="refresh" class="translate">refresh</label>
+									<input class="value" id="refreshWebApi" type="number" placeholder="0" />
+									<label for="refreshWebApi" class="translate">refresh</label>
 								</div>
 							</div>
 						</div>
@@ -290,7 +318,6 @@
 											<th data-name="bridge_ip" style="width: 20%" class="translate">bridge_ip</th>
 											<th data-name="bridge_port" data-type="number" data-default="8080" style="width: 10%" class="translate">bridge_port</th>
 											<th data-name="bridge_token" style="width: 20%" class="translate">bridge_token</th>
-											<th data-name="bridge_callback" data-type="checkbox" data-default="true" style="width: 10%" class="translate">bridge_callback</th>
 											<th data-name="active" data-type="checkbox" data-default="true" style="width: 70px" class="translate">enabled</th>
 											<th data-buttons="delete" style="width: 120px"></th>
 										</tr>
@@ -308,21 +335,53 @@
 				<div class="col s12 m12">
 					<div class="row" style="margin-bottom: 0">
 						<div class="col s12 m12">
-							<p class="translate title">other</p>
+							<p class="translate title">refreshSettings</p>
 						</div>
 					</div>
 					<div class="row box">
 						<div class="col s12 m12">
 							<div class="row">
-								<div class="col s4 m4">
-									<p class="subtitle translate">port_info</p>
+								<div class="col s12 m12">
+									<p class="subtitle translate">refreshInfo</p>
 								</div>
 							</div>
-							<div class="row">
-								<div class="input-field col s4 m4">
-									<input class="value" id="callbackPort" type="number" placeholder="51988" />
-									<label for="callbackPort" class="translate">port</label>
+							<div class="row" style="margin-bottom: 0">
+							
+								<div class="col s4 m4">
+									<div class="row">
+										<div class="col s12 m12">
+											<label>
+												<input name="refreshBridgeApiType" id="refreshBridgeApiTypeByCallback" class="value" value="callback" type="radio" />
+												<span class="translate">refreshBridgeApiTypeByCallback</span>
+											</label>
+										</div>
+									</div>
+									<div class="row">
+										<div class="input-field col s12 m12">
+											<input class="value" id="callbackPort" type="number" placeholder="51988" />
+											<label for="callbackPort" class="translate">port</label>
+										</div>
+									</div>
 								</div>
+							
+								<div class="col s2 m2"></div>
+								<div class="col s4 m4">
+									<div class="row">
+										<div class="col s12 m12">
+											<label>
+												<input name="refreshBridgeApiType" id="refreshBridgeApiTypeByPolling" class="value" value="polling" type="radio" />
+												<span class="translate">refreshBridgeApiTypeByPolling</span>
+											</label>
+										</div>
+									</div>
+									<div class="row">
+										<div class="input-field col s12 m12">
+											<input class="value" id="refreshBridgeApi" type="number" placeholder="0" />
+											<label for="refreshBridgeApi" class="translate">refresh</label>
+										</div>
+									</div>
+								</div>
+								
 							</div>
 						</div>
 					</div>

@@ -1,6 +1,6 @@
 ![Logo](admin/nuki-extended.png)
 # ioBroker.nuki-extended
-This ioBroker adapter (formerly ioBroker.Nuki2) allows to control and monitor the [Nuki Smart Lock](https://nuki.io/de/smart-lock/) and / or the [Nuki Opener](https://nuki.io/de/opener/) by using both the [Nuki Bridge API (v1.9.0, 06.05.2019)](https://developer.nuki.io/page/nuki-bridge-http-api-170/4/#heading--introduction) and the [Nuki Web API (v1.2.0, 31.05.2019)](https://developer.nuki.io/page/nuki-web-api-111/3/).
+This ioBroker adapter (formerly ioBroker.Nuki2) allows to control and monitor the [Nuki Smart Lock](https://nuki.io/de/) by using both the [Nuki Bridge API (v1.9.0, 06.05.2019)](https://developer.nuki.io/page/nuki-bridge-http-api-170/4/#heading--introduction) and the [Nuki Web API (v1.2.0, 31.05.2019)](https://developer.nuki.io/page/nuki-web-api-111/3/).
 
 ![Number of Installations](http://iobroker.live/badges/nuki-extended-installed.svg) ![Stable Version](http://iobroker.live/badges/nuki-extended-stable.svg) [![NPM version](http://img.shields.io/npm/v/iobroker.nuki-extended.svg)](https://www.npmjs.com/package/iobroker.nuki-extended)
 [![Travis CI](https://travis-ci.org/Zefau/ioBroker.nuki-extended.svg?branch=master)](https://travis-ci.org/Zefau/ioBroker.nuki-extended)

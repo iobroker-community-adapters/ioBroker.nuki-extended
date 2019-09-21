@@ -9,11 +9,28 @@ module.exports =
 	'boxes': {'node': 'boxes', 'description': 'Nuki Boxes', 'role': 'channel'},
 	'opener': {'node': 'opener', 'description': 'Nuki Opener', 'role': 'channel'},
 	
+	
 	// INFO
 	'bridgeApiSync': {'node': 'info.bridgeApiSync', 'description': 'Indicates whether syncing via Bridge API is activated', 'role': 'indicator', 'type': 'boolean'},
 	'bridgeApiLast': {'node': 'info.bridgeApiLast', 'description': 'Timestamp of last sync', 'role': 'date'},
 	'webApiSync': {'node': 'info.webApiSync', 'description': 'Indicates whether syncing via Bridge API is activated', 'role': 'indicator', 'type': 'boolean'},
 	'webApiLast': {'node': 'info.webApiLast', 'description': 'Timestamp of last sync', 'role': 'date'},
+	
+	// INFO - NOTIFICATIONS
+	'notifications': {'description': 'Notifications', 'role': 'channel'},
+	'notifications.settings.authIds': {'description': 'A set of auth IDs to filter push notifications to certain users or keypads. If no entry push notifications are triggered for all users and keypads', 'type': 'string', 'role': 'text', 'convert': 'array'},
+	'notifications.settings.triggerEvents': {'description': 'A set on which push notifications should be triggered: lock, unlock, unlatch, lockngo, open, ring, doorsensor, warnings, smartlock', 'type': 'string', 'role': 'text', 'convert': 'array'},
+	'notifications.settings.smartlockId': {'description': 'The smartlock ID, if not set all Smart Locks of the account are enabled for push notifications', 'type': 'number', 'role': 'value'},
+	'notifications.settings': {'description': 'Settings per Smart Lock', 'role': 'channel'},
+	'notifications.lastActiveDate': {'description': 'The last active date', 'type': 'string', 'role': 'text'},
+	'notifications.status': {'description': 'Current activation state', 'type': 'number', 'role': 'indicator', 'common': {'states': {'0': 'INIT', '1': 'ACTIVE', '2': 'FAILED'}}},
+	'notifications.language': {'description': 'The language of push messages', 'type': 'string', 'role': 'text'},
+	'notifications.os': {'description': 'The operating system', 'type': 'number', 'role': 'text', 'common': {'states': {'0': 'Android', '1': 'iOS', '2': 'Webhook'}}},
+	'notifications.pushId': {'description': 'The push ID or the POST URL for a webhook', 'type': 'string', 'role': 'text'},
+	'notifications.secret': {'description': 'The 40 byte hex string to sign the checksumof the POST payload if the notification is webhook (os=2)', 'type': 'string', 'role': 'text'},
+	'notifications.notificationId': {'description': 'The unique notificationId for the notification', 'type': 'string', 'role': 'text'},
+	'notifications.referenceId': {'description': 'The reference ID, an ID to identify a foreign system', 'type': 'string', 'role': 'text'},
+	
 	
 	// BRIDGE
 	'bridgeType': {'state': 'bridgeType', 'description': 'Type of bridge', 'type': 'number', 'role': 'value', 'common': {'states': {'1': 'Hardware Bridge', '2': 'Software Bridge'}}},
