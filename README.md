@@ -30,34 +30,33 @@ tbd
 
 
 ## Installation
-### Get a API token
+### Nuki Bridge API
 How to get your hardware bridge token (does not work for software bridges):
 
 1. Call ```http://<bridge_ip>:<bridge_port>/auth``` from any browser in your network. The bridge turns on its LED.
 2. Press the button of the bridge within 30 seconds.
 3. Result of the browser call should be something like this:
    ```
-    {
-    "token": "token123",
-    "success": true
-    }
+   {
+      "token":"token123",
+      "success":true
+   }
    ```
 4. Use the generated token in the nuki-extended adapter.
 
-### Manually set callback (optionally)
-If the callback function is being used, the adapter will automatically set the callback on the Nuki bridge when the instance is being saved. Respective Nuki states ([see below](#locks-with-nuki-bridge-api)) will be kept up-to-date by the Nuki bridge while callback is activated.
+### Nuki Web API
+Do the following, to use the Nuki Web API:
 
-Callbacks can also be set and removed __manually__ from any browser with following URLs:
+1. Retrieve a token at https://web.nuki.io/de/#/admin/web-api
+2. Use this token in the nuki-extended adapter
+3. Make sure your nuki devices are published on the Nuki Web API (use the Smartphone App via Settings `Activate Nuki Web`)
 
-* set Callback: ```http://<bridge_ip>:<bridge_port>/callback/add?url=http%3A%2F%2F<host_ip>%3A<host_port>%2Fnuki-api-bridge&token=<bridgeToken>```
-* remove Callback: ```http://<bridge_ip>:<bridge_port>/callback/remove?id=<callback_id>&token=<bridgeToken>```
-* list all Callbacks: ```http://<bridge_ip>:<bridge_port>/callback/list?token=<bridgeToken>```
 
 ## Channels & States
 If you successfully setup ioBroker.nuki-extended, the following channels and states are created:
 
 ### Bridges (with Nuki Bridge API)
-A bridge will be created as device with the name pattern ```bridge__<name of bridge>```. The following channels / states will be created in each bridge:
+A bridge will be created as device within the channel `bridges`. The following channels / states will be created in each bridge:
 
 | Channel | State | Description |
 |:------- |:----- |:----------- |
@@ -74,7 +73,7 @@ A bridge will be created as device with the name pattern ```bridge__<name of bri
 | - | versApp | Version of the bridge app (software bridge only) |
 
 ### Smartlocks and Opener (with Nuki Bridge API)
-A lock will be created as device with the name pattern ```door__<name of door>```. The following channels / states will be created in each lock (when using the Nuki Bridge API):
+A smartlock or opener will be created as device within the respective channel `doors` or `openers`. The following channels / states will be created in each device (when using the Nuki Bridge API):
 
 | Channel | State | Description |
 |:------- |:----- |:----------- |
@@ -91,7 +90,7 @@ A lock will be created as device with the name pattern ```door__<name of door>``
 _** marked states will be updated on a Nuki action if callback is set_
 
 ### Smartlocks and Opener (with Nuki Web API)
-A lock will be created as device with the name pattern ```door__<name of door>```. The following channels / states will be created in each lock (when using the Nuki Web API):
+A smartlock or opener will be created as device within the respective channel `doors` or `openers`. The following channels / states will be created in each device (when using the Nuki Web API):
 
 | Channel | State | Description (possbile Values) |
 |:------- |:----- |:----------------------------- |
