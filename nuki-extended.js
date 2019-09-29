@@ -461,7 +461,7 @@ function initNukiAPIs()
  */
 function getBridgeApi(bridge)
 {
-	library.set(library.getNode('bridgeApiSync'), true);
+	library.set(library.getNode('bridgeApiSync'), true, true);
 	library.set(library.getNode('bridgeApiLast'), new Date().toISOString().substr(0,19) + '+00:00');
 	
 	// get current callback URLs
@@ -545,7 +545,7 @@ function getBridgeApi(bridge)
 function getWebApi()
 {
 	if (!nukiWebApi) return;
-	library.set(library.getNode('webApiSync'), true);
+	library.set(library.getNode('webApiSync'), true, true);
 	library.set(library.getNode('webApiLast'), new Date().toISOString().substr(0,19) + '+00:00');
 	
 	adapter.log.silly('getWebApi(): Retrieving from Nuki Web API..');
@@ -572,7 +572,7 @@ function getWebApi()
 			{
 				library.set({node: DEVICES[smartlock.nukiId].path + '.logs', description: 'Logs / History of Nuki'}, JSON.stringify(log.slice(0, 250)));
 				
-			}).catch(err => {adapter.log.debug('getWebApi(): Error retrieving logs: ' + err.message)});
+			}).catch(err => {adapter.log.warn('getWebApi(): Error retrieving logs: ' + err.message)});
 			
 			// get users
 			nukiWebApi.getSmartlockAuth(smartlock.nukiId).then(users =>
@@ -580,6 +580,8 @@ function getWebApi()
 				library.set({ ...library.getNode('users'), 'node': DEVICES[smartlock.nukiId].path + '.users' });
 				users.forEach(user =>
 				{
+					user.name = user.name || 'unknown';
+					
 					let nodePath = DEVICES[smartlock.nukiId].path + '.users.' + library.clean(user.name, true, '_');
 					library.set({node: nodePath, description: 'User ' + user.name, role: 'channel'});
 					readData('', user, nodePath);
@@ -607,12 +609,19 @@ function updateLock(payload)
 {
 	// index Nuki
 	let type, path;
-	if (DEVICES[payload.nukiId] === undefined)
+	if (DEVICES[payload.nukiId] === undefined || !DEVICES[payload.nukiId].path)
 	{
 		let actions = null;
 		
+		// 
+		if (!payload.name || payload.deviceType === undefined)
+		{
+			adapter.log.debug('Error updating device due to missing data (' + JSON.stringify(payload) + ').');
+			return false;
+		}
+		
 		// Nuki Smartlock
-		if (payload.deviceType == 0 || !payload.deviceType)
+		if (payload.deviceType === 0 || !payload.deviceType)
 		{
 			library.set(library.getNode('smartlocks'));
 			type = 'Smartlock';
@@ -620,16 +629,16 @@ function updateLock(payload)
 		}
 		
 		// Nuki Box
-		else if (payload.deviceType == 1)
+		else if (payload.deviceType === 1)
 		{
 			library.set(library.getNode('boxes'));
 			type = 'Box';
 		}
 		
 		// Nuki Opener
-		else if (payload.deviceType == 2)
+		else if (payload.deviceType === 2)
 		{
-			library.set(library.getNode('opener'));
+			library.set(library.getNode('openers'));
 			type = 'Opener';
 			actions = _OPENER.ACTIONS;
 		}
@@ -650,6 +659,7 @@ function updateLock(payload)
 	else
 		path = DEVICES[payload.nukiId].path;
 	
+	
 	// update bridge
 	if (payload.bridge !== undefined)
 		DEVICES[payload.nukiId].bridge = payload.bridge;
@@ -658,13 +668,20 @@ function updateLock(payload)
 	if (payload.nuki !== undefined)
 		DEVICES[payload.nukiId].instance = payload.nuki;
 	
+	// add additional states
+	if (DEVICES[payload.nukiId].type == 'Smartlock' && payload.state.doorState)
+		payload.state.closed = payload.state.doorState;
+	
+	if (DEVICES[payload.nukiId].type == 'Smartlock' && payload.state.state)
+		payload.state.locked = payload.state.state;
+	
 	// remove unnecessary states
 	if (payload.state && payload.state.stateName) delete payload.state.stateName;
 	if (payload.nuki) delete payload.nuki;
 	
 	// create / update device
 	adapter.log.debug('Updating lock ' + path + ' with payload: ' + JSON.stringify(payload));
-	library.set({node: path, description: '' + payload.name, role: 'channel'});
+	library.set({node: path, description: '' + DEVICES[payload.nukiId].name, role: 'channel'});
 	readData('', payload, path);
 }
 
@@ -791,7 +808,7 @@ function readData(key, data, prefix)
 		return false;
 	
 	// get node details
-	key = library.clean(key, false, '_');
+	key = key ? library.clean(key, false, '_') : '';
 	let node = library.getNode(prefix && prefix.indexOf('users.') > -1 ? 'users.' + key : key);
 	
 	// add node details
@@ -860,21 +877,6 @@ function convertNode(node, data, prefix)
 	// type is boolean, but number given
 	if (node.type == 'boolean' && Number.isInteger(data) && !(node.common && node.common.states))
 		data = data === 1;
-	
-	// get options
-	let options = null;
-	if (node.convert && node.convert.indexOf(':') > -1)
-		[ node.convert, options ] = node.convert.split(':');
-	
-	// convert
-	switch(node.convert)
-	{
-		case 'node':
-			if (library.getNode(options))
-				readData(options, data, prefix);
-			
-			break;
-	}
 	
 	return data;
 }
