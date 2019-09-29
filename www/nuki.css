@@ -5,9 +5,19 @@ body, a {
 
 .hidden {display: none}
 
+#noNukiWebApi {
+	text-align: center;
+	font-weight: bold;
+	float: left;
+	background: #d7e4ed;
+	width: 100%;
+	padding: 5px 0;
+	border-radius: 5px;
+}
+
 #cd-timeline {
     margin: 0 auto !important;
-    padding: 0 !important;
+    padding: 20px 0 0 0 !important;
 }
 
 #cd-timeline::before {z-index: -1}
@@ -26,20 +36,22 @@ body, a {
 	margin-top: 0;
 	padding: 10px;
 	text-align: center;
-	border-bottom-right-radius: 3px;
-	border-bottom-left-radius: 3px;
+	border-bottom-right-radius: 0.25em;
+	border-bottom-left-radius: 0.25em;
+	position: fixed;
+	top: 0;
+	z-index: 101;
 }
 
-.locks li {
-	display: inline;
-	padding-right: 5px;
-	cursor: pointer;
-	color: #fff;
-}
+.locks li {display: inline}
 
-.locks li:hover {
-	text-decoration: underline;
-}
+.locks li,
+.locks li a {color: #fff}
+.locks li a {cursor: pointer}
+.locks li a.active {font-weight: bold !important}
+.locks li a:hover {text-decoration: underline}
+
+.locks .menu:not(:first-child)::before {content: ' | '}
 
 .title {
     margin: 0;

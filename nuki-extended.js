@@ -146,7 +146,7 @@ function startAdapter(options)
 					CALLBACKS[bridgeId].splice(callbackIndex, 1);
 					library._setValue(BRIDGES[bridgeId].data.path + '.callbacks.list', JSON.stringify(CALLBACKS[bridgeId].map(cb => {return {'callbackId': cb.callbackId, 'url': cb.url}})));
 				})
-				.catch(err => {adapter.log.debug('Error removing callback (' + JSON.stringify(err) + ')!')});
+				.catch(err => adapter.log.debug('Error removing callback (' + JSON.stringify(err) + ')!'));
 			}
 			else
 				adapter.log.warn('Error deleting callback with URL ' + url + ': ' + (err ? err.message : 'No Callback ID given!'));
@@ -358,7 +358,8 @@ function initNukiAPIs()
 				}
 				
 				return Promise.resolve(false);
-			});
+			})
+			.catch(err => adapter.log.debug('Error retrieving callbacks (' + JSON.stringify(err) + ')!'));
 		});
 		
 		// attach server to listen (only one listener for all Nuki Bridges)
@@ -395,7 +396,8 @@ function initNukiAPIs()
 			}
 			else
 				adapter.log.info('Not listening for Nuki events.');
-		});
+		})
+		.catch(err => adapter.log.debug('Error resolving listeners (' + JSON.stringify(err) + ')!'));
 	}
 	
 	// periodically refresh settings
@@ -469,7 +471,8 @@ function getBridgeApi(bridge)
 	{
 		CALLBACKS[bridge.data.bridge_id] = cbs;
 		setCallbackNodes(bridge.data.bridge_id);
-	});
+	})
+	.catch(err => adapter.log.debug('Error retrieving callbacks (' + JSON.stringify(err) + ')!'));
 	
 	// get nuki's
 	adapter.log.silly('Retrieving from Nuki Bridge API (Bridge ' + bridge.data.bridge_ip + ')..');
@@ -564,6 +567,15 @@ function getWebApi()
 			delete smartlock.smartlockId;
 			delete smartlock.type;
 			
+			// get config
+			if (adapter.config.syncConfig !== true)
+			{
+				if (smartlock.config) delete smartlock.config;
+				if (smartlock.advancedConfig) delete smartlock.advancedConfig;
+				if (smartlock.openerAdvancedConfig) delete smartlock.openerAdvancedConfig;
+				if (smartlock.webConfig) delete smartlock.webConfig;
+			}
+			
 			// update lock
 			updateLock(smartlock);
 	
@@ -575,19 +587,22 @@ function getWebApi()
 			}).catch(err => {adapter.log.warn('getWebApi(): Error retrieving logs: ' + err.message)});
 			
 			// get users
-			nukiWebApi.getSmartlockAuth(smartlock.nukiId).then(users =>
+			if (adapter.config.syncUsers)
 			{
-				library.set({ ...library.getNode('users'), 'node': DEVICES[smartlock.nukiId].path + '.users' });
-				users.forEach(user =>
+				nukiWebApi.getSmartlockAuth(smartlock.nukiId).then(users =>
 				{
-					user.name = user.name || 'unknown';
+					library.set({ ...library.getNode('users'), 'node': DEVICES[smartlock.nukiId].path + '.users' });
+					users.forEach(user =>
+					{
+						user.name = user.name || 'unknown';
+						
+						let nodePath = DEVICES[smartlock.nukiId].path + '.users.' + library.clean(user.name, true, '_');
+						library.set({node: nodePath, description: 'User ' + user.name, role: 'channel'});
+						readData('', user, nodePath);
+					});
 					
-					let nodePath = DEVICES[smartlock.nukiId].path + '.users.' + library.clean(user.name, true, '_');
-					library.set({node: nodePath, description: 'User ' + user.name, role: 'channel'});
-					readData('', user, nodePath);
-				});
-				
-			}).catch(err => {adapter.log.warn('getWebApi(): Error retrieving users: ' + err.message)});
+				}).catch(err => {adapter.log.warn('getWebApi(): Error retrieving users: ' + err.message)});
+			}
 		});
 		
 	}).catch(err => {adapter.log.warn('getWebApi(): Error retrieving smartlocks: ' + err.message)});

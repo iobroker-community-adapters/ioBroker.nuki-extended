@@ -7,14 +7,14 @@ module.exports =
 	'bridges': {'node': 'bridges', 'description': 'Nuki Bridges', 'role': 'channel'},
 	'smartlocks': {'node': 'smartlocks', 'description': 'Nuki Smartlocks', 'role': 'channel'},
 	'boxes': {'node': 'boxes', 'description': 'Nuki Boxes', 'role': 'channel'},
-	'opener': {'node': 'opener', 'description': 'Nuki Opener', 'role': 'channel'},
+	'openers': {'node': 'openers', 'description': 'Nuki Opener', 'role': 'channel'},
 	
 	
 	// INFO
 	'bridgeApiSync': {'node': 'info.bridgeApiSync', 'description': 'Indicates whether syncing via Bridge API is activated', 'role': 'indicator', 'type': 'boolean'},
-	'bridgeApiLast': {'node': 'info.bridgeApiLast', 'description': 'Timestamp of last sync', 'role': 'date'},
-	'webApiSync': {'node': 'info.webApiSync', 'description': 'Indicates whether syncing via Bridge API is activated', 'role': 'indicator', 'type': 'boolean'},
-	'webApiLast': {'node': 'info.webApiLast', 'description': 'Timestamp of last sync', 'role': 'date'},
+	'bridgeApiLast': {'node': 'info.bridgeApiLast', 'description': 'Timestamp of last Bridge API sync', 'role': 'date'},
+	'webApiSync': {'node': 'info.webApiSync', 'description': 'Indicates whether syncing via Web API is activated', 'role': 'indicator', 'type': 'boolean'},
+	'webApiLast': {'node': 'info.webApiLast', 'description': 'Timestamp of last Web API sync', 'role': 'date'},
 	
 	// INFO - NOTIFICATIONS
 	'notifications': {'description': 'Notifications', 'role': 'channel'},
@@ -79,9 +79,9 @@ module.exports =
 	// SMARTLOCK - STATE
 	'state': {'description': 'Current states', 'role': 'channel'},
 	'state.batteryCritical': {'description': 'States critical battery level', 'role': 'indicator.lowbat', 'type': 'boolean'},
-	'state.doorState': {'description': 'Current door-state of the Nuki', 'type': 'number', 'role': 'value', 'common': {'states': LOCK.DOOR}, 'convert': 'node:state.closed'},
+	'state.doorState': {'description': 'Current door-state of the Nuki', 'type': 'number', 'role': 'value', 'common': {'states': LOCK.DOOR}},
 	'state.lastAction': {'description': 'Last triggered action', 'type': 'number', 'role': 'value'},
-	'state.state': {'state': 'state.lockState', 'description': 'Current lock-state of the Nuki or Opener', 'type': 'number', 'role': 'value', 'convert': 'node:state.locked'},
+	'state.state': {'state': 'state.lockState', 'description': 'Current lock-state of the Nuki or Opener', 'type': 'number', 'role': 'value'},
 	'state.mode': {'description': 'Operation Mode of the Nuki or Opener', 'type': 'number', 'role': 'value', 'common': {'states': {'0': 'UNINITIALIZED', '1': 'PAIRING', '2': 'NORMAL', '3': 'CONTINUOUS', '4': 'MAINTENANCE'}}},
 	'state.ringToOpenTimer': {'description': 'Remaining ring to open time', 'type': 'number', 'role': 'value'},
 	'state.trigger': {'description': 'The state trigger', 'type': 'number', 'role': 'value', 'common': {'states': {'0': 'SYSTEM', '1': 'MANUAL', '2': 'BUTTON', '3': 'AUTOMATIC', '4': 'WEB', '5': 'APP', '6': 'CONTINUOUS'}}},

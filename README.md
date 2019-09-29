@@ -30,37 +30,39 @@ tbd
 
 
 ## Installation
-### Nuki Bridge API
+### Get a API token
 How to get your hardware bridge token (does not work for software bridges):
 
 1. Call ```http://<bridge_ip>:<bridge_port>/auth``` from any browser in your network. The bridge turns on its LED.
 2. Press the button of the bridge within 30 seconds.
 3. Result of the browser call should be something like this:
    ```
-   {
-      "token":"token123",
-      "success":true
-   }
+    {
+    "token": "token123",
+    "success": true
+    }
    ```
 4. Use the generated token in the nuki-extended adapter.
 
-### Nuki Web API
-Do the following, to use the Nuki Web API:
+### Manually set callback (optionally)
+If the callback function is being used, the adapter will automatically set the callback on the Nuki bridge when the instance is being saved. Respective Nuki states ([see below](#locks-with-nuki-bridge-api)) will be kept up-to-date by the Nuki bridge while callback is activated.
 
-1. Retrieve a token at https://web.nuki.io/de/#/admin/web-api
-2. Use this token in the nuki-extended adapter
-3. Make sure your nuki devices are published on the Nuki Web API (use the Smartphone App via Settings `Activate Nuki Web`)
+Callbacks can also be set and removed __manually__ from any browser with following URLs:
 
+* set Callback: ```http://<bridge_ip>:<bridge_port>/callback/add?url=http%3A%2F%2F<host_ip>%3A<host_port>%2Fnuki-api-bridge&token=<bridgeToken>```
+* remove Callback: ```http://<bridge_ip>:<bridge_port>/callback/remove?id=<callback_id>&token=<bridgeToken>```
+* list all Callbacks: ```http://<bridge_ip>:<bridge_port>/callback/list?token=<bridgeToken>```
 
 ## Channels & States
 If you successfully setup ioBroker.nuki-extended, the following channels and states are created:
 
 ### Bridges (with Nuki Bridge API)
-A bridge will be created as device within the channel `bridges`. The following channels / states will be created in each bridge:
+A bridge will be created as device with the name pattern ```bridge__<name of bridge>```. The following channels / states will be created in each bridge:
 
 | Channel | State | Description |
 |:------- |:----- |:----------- |
 | - | \_connected | Flag indicating whether or not the bridge is connected to the Nuki server |
+| - | name | Name of the bridge / server |
 | - | bridgeId | ID of the bridge / server |
 | - | bridgeIp | IP address of the bridge |
 | - | bridgePort | Port of the bridge |
@@ -71,16 +73,47 @@ A bridge will be created as device within the channel `bridges`. The following c
 | - | versFirmware | Version of the bridges firmware (hardware bridge only) |
 | - | versWifi | Version of the WiFi modules firmware (hardware bridge only) |
 | - | versApp | Version of the bridge app (software bridge only) |
+| callbacks | - | Callbacks of the Bridge |
+| callbacks | list | List of callbacks |
+| callbacks._callbackId_ | \_delete | Delete the callback |
+| callbacks._callbackId_ | url | URL of the callback |
 
-### Smartlocks and Opener (with Nuki Bridge API)
-A smartlock or opener will be created as device within the respective channel `doors` or `openers`. The following channels / states will be created in each device (when using the Nuki Bridge API):
+### General Information
 
 | Channel | State | Description |
 |:------- |:----- |:----------- |
-| - | action | Trigger an action on the lock |
-| - | bridge | Bridge of the Nuki |
+| - | connection | Adapter Connection Status |
+| - | bridgeApiSync | Indicates whether syncing via Bridge API is activated |
+| - | bridgeApiLast | Timestamp of last Bridge API sync |
+| - | webApiSync | Indicates whether syncing via Web API is activated |
+| - | webApiLast | Timestamp of last Web API sync |
+| notifications | - | Notifications |
+| notifications._notificationIndex_ | - | - |
+| notifications._notificationIndex_.settings | - | Notification Settings |
+| notifications._notificationIndex_.settings._settingsIndex_ | - | - |
+| notifications._notificationIndex_.settings._settingsIndex_ | authIds | A set of auth IDs to filter push notifications to certain users or keypads. If no entry push notifications are triggered for all users and keypads |
+| notifications._notificationIndex_.settings._settingsIndex_ | smartlockId | The smartlock ID, if not set all Smart Locks of the account are enabled for push notifications |
+| notifications._notificationIndex_.settings._settingsIndex_ | triggerEvents | A set on which push notifications should be triggered: lock, unlock, unlatch, lockngo, open, ring, doorsensor, warnings, smartlock |
+| notifications._notificationIndex_ | language | The language of push messages |
+| notifications._notificationIndex_ | lastActiveDate | The last active date |
+| notifications._notificationIndex_ | notificationId | The unique notificationId for the notification |
+| notifications._notificationIndex_ | os | The operating system<br>`{"0": 'Android', "1": 'iOS', "2": 'Webhook'}` |
+| notifications._notificationIndex_ | pushId | The push ID or the POST URL for a webhook |
+| notifications._notificationIndex_ | referenceId | The reference ID, an ID to identify a foreign system |
+| notifications._notificationIndex_ | secret | The 40 byte hex string to sign the checksumof the POST payload if the notification is webhook (os=2) |
+| notifications._notificationIndex_ | status | Current activation state<br>`{"0": 'INIT', "1": 'ACTIVE', "2": 'FAILED'}` |
+
+
+### Smartlocks and Opener (with Nuki Bridge API)
+A lock will be created as device with the name pattern ```door__<name of door>```. The following channels / states will be created in each lock (when using the Nuki Bridge API):
+
+| Channel | State | Description |
+|:------- |:----- |:----------- |
+| - | \_ACTION | Trigger an action on the lock |
 | - | id | ID of the Nuki |
 | - | name | Name of the Nuki |
+| - | type | Type of device |
+| - | bridgeId | Bridge ID of the Nuki |
 | status | - | Current status of the lock |
 | status | batteryCritical** | States critical battery level |
 | status | lockState** | Current lock-state of the Nuki |
@@ -90,71 +123,145 @@ A smartlock or opener will be created as device within the respective channel `d
 _** marked states will be updated on a Nuki action if callback is set_
 
 ### Smartlocks and Opener (with Nuki Web API)
-A smartlock or opener will be created as device within the respective channel `doors` or `openers`. The following channels / states will be created in each device (when using the Nuki Web API):
+A lock will be created as device with the name pattern ```door__<name of door>```. The following channels / states will be created in each lock (when using the Nuki Web API):
 
 | Channel | State | Description (possbile Values) |
 |:------- |:----- |:----------------------------- |
-| - | action | Trigger an action on the lock |
+| - | \_ACTION | Trigger an action on the lock |
 | - | id | ID of the Nuki |
 | - | name | Name of the Nuki |
-| status | - | Current status of the lock |
-| status | batteryCritical | States critical battery level |
-| status | closed | Indication if door is closed (boolean of doorState) |
-| status | doorState | Current door-state of the Nuki |
-| status | lastAction | Last triggered action |
-| status | lockState | Current lock-state of the Nuki |
-| status | locked | Indication if door is locked |
-| status | mode | The smartlock mode<br>`{"0": 'UNINITIALIZED', "1": 'PAIRING', "2": 'NORMAL', "3": 'UNKNOWN', "4": 'MAINTENANCE'}` |
-| status | refreshed | Timestamp of last update |
-| status | trigger | The state trigger<br>`{"0": 'SYSTEM', "1": 'MANUAL', "2": 'BUTTON', "3": 'AUTOMATIC', "4": 'WEB', "5": 'APP'}` |
-| config | - | Configuration of the lock |
-| config | gpsLatitude | Latitude |
-| config | gpsLongitude | Longitude |
+| - | type | Type of device |
+| - | logs | Logs / History of Nuki |
+| - | bridgeId | Bridge ID of the Nuki |
+
+#### Information
+
+| Channel | State | Description (possbile Values) |
+|:------- |:----- |:----------------------------- |
+| info | - | Additional Information |
+| info | accountId | The account ID |
+| info | authId | The authorization ID |
+| info | favorite | The favorite flag |
+| info | firmwareVersion | The firmware version |
+| info | hardwareVersion | The hardware version |
+| info | operationId | The operation id - if set the device is locked for another operation |
+| info | serverState | The server state<br>`{"0": 'OK', "1": 'UNREGISTERED', "2": 'AUTH UUID INVALID', "3": 'AUTH INVALID', "4": 'OFFLINE'}` |
+| info | adminPinState | The admin pin state<br>`{"0": 'OK', "1": 'MISSING', "2": 'INVALID'}` |
+| info | virtualDevice | The flag indicating a virtual Smart Lock |
+| info | dateCreated | The creation date |
+| info | dateUpdated | The update date |
+	
+#### State
+
+| Channel | State | Description (possbile Values) |
+|:------- |:----- |:----------------------------- |
+| state | - | Current status of the lock |
+| state | batteryCritical | States critical battery level |
+| state | closed | Indication if door is closed (boolean of doorState) |
+| state | doorState | Current door-state of the Nuki |
+| state | lastAction | Last triggered action |
+| state | lockState | Current lock-state of the Nuki |
+| state | locked | Indication if door is locked |
+| state | mode | The smartlock mode<br>`{"0": 'UNINITIALIZED', "1": 'PAIRING', "2": 'NORMAL', "3": 'UNKNOWN', "4": 'MAINTENANCE'}` |
+| state | ringToOpenTimer | Remaining ring to open time |
+| state | refreshed | Timestamp of last update |
+| state | trigger | The state trigger<br>`{"0": 'SYSTEM', "1": 'MANUAL', "2": 'BUTTON', "3": 'AUTOMATIC', "4": 'WEB', "5": 'APP'}` |
+
+#### General Config
+
+| Channel | State | Description (possbile Values) |
+|:------- |:----- |:----------------------------- |
+| config | - | Configuration |
+| config | advertisingMode | The advertising mode (battery saving)<br>`{"0": 'AUTOMATIC', "1": 'NORMAL', "2": 'SLOW', "3": 'SLOWEST'}` |
 | config | autoUnlatch | True if the door should be unlatched on unlocking (knob) |
-| config | pairingEnabled | True if the pairing is allowed via the smartlock button |
 | config | buttonEnabled | True if the button on the smartlock is enabled |
-| config | ledEnabled | True if the LED on the smartlock is enabled |
-| config | ledBrightness | The brightness of the LED: 0 (off) to 5 (max) |
-| config | fobPaired | True if a fob is paired with the smartlock |
+| config | capabilities | The capabilities indicate whether door opening is possible via App, RTO or both |
+| config | daylightSavingMode | The daylight saving mode |
 | config | fobAction1 | The fob action if button is pressed once<br>`{"0": 'NONE', "1": 'UNLOCK', "2": 'LOCK', "3": 'LOCK_N_GO', "4": 'INTELLIGENT'}` |
 | config | fobAction2 | The fob action if button is pressed twice<br>`{"0": 'NONE', "1": 'UNLOCK', "2": 'LOCK', "3": 'LOCK_N_GO', "4": 'INTELLIGENT'}` |
 | config | fobAction3 | The fob action if button is pressed 3 times<br>`{"0": 'NONE', "1": 'UNLOCK', "2": 'LOCK', "3": 'LOCK_N_GO', "4": 'INTELLIGENT'}` |
-| config | singleLock | True if the smartlock should only lock once (instead of twice) |
-| config | advertisingMode | The advertising mode (battery saving)<br>`{"0": 'AUTOMATIC', "1": 'NORMAL', "2": 'SLOW', "3": 'SLOWEST'}` |
-| config | keypadPaired | True if a keypad is paired with the smartlock |
+| config | fobPaired | True if a fob is paired with the smartlock |
+| config | gpsLatitude | Latitude |
+| config | gpsLongitude | Longitude |
 | config | homekitState | The homekit state<br>`{"0": 'UNAVAILABLE', "1": 'DISABLED', "2": 'ENABLED', "3": 'ENABLED & PAIRED'}` |
+| config | keypadPaired | True if a keypad is paired with the smartlock |
+| config | ledBrightness | The brightness of the LED: 0 (off) to 5 (max) |
+| config | ledEnabled | True if the LED on the smartlock is enabled |
+| config | name | The name of the smartlock for new users |
+| config | operatingMode | The operating mode of the opener |
+| config | pairingEnabled | True if the pairing is allowed via the smartlock button |
+| config | singleLock | True if the smartlock should only lock once (instead of twice) |
 | config | timezoneId | The timezone id |
-| config.advanced | - | Advanced Configuration of the lock |
-| config.advanced | totalDegrees | The absolute total position in degrees that has been reached during calibration |
-| config.advanced | unlockedPositionOffsetDegrees | Offset that alters the unlocked position |
-| config.advanced | lockedPositionOffsetDegrees | Offset that alters the locked position |
-| config.advanced | singleLockedPositionOffsetDegrees | Offset that alters the single locked position |
-| config.advanced | unlockedToLockedTransitionOffsetDegrees | Offset that alters the position where transition from unlocked to locked happens |
-| config.advanced | lngTimeout | Timeout in seconds for lock ‘n’ go |
-| config.advanced | singleButtonPressAction | The desired action, if the button is pressed once<br>`{"0": "NO_ACTION", "1": "INTELLIGENT", "2": "UNLOCK", "3": "LOCK", "4": "UNLATCH", "5": "LOCK_N_GO", "6": "SHOW_STATUS"}` |
-| config.advanced | doubleButtonPressAction | The desired action, if the button is pressed twice<br>`{"0": "NO_ACTION", "1": "INTELLIGENT", "2": "UNLOCK", "3": "LOCK", "4": "UNLATCH", "5": "LOCK_N_GO", "6": "SHOW_STATUS"}` |
-| config.advanced | detachedCylinder | Flag that indicates that the inner side of the used cylinder is detached from the outer side |
-| config.advanced | batteryType | The type of the batteries present in the smart lock<br>`{"0": 'ALKALI', "1": 'ACCUMULATOR', "2": 'LITHIUM'}` |
-| config.advanced | automaticBatteryTypeDetection | Flag that indicates if the automatic detection of the battery type is enabled |
-| config.advanced | unlatchDuration | Duration in seconds for holding the latch in unlatched position |
-| config.advanced | autoLockTimeout | Seconds until the smart lock relocks itself after it has been unlocked. No auto relock if value is 0. |
+| config | timezoneOffset | The timezone offset (in minutes) |
+
+#### Advanced Config
+
+| Channel | State | Description (possbile Values) |
+|:------- |:----- |:----------------------------- |
+| advancedConfig | - | Advanced Configuration |
+| advancedConfig | autoLockTimeout | Seconds until the smart lock relocks itself after it has been unlocked. No auto relock if value is 0. |
+| advancedConfig | automaticBatteryTypeDetection | Flag that indicates if the automatic detection of the battery type is enabled |
+| advancedConfig | batteryType | The type of the batteries present in the smart lock<br>`{"0": 'ALKALI', "1": 'ACCUMULATOR', "2": 'LITHIUM'}` |
+| advancedConfig | detachedCylinder | Flag that indicates that the inner side of the used cylinder is detached from the outer side |
+| advancedConfig | doubleButtonPressAction | The desired action, if the button is pressed twice<br>`{"0": "NO_ACTION", "1": "INTELLIGENT", "2": "UNLOCK", "3": "LOCK", "4": "UNLATCH", "5": "LOCK_N_GO", "6": "SHOW_STATUS"}` |
+| advancedConfig | lngTimeout | Timeout in seconds for lock ‘n’ go |
+| advancedConfig | lockedPositionOffsetDegrees | Offset that alters the locked position |
+| advancedConfig | singleButtonPressAction | The desired action, if the button is pressed once<br>`{"0": "NO_ACTION", "1": "INTELLIGENT", "2": "UNLOCK", "3": "LOCK", "4": "UNLATCH", "5": "LOCK_N_GO", "6": "SHOW_STATUS"}` |
+| advancedConfig | singleLockedPositionOffsetDegrees | Offset that alters the single locked position |
+| advancedConfig | totalDegrees | The absolute total position in degrees that has been reached during calibration |
+| advancedConfig | unlatchDuration | Duration in seconds for holding the latch in unlatched position |
+| advancedConfig | unlockedPositionOffsetDegrees | Offset that alters the unlocked position |
+| advancedConfig | unlockedToLockedTransitionOffsetDegrees | Offset that alters the position where transition from unlocked to locked happens |
+
+#### Opener Advanced Config
+
+| Channel | State | Description (possbile Values) |
+|:------- |:----- |:----------------------------- |
+| openerAdvancedConfig | - | Opener Configuration |
+| openerAdvancedConfig | intercomId | The database ID of the connected intercom |
+| openerAdvancedConfig | busModeSwitch | Method to switch between data and analogue mode<br>`{"0": 'DATA MODE', "1": 'ANALOGUE MODE'}` |
+| openerAdvancedConfig | shortCircuitDuration | Duration of the short circuit for BUS mode switching in ms |
+| openerAdvancedConfig | electricStrikeDelay | Delay of electric strike activation in ms (after lock action 3 -electric strike actuation-) |
+| openerAdvancedConfig | randomElectricStrikeDelay | Random electricStrikeDelay (range 3000 - 7000 ms) in order to simulate a person inside actuating the electric strike |
+| openerAdvancedConfig | electricStrikeDuration | Duration in ms of electric strike actuation (lock action 3 -electric strike actuation-) |
+| openerAdvancedConfig | disableRtoAfterRing | Flag to disable RTO after ring |
+| openerAdvancedConfig | rtoTimeout | After this period of time in minutes, RTO gets deactivated automatically |
+| openerAdvancedConfig | doorbellSuppression | The doorbell supression mode<br>`{"0": 'NEVER', "1": 'ALWAYS', "2": 'RTO', "3": 'CONTINUOUS', "4": 'CONTINUOUS + RTO'}` |
+| openerAdvancedConfig | doorbellSuppressionDuration | Duration in ms of doorbell suppression (only in Operating mode 2 -digital Intercom-) |
+| openerAdvancedConfig | soundRing | The sound for ring |
+| openerAdvancedConfig | soundOpen | The sound for open |
+| openerAdvancedConfig | soundRto | The sound for RTO |
+| openerAdvancedConfig | soundCm | The sound for CM |
+| openerAdvancedConfig | soundConfirmation | The sound confirmation |
+| openerAdvancedConfig | soundLevel | The sound level |
+| openerAdvancedConfig | singleButtonPressAction | The desired action, if the button is pressed once |
+| openerAdvancedConfig | doubleButtonPressAction | The desired action, if the button is pressed twice |
+| openerAdvancedConfig | batteryType | The type of the batteries present in the smart lock<br>`{"0": 'ALKALI', "1": 'ACCUMULATOR', "2": 'LITHIUM'}` |
+| openerAdvancedConfig | automaticBatteryTypeDetection | Flag that indicates if the automatic detection of the battery type is enabled |
+| openerAdvancedConfig | operationId | The operation id - if set device is locked for another operation |
+
+#### Users
+
+| Channel | State | Description (possbile Values) |
+|:------- |:----- |:----------------------------- |
 | users | - | Users of the lock |
 | users._userName_ | - | User _userName_ |
-| users._userName_ | name | Name of user |
-| users._userName_ | type | The type of the authorization<br>`{"0": 'APP', "1": 'BRIDGE', "2": 'FOB', "3": 'KEYPAD', "13": 'KEYPAD CODE', "14": 'Z-KEY', "15": 'VIRTUAL'}` |
-| users._userName_ | id | The unique id of user |
-| users._userName_ | authId | The smartlock authorization id |
-| users._userName_ | enabled | True if the user is enabled |
-| users._userName_ | remoteAllowed | True if the auth has remote access |
-| users._userName_ | lockCount | The lock count |
-| users._userName_ | dateLastActive | The last active date |
-| users._userName_ | dateCreated | The creation date |
-| users._userName_ | dateUpdated | The update date |
 | users._userName_ | allowedFromDate | The allowed from date |
 | users._userName_ | allowedUntilDate | The allowed until date |
 | users._userName_ | allowedWeekDays | The allowed weekdays<br>`{64: 'Monday', 32: 'Tuesday', 16: 'Wednesday', 8: 'Thursday', 4: 'Friday', 2: 'Saturday', 1: 'Sunday'}` |
 | users._userName_ | allowedFromTime | The allowed from time (in minutes from midnight) |
 | users._userName_ | allowedUntilTime | The allowed until time (in minutes from midnight) |
+| users._userName_ | authId | The smartlock authorization id |
+| users._userName_ | dateCreated | The creation date |
+| users._userName_ | dateUpdated | The update date |
+| users._userName_ | dateLastActive | The last active date |
+| users._userName_ | enabled | True if the user is enabled |
+| users._userName_ | id | The unique id of user |
+| users._userName_ | lockCount | The lock count |
+| users._userName_ | name | Name of user |
+| users._userName_ | remoteAllowed | True if the auth has remote access |
+| users._userName_ | smartlockId | The Nuki ID |
+| users._userName_ | type | The type of the authorization<br>`{"0": 'APP', "1": 'BRIDGE', "2": 'FOB', "3": 'KEYPAD', "13": 'KEYPAD CODE', "14": 'Z-KEY', "15": 'VIRTUAL'}` |
 
 
 ## Smart Home / Alexa integration using ioBroker.javascript
@@ -177,12 +284,12 @@ var states = {
 
 schedule('0 22 * * *', function()
 {
-    var status = (getState('nuki-extended.0.door__home_door.status.lockState').val);
+    var status = (getState('nuki-extended.0.smartlocks.home_door.state.lockState').val);
     var msg = 'Main Door door is ' + (states[status]) + '. ';
 
     if (status == '3')
     {
-        setState('nuki-extended.0.door__home_door.action', 2);
+        setState('nuki-extended.0.smartlocks.home_door._ACTION', 2);
         msg += 'Locking door..'
     }
     else
@@ -239,7 +346,7 @@ const DOOR_STATES = {
  * LISTEN TO CHANGES TO LOCK STATE
  * 
  */
-on({id: '#LOCK STATE ID#', change: 'any'}, function(obj)
+on({id: 'nuki-extended.0.smartlocks.home_door.state.lockState', change: 'any'}, function(obj)
 {
     if (obj !== undefined && obj.state !== undefined)
       say('Door is ' + DOOR_STATES[obj.state.val] + '!')
@@ -321,7 +428,7 @@ const DOOR_STATES = {
  * LISTEN TO CHANGES TO LOCK STATE
  * 
  */
-on({id: '#LOCK STATE ID#', change: 'any'}, function(obj)
+on({id: 'nuki-extended.0.smartlocks.home_door.state.lockState', change: 'any'}, function(obj)
 {
     if (obj !== undefined && obj.state !== undefined)
       msg('Door is ' + DOOR_STATES[obj.state.val] + '!')
@@ -347,7 +454,7 @@ const DOOR_STATES = {
  * LISTEN TO CHANGES TO LOCK STATE
  * 
  */
-on({id: '#LOCK STATE ID#', change: 'any'}, function(obj)
+on({id: 'nuki-extended.0.smartlocks.home_door.state.lockState', change: 'any'}, function(obj)
 {
     if (obj !== undefined && obj.state !== undefined)
     {
@@ -358,11 +465,18 @@ on({id: '#LOCK STATE ID#', change: 'any'}, function(obj)
 ```
 
 
-
 ## Changelog
 
-### 2.0.0 (2019-xx-xx)
-- (Zefau) Fixed Bug with incorrect callbacks
+### 2.0.0 (2019-10-xx)
+- (Zefau) added support for new Nuki Opener
+- (Zefau) added support for hashed token on hardware bridges (see https://developer.nuki.io/page/nuki-bridge-http-api-190/4#heading--token)
+- (Zefau) added fallback to Nuki Web API in case applied actions on Nuki Bridge API fail, e.g. due to bridge error 503 (see https://developer.nuki.io/t/random-http-503-unavailable/909/85?u=zefau)
+- (Zefau) added retry in case applied actions on Nuki Bridge API fail (when Nuki Web API is not used)
+- (Zefau) added option to regularly synchronise instead of using Bridge API callback
+- (Zefau) added refreshing all states of Nuki Web API when callback is received via Nuki Bridge API
+- (Zefau) added states for Nuki Notifications
+- (Zefau) added support for multiple devices (including Nuki Opener) on adapter web interface
+- (Zefau) added option to not retrieve all information (by deselecting `config` or `users`) via Nuki Web API
 
 
 ## Credits

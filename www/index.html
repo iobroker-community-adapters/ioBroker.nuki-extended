@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>ioBroker.nuki2</title>
+	<title>ioBroker.nuki-extended</title>
 	
 	<link rel="stylesheet" type="text/css" href="../../css/adapter.css"/>
 	<link rel="stylesheet" type="text/css" href="../../lib/css/materialize.css">
@@ -14,20 +14,67 @@
 
 	<script src="../../lib/js/materialize.js"></script>
 	<script src="LOCK.js"></script>
+	<script src="ICONS.js"></script>
 	<script src="LANGUAGE.js"></script>
 	<script>
 	<!--
 	var lang = (navigator.languages != undefined ? navigator.languages[0] : navigator.language).substr(0, 2);
 	console.log('LANGUAGE: ' + lang);
 	
+	var logIDs = [], timeline = [];
+	var timer = 0;
 	var socketConnected;
 	var tl;
 	
 	
 	// add entries
-	function timeline(entries)
+	function addTimeline(entries)
 	{
-		console.log(entries.length + ' entries found in log.');
+		// compare payload to existing entries
+		let added = false;
+		let entry;
+		for (let i = 0; i < entries.length; i++)
+		{
+			entry = entries[i];
+			
+			if (logIDs.indexOf(entry.id) === -1)
+			{
+				added = true;
+				logIDs.push(entry.id);
+				
+				// 
+				entry.date = new Date(entry.date);
+				entry.dateFormatted = entry.date.toLocaleDateString(lang, {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'});
+				entry.timeFormatted = entry.date.toLocaleTimeString(lang, {hour: '2-digit', minute:'2-digit', second:'2-digit'});
+				entry.action = ACTIONS[entry.action];
+				entry.deviceType = TYPES[entry.deviceType];
+				
+				// add to timeline
+				timeline.push(entry);
+			}
+			else
+				break;
+		}
+		
+		if (added)
+		{
+			// sort
+			timeline.sort(function(a, b)
+			{
+				return b.date - a.date
+			});
+			
+			// show timeline
+			showTimeline(timeline);
+		}
+	}
+	
+	function showTimeline(entries)
+	{
+		console.log("Show timeline with " + timeline.length + " entries.");
+		console.log(JSON.stringify(timeline));
+		
+		$('.cd-timeline-block').not('.template').remove();
 		entries.forEach(function(entry) {addLog(entry)});
 		
 		tl.hideBlocks();
@@ -37,15 +84,12 @@
 	// add log entry
 	function addLog(entry)
 	{
-		var date = new Date(entry.date);
-		entry.date = date.toLocaleDateString(lang, {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'});
-		entry.time = date.toLocaleTimeString(lang, {hour: '2-digit', minute:'2-digit', second:'2-digit'});
-		entry.action = ACTIONS[entry.action];
-		
-		var tpl = $('.template').clone().removeClass('template hidden').addClass('lock_' + entry.smartlockId);
+		var tpl = $('.template').clone().removeClass('template hidden').addClass('device device_' + entry.smartlockId);
 		tpl.find('.cd-name').html(L(lang, entry.action).replace(/%person%/gi, entry.name ? L(lang, 'by') + ' ' + entry.name.replace('Nuki Web ()', 'Nuki Web API') : '<em>' + L(lang, 'manually') + '</em>'));
 		tpl.find('.cd-icon').addClass('action-'+entry.action).css('background-image', 'url('+ICONS[entry.action]+')');
-		tpl.find('.cd-date').html(entry.date + ', ' + entry.time);
+		tpl.find('.cd-date').html(entry.dateFormatted + ', ' + entry.timeFormatted);
+		
+		tpl.find('.cd-description').removeClass('hidden').find('.nuki-device').html('<img style="vertical-align: middle" src="'+ICONS['DEVICE']+'" />' + ' ' + entry.deviceType);
 		
 		if (entry.trigger != 0)
 			tpl.find('.cd-description').removeClass('hidden').find('.nuki-trigger').html('<img style="vertical-align: middle" src="'+ICONS['TRIGGER']+'" />' + ' ' + L(lang, TRIGGER[entry.trigger]));
@@ -57,6 +101,7 @@
 			tpl.find('.cd-description').removeClass('hidden').find('.nuki-autoUnlock').html('<img style="vertical-align: middle" src="'+ICONS['AUTO_UNLOCK']+'" />' + ' ' + L(lang, 'AUTO_UNLOCK'));
 		
 		$('#cd-timeline .cd-timeline-block').last().after(tpl);
+		$('#noNukiWebApi').remove();
 	}
 	
 	// add locks
@@ -64,22 +109,53 @@
 	{
 		var list = $('#cd-timeline .locks');
 		
+		// add lock
 		if (list.find('[data-node="' + lock.nuki + '"]').length == 0)
-			list.append('<li data-node="' + lock.nuki + '">%name%</li>');
+			list.append('<li class="menu" data-node="' + lock.nuki + '"><a class="filter">%name%</a></li>');
 		
+		// show selection only with 2 devices or more
 		if (list.find('li').length > 2)
+		{
+			list.css('width', $('#cd-timeline').css('width'));
 			list.removeClass('hidden');
+		}
 		
-		$('[data-node="' + lock.nuki + '"]').attr('data-' + lock.key, lock.value);
-		$('[data-node="' + lock.nuki + '"]').text($('[data-node="' + lock.nuki + '"]').text().replace(RegExp('%' + lock.key + '%', 'gi'), lock.value));
+		// set data-id and data-name with its values
+		if (!$('[data-node="' + lock.nuki + '"]').attr('data-' + lock.key))
+			$('[data-node="' + lock.nuki + '"]').attr('data-' + lock.key, lock.value);
+		
+		// replace %name% with acutal name
+		if ($('[data-node="' + lock.nuki + '"]').html().indexOf('%') > -1)
+			$('[data-node="' + lock.nuki + '"]').html($('[data-node="' + lock.nuki + '"]').html().replace(RegExp('%' + lock.key + '%', 'gi'), lock.value));
 	}
 	
 	// page loaded
 	$(window).on('load', function()
 	{
+		// attach listener to filter
+		$('body').on('click', '.menu .filter', function(e)
+		{
+			let id = $(this).parent().data('id');
+			
+			// remove current selection
+			$('.menu .filter').removeClass('active');
+			
+			// add new selection
+			$(this).addClass('active');
+			if (id != "ALL")
+			{
+				$('.device').addClass('hidden');
+				$('.device_' + id).removeClass('hidden');
+			}
+			else
+				$('.device').removeClass('hidden');
+			
+			tl.hideBlocks();
+			$(window).trigger('scroll');
+		});
+		
 		// config
-		servConn.namespace = 'nuki2.0';
-		var states = ['logs', 'id', 'name'];
+		var STATES = ['logs', 'id', 'name'];
 		
 		//
 		// Vertical Timeline
@@ -98,19 +174,13 @@
 				// retrieve states
 				if (socketConnected)
 				{
-					servConn.getChildren(servConn.namespace, function(err, _locks)
+					['smartlocks', 'openers'].forEach(function(deviceType)
 					{
-						if (err !== null)
+						timer = timer + 1;
+						setTimeout(function updater()
 						{
-							alert(err);
-							return;
-						}
-						
-						_locks.forEach(function(lock)
-						{
-							if (lock.indexOf('.door__') === -1) return; // only doors, no bridges
-							
-							servConn.getStates(states.map(function(state) {return lock+'.'+state}), function(err, _states)
+							console.log('Retrieving ' + deviceType + ' logs..');
+							servConn.getChildren('nuki-extended.0.' + deviceType, function(err, _devices)
 							{
 								if (err !== null)
 								{
@@ -118,33 +188,51 @@
 									return;
 								}
 								
-								if (_states !== null && _states !== undefined)
+								_devices.forEach(function(device)
 								{
-									for (var key in _states)
+									servConn.getStates(STATES.map(state => device + '.' + state), function(err, _states)
 									{
-										if (!_states[key] || !_states[key].val)
+										if (err !== null)
 										{
-											alert('Please activate Nuki Web API to retrieve log entries!');
+											alert(err);
 											return;
 										}
 										
-										var content = _states[key].val;
-										var node = key.replace(lock+'.', '');
-										
-										// add log entries
-										if (node == 'logs')
-											timeline(JSON.parse(content));
-										
-										// add other information
-										else
+										if (_states !== null && _states !== undefined)
 										{
-											addLock({'nuki': lock, key: node, value: content});
-											$('[data-state="' + node + '"]').html(content);
+											for (var key in _states)
+											{
+												var node = key.substr(key.lastIndexOf('.')+1);
+												if (STATES.indexOf(node) === -1)
+													continue;
+												
+												var content = _states[key].val;
+												
+												// add log entries
+												if (node == 'logs')
+												{
+													let entries = JSON.parse(content);
+													console.log('Found ' + entries.length + ' entries in ' + deviceType + ' log.');
+													addTimeline(entries);
+												}
+												
+												// add other information
+												else
+												{
+													addLock({'nuki': device, key: node, value: content});
+													$('[data-state="' + node + '"]').html(content);
+												}
+											}
+											
+											// updater
+											setTimeout(updater, 10*1000); // every 10s
 										}
-									}
-								}
+									});
+								});
 							});
-						});
+							
+							
+						}, timer*1000);
 						
 					});
 				}
@@ -177,15 +265,17 @@
 
 <section id="cd-timeline" class="cd-container">
 	<ul class="locks hidden">
-		<li data-id="ALL">Show all Doors</li>
+		<li data-id="ALL" class="menu"><a class="filter active">Show all</a></li>
 	</ul>
-	<h2 class="title" data-state="name"></h2>
-
+	
+	<p id="noNukiWebApi">Please activate Nuki Web API to retrieve log entries!</p>
+	
 	<div class="cd-timeline-block template hidden">
 		<div class="cd-timeline-img cd-icon"></div>
 		<div class="cd-timeline-content">
 			<h2 class="cd-name"></h2>
 			<p class="cd-description hidden">
+				<span class="nuki-device"></span>
 				<span class="nuki-trigger"></span>
 				<span class="nuki-state"></span>
 				<span class="nuki-autoUnlock"></span>

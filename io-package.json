@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "nuki-extended",
-        "version": "2.0.0",
+        "version": "2.0.0-rc.2",
         "title": "Nuki Lock & Opener",
         "titleLang": {
             "en": "Nuki Lock & Opener",
@@ -17,56 +17,19 @@
         },
         "desc": {
             "en": "Control and monitor your Nuki Smartlock and Nuki Opener with ioBroker",
-            "de": "Steuern und überwachen des Nuki Smartlocks und des Nuki Openers mit ioBroker"
+            "de": "Steuern und überwachen des Nuki Smartlocks und des Nuki Openers mit ioBroker",
+            "ru": "Контроль и мониторинг вашего Smartlock Нуки и Нуки открывалка с ioBroker",
+            "pt": "Controlar e monitorar seu Nuki Smartlock e Nuki Abridor com ioBroker",
+            "nl": "Controle en toezicht op uw Nuki Smartlock en Nuki Opener met ioBroker",
+            "fr": "Le contrôle et la surveillance de votre Nuki Smartlock et Nuki Ouvre-boîte avec ioBroker",
+            "it": "Controllo e monitoraggio del Nuki Smartlock e Nuki Lettore con ioBroker",
+            "es": "Control y monitoreo de su Nuki Smartlock y Nuki Abridor con ioBroker",
+            "pl": "Kontrola i monitorowanie twojego Smartlock Нуки i Нуки otwieracz do butelek z ioBroker",
+            "zh-cn": "控制和监视你的Nuki Smartlock和Nuki开与ioBroker"
         },
         "news": {
-            "1.0.1": {
-                "en": "Performance improvements",
-                "de": "Performance-Verbesserungen",
-                "ru": "Улучшения производительности ",
-                "pt": "Melhorias de desempenho",
-                "nl": "Performance verbeteringen",
-                "fr": "Des améliorations de performances",
-                "it": "Miglioramenti delle prestazioni",
-                "es": "Mejoras de rendimiento",
-                "pl": "Ulepszenia wydajności ",
-                "zh-cn": "性能的改进"
-            },
-            "1.0.0": {
-                "en": "bump to stable release (no changes)",
-                "de": "bump zum stable-release (keine änderungen)",
-                "ru": "поднять до стабильного релиза (без изменений)",
-                "pt": "a colisão a versão estável (sem alterações)",
-                "nl": "bump naar 'stable' release (geen wijzigingen)",
-                "fr": "bump pour la version stable (aucun changement)",
-                "it": "bump del rilascio stabile (nessuna modifica)",
-                "es": "golpe a la versión estable (sin cambios)",
-                "pl": "podnieść do stabilnego wydania (bez zmian)",
-                "zh-cn": "碰到稳定释放(没有变化)"
-            },
-            "0.9.1": {
-                "en": "Added Web Interface to view logs",
-                "de": "Die Web-Schnittstelle zum anzeigen der Protokolle",
-                "ru": "Добавлен web-интерфейс для просмотра журналов",
-                "pt": "Adicionado Interface Web para exibir logs",
-                "nl": "Toegevoegd Web Interface om logboeken te bekijken",
-                "fr": "Ajout de l'Interface Web pour afficher les journaux",
-                "it": "Aggiunto Interfaccia Web per visualizzare i log",
-                "es": "Añadido Interfaz de Web para ver los registros de",
-                "pl": "Dodany web-interfejs do przeglądania czasopism",
-                "zh-cn": "加入网络的界面查看记录"
-            },
-            "0.9.0": {
-                "en": "reworked adapter (auto discovery in admin panel, support for multiple bridges)",
-                "de": "überarbeiteter Adapter (auto discovery und Unterstützung für mehrere Bridges)",
-                "ru": "переработан адаптер (автообнаружение в админ-панели, поддержка нескольких мостов)",
-                "pt": "adaptador retrabalhado (descoberta automática no painel de administração, suporte para várias pontes)",
-                "nl": "herwerkte adapter (auto discovery in admin panel, ondersteuning voor meerdere bridges)",
-                "fr": "adaptateur retravaillé (découverte automatique dans le panneau d'administration, prise en charge de plusieurs ponts)",
-                "it": "adattatore rielaborato (individuazione automatica nel pannello di amministrazione, supporto per più bridge)",
-                "es": "Adaptador reelaborado (descubrimiento automático en el panel de administración, soporte para múltiples puentes)",
-                "pl": "przerobiony adapter (automatyczne wykrywanie w panelu administratora, obsługa wielu mostów)",
-                "zh-cn": "重新设计的适配器（管理面板中的自动发现，支持多个网桥）"
+            "2.0.1": {
+                "en": ""
             }
         },
         "authors": [
@@ -81,7 +44,7 @@
             "nuki",
             "smart",
             "lock",
-			"opener"
+            "opener"
         ],
         "readme": "https://github.com/Zefau/ioBroker.nuki-extended/blob/master/README.md",
         "docs": "README.md",
@@ -99,6 +62,9 @@
         "messagebox": true,
         "subscribe": "messagebox"
     },
-    "native": {},
+    "native": {
+		"syncConfig": true,
+		"syncUsers": true
+	},
     "objects": []
 }

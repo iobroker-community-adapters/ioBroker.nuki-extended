@@ -21,9 +21,9 @@ function L(lang, word)
 var LANG = {
 	'UNLOCK': {'en': 'Door unlocked %person%', 'de': 'Tür %person% aufgeschlossen'},
 	'LOCK': {'en': 'Door locked %person%', 'de': 'Tür %person% verschlossen'},
-	'UNLATCH': {'en': 'Door unlatched %person%', 'de': 'Tür %person% entriegelt'},
+	'UNLATCH': {'en': 'Door unlatched %person%', 'de': 'Tür %person% geöffnet'},
 	'LOCK_N_GO': {'en': 'Door locked & go %person%', 'de': 'Tür %person% geschlossen und los'},
-	'LOCK_N_GO_WITH_UNLATCH': {'en': 'Door unlatched & go %person%', 'de': 'Tür %person% entriegelt und los'},
+	'LOCK_N_GO_WITH_UNLATCH': {'en': 'Door unlatched & go %person%', 'de': 'Tür %person% geöffnet und los'},
 	'DOOR_OPENED': {'en': 'Door opened %person%', 'de': 'Tür %person% geöffnet'},
 	'DOOR_CLOSED': {'en': 'Door closed %person%', 'de': 'Tür %person% geschlossen'},
 	'DOOR_SENSOR_JAMMED': {'en': 'Door Sensor jammed %person%', 'de': 'Tür Sensor %person% blockiert'},
