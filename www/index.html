@@ -25,7 +25,7 @@
 	var timer = 0;
 	var socketConnected;
 	var tl;
-	
+	var instances = 0;
 	
 	// add entries
 	function addTimeline(entries)
@@ -174,63 +174,77 @@
 				// retrieve states
 				if (socketConnected)
 				{
+					// get all instances of the adapter
+					console.log('Retrieving all adapter instances..');
+					for (let instance = 0; instance < 9; instance++)
+					{
+						servConn.getObject('nuki-extended.' + instance + '.info.connection', function(err, _instance)
+						{
+							if (_instance !== null)
+								instances = instances < instance ? instance : instances;
+						});
+					}
+					
+					// get logs from devices
 					['smartlocks', 'openers'].forEach(function(deviceType)
 					{
 						timer = timer + 1;
 						setTimeout(function updater()
 						{
-							console.log('Retrieving ' + deviceType + ' logs..');
-							servConn.getChildren('nuki-extended.0.' + deviceType, function(err, _devices)
+							for (let instance = 0; instance <= instances; instance++)
 							{
-								if (err !== null)
+								console.log('Retrieving ' + deviceType + ' logs from instance ' + instance + '..');
+								servConn.getChildren('nuki-extended.' + instance + '.' + deviceType, function(err, _devices)
 								{
-									alert(err);
-									return;
-								}
-								
-								_devices.forEach(function(device)
-								{
-									servConn.getStates(STATES.map(state => device + '.' + state), function(err, _states)
+									if (err !== null)
 									{
-										if (err !== null)
+										alert(err);
+										return;
+									}
+									
+									_devices.forEach(function(device)
+									{
+										servConn.getStates(STATES.map(state => device + '.' + state), function(err, _states)
 										{
-											alert(err);
-											return;
-										}
-										
-										if (_states !== null && _states !== undefined)
-										{
-											for (var key in _states)
+											if (err !== null)
 											{
-												var node = key.substr(key.lastIndexOf('.')+1);
-												if (STATES.indexOf(node) === -1)
-													continue;
-												
-												var content = _states[key].val;
-												
-												// add log entries
-												if (node == 'logs')
-												{
-													let entries = JSON.parse(content);
-													console.log('Found ' + entries.length + ' entries in ' + deviceType + ' log.');
-													addTimeline(entries);
-												}
-												
-												// add other information
-												else
-												{
-													addLock({'nuki': device, key: node, value: content});
-													$('[data-state="' + node + '"]').html(content);
-												}
+												alert(err);
+												return;
 											}
 											
-											// updater
-											setTimeout(updater, 10*1000); // every 10s
-										}
+											if (_states !== null && _states !== undefined)
+											{
+												for (var key in _states)
+												{
+													var node = key.substr(key.lastIndexOf('.')+1);
+													if (STATES.indexOf(node) === -1)
+														continue;
+													
+													var content = _states[key].val;
+													
+													// add log entries
+													if (node == 'logs')
+													{
+														let entries = JSON.parse(content);
+														console.log('Found ' + entries.length + ' entries in ' + deviceType + ' log.');
+														addTimeline(entries);
+													}
+													
+													// add other information
+													else
+													{
+														addLock({'nuki': device, key: node, value: content});
+														$('[data-state="' + node + '"]').html(content);
+													}
+												}
+												
+												// updater
+												setTimeout(updater, 10*1000); // every 10s
+											}
+										});
 									});
 								});
-							});
-							
+							}
 							
 						}, timer*1000);
 						
