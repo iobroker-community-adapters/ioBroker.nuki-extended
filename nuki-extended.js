@@ -377,8 +377,10 @@ function initNukiAPIs()
 					{
 						let payload = {'nukiId': req.body.nukiId, 'state': { ...req.body, 'timestamp': new Date().toISOString().substr(0,19) + '+00:00' }};
 						if (payload.state.nukiId) delete payload.state.nukiId;
+						if (payload.state.deviceType) delete payload.state.deviceType;
 						
 						adapter.log.debug('Received payload via callback: ' + JSON.stringify(payload));
+						library.set(library.getNode('bridgeApiLast'), new Date().toISOString().substr(0,19) + '+00:00');
 						updateLock(payload);
 						res.sendStatus(200);
 						
@@ -558,14 +560,14 @@ function getWebApi()
 	{
 		smartlocks.forEach(smartlock =>
 		{
-			adapter.log.debug('getWebApi(): ' + JSON.stringify(smartlock));
-			
 			// remap states
 			smartlock.nukiId = smartlock.smartlockId;
 			smartlock.deviceType = smartlock.type;
 			if (smartlock.state) smartlock.state.timestamp = new Date().toISOString().substr(0,19) + '+00:00';
 			delete smartlock.smartlockId;
 			delete smartlock.type;
+			
+			adapter.log.debug('getWebApi(): ' + JSON.stringify(smartlock));
 			
 			// get config
 			if (adapter.config.syncConfig !== true)

@@ -110,5 +110,5 @@
     "test:package": "mocha test/package --exit",
     "test:unit": "mocha test/unit --exit"
   },
-  "version": "2.0.0-rc.2"
+  "version": "2.0.0-rc.3"
 }
