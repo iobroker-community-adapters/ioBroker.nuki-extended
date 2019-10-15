@@ -11,8 +11,9 @@ module.exports =
 	
 	
 	// INFO
+	'bridgeApiCallback': {'node': 'info.bridgeApiSync', 'description': 'Indicates whether syncing via Bridge API is activated', 'role': 'indicator', 'type': 'boolean'},
 	'bridgeApiSync': {'node': 'info.bridgeApiSync', 'description': 'Indicates whether syncing via Bridge API is activated', 'role': 'indicator', 'type': 'boolean'},
-	'bridgeApiLast': {'node': 'info.bridgeApiLast', 'description': 'Timestamp of last Bridge API sync', 'role': 'date'},
+	'bridgeApiLast': {'node': 'info.bridgeApiLast', 'description': 'Timestamp of last Bridge API sync or callback', 'role': 'date'},
 	'webApiSync': {'node': 'info.webApiSync', 'description': 'Indicates whether syncing via Web API is activated', 'role': 'indicator', 'type': 'boolean'},
 	'webApiLast': {'node': 'info.webApiLast', 'description': 'Timestamp of last Web API sync', 'role': 'date'},
 	
@@ -42,6 +43,7 @@ module.exports =
 	'uptime': {'state': 'uptime', 'description': 'Uptime of the bridge in seconds', 'role': 'value'},
 	'currentTime': {'state': 'refreshed', 'description': 'Timestamp of last update', 'role': 'date'},
 	'serverConnected': {'state': '_connected', 'description': 'Flag indicating whether or not the bridge is connected to the Nuki server', 'type': 'boolean', 'role': 'indicator.reachable'},
+	'wlanConnected': {'description': 'Flag indicating whether connected to WLAN', 'type': 'boolean', 'role': 'indicator'},
 	
 	'versions.firmwareVersion': {'state': 'versFirmware', 'description': 'Version of the bridges firmware (hardware bridge only)', 'role': 'text'},
 	'versions.wifiFirmwareVersion': {'state': 'versWifi', 'description': 'Version of the WiFi modules firmwarehardware bridge only', 'role': 'text'},
@@ -51,6 +53,7 @@ module.exports =
 	'callbacks': {'description': 'Callbacks of the Bridge', 'role': 'channel'},
 	'callbacks.list': {'description': 'List of callbacks', 'role': 'json'},
 	'callbacks.callback': {'description': 'Callback', 'role': 'channel'},
+	'callbacks.callback.id': {'description': 'ID of the callback', 'role': 'value', 'type': 'number'},
 	'callbacks.callback.url': {'description': 'URL of the callback', 'role': 'text'},
 	'callbacks.callback.delete': {'description': 'Delete the callback', 'role': 'button'},
 	
@@ -150,6 +153,9 @@ module.exports =
 	'advancedConfig.unlatchDuration': {'description': 'Duration in seconds for holding the latch in unlatched position', 'role': 'value'},
 	'advancedConfig.autoLockTimeout': {'description': 'Seconds until the smart lock relocks itself after it has been unlocked. No auto relock if value is 0.', 'role': 'value'},
 	
+	// SMARTLOCK - CONFIG
+	'webConfig': {'description': 'Web Configuration', 'role': 'channel'},
+	'webConfig.batteryWarningPerMailEnabled': {'description': 'True if a battery warning is send via email', 'type': 'boolean', 'role': 'indicator'},
 	
 	// OPENER
 	

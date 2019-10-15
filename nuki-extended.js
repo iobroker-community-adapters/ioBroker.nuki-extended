@@ -6,7 +6,6 @@ const _request = require('request-promise');
 const _http = require('express')();
 const _parser = require('body-parser');
 const _ip = require('ip');
-const _uuid = require('uuid/v5');
 
 const Bridge = require('./lib/nuki-bridge-api');
 const Nuki = require('nuki-web-api');
@@ -78,6 +77,7 @@ function startAdapter(options)
 				library.setDeviceState(state.replace(adapterName + '.' + adapter.instance + '.', ''), states[state] && states[state].val);
 		
 			// start
+			library.set(Library.CONNECTION, true);
 			initNukiAPIs();
 		});
 	});
@@ -139,14 +139,14 @@ function startAdapter(options)
 					adapter.log.info('Deleted callback with URL ' + url + '.');
 					
 					// delete objects
-					let path = BRIDGES[bridgeId].data.path + '.callbacks.' + _uuid(url, _uuid.URL);
+					let path = BRIDGES[bridgeId].data.path + '.callbacks.' + CALLBACKS[bridgeId][callbackIndex].getCallbackId();
 					library.del(path, true);
 					
 					// update callback list
 					CALLBACKS[bridgeId].splice(callbackIndex, 1);
-					library._setValue(BRIDGES[bridgeId].data.path + '.callbacks.list', JSON.stringify(CALLBACKS[bridgeId].map(cb => {return {'callbackId': cb.callbackId, 'url': cb.url}})));
+					library._setValue(BRIDGES[bridgeId].data.path + '.callbacks.list', JSON.stringify(CALLBACKS[bridgeId].map(cb => {return {'id': cb.id, 'url': cb.url}})));
 				})
-				.catch(err => adapter.log.debug('Error removing callback (' + JSON.stringify(err) + ')!'));
+				.catch(err => adapter.log.debug('Error removing callback (' + err.message + ')!'));
 			}
 			else
 				adapter.log.warn('Error deleting callback with URL ' + url + ': ' + (err ? err.message : 'No Callback ID given!'));
@@ -247,6 +247,7 @@ function startAdapter(options)
  */
 function initNukiAPIs()
 {
+	library.set(library.getNode('bridgeApiCallback'), false);
 	library.set(library.getNode('bridgeApiSync'), false);
 	library.set(library.getNode('webApiSync'), false);
 	
@@ -278,7 +279,6 @@ function initNukiAPIs()
 	else
 	{
 		setup.push('bridge_api');
-		library.set(Library.CONNECTION, true);
 		
 		// go through bridges
 		let listener = adapter.config.bridges.map((device, i) =>
@@ -319,11 +319,11 @@ function initNukiAPIs()
 			{
 				adapter.log.debug('Retrieved current callbacks from Nuki Bridge ' + bridge_ident + '.');
 				CALLBACKS[device.bridge_id] = cbs;
-				setCallbackNodes(device.bridge_id);
 				
 				// check for enabled callback
 				if (adapter.config.refreshBridgeApiType == 'callback')
 				{
+					library.set(library.getNode('bridgeApiCallback'), true);
 					let url = 'http://' + _ip.address() + ':' + adapter.config.callbackPort + '/nuki-api-bridge'; // NOTE: https is not supported according to API documentation
 					
 					// attach callback
@@ -347,12 +347,15 @@ function initNukiAPIs()
 								else
 								{
 									adapter.log.warn('Callback not attached due to error. See debug log for details.');
-									adapter.log.debug(JSON.stringify(err));
+									adapter.log.debug(err.message);
 								}
 							});
 					}
 					else
+					{
 						adapter.log.debug('Callback (with URL ' + url + ') already attached to Nuki Bridge ' + bridge_ident + '.');
+						setCallbackNodes(device.bridge_id);
+					}
 					
 					return Promise.resolve(true);
 				}
@@ -381,16 +384,20 @@ function initNukiAPIs()
 						
 						adapter.log.debug('Received payload via callback: ' + JSON.stringify(payload));
 						library.set(library.getNode('bridgeApiLast'), new Date().toISOString().substr(0,19) + '+00:00');
+						library.set(library.getNode('bridgeApiCallback'), true);
+						
 						updateLock(payload);
 						res.sendStatus(200);
+						res.end();
 						
 						// update Web API as well
 						getWebApi();
 					}
 					else
 					{
-						res.sendStatus(500);
 						adapter.log.warn('main(): ' + e.message);
+						res.sendStatus(500);
+						res.end();
 					}
 				});
 				
@@ -443,21 +450,31 @@ function initNukiAPIs()
 	if (adapter.config.refreshBridgeApi > 0 && !unloaded && adapter.config.refreshBridgeApiType == 'polling')
 	{
 		adapter.log.info('Polling Nuki Bridge API with a frequency of ' + adapter.config.refreshBridgeApi + 's.');
-		refreshCycleBridgeApi = setTimeout(function updaterBridgeApi()
-		{
-			// update Nuki Bridge API
-			for (let key in BRIDGES) {getBridgeApi(BRIDGES[key])}
-			
-			// set interval
-			if (!unloaded)
-				refreshCycleBridgeApi = setTimeout(updaterBridgeApi, Math.round(parseInt(adapter.config.refreshBridgeApi)*1000));
-			
-		}, Math.round(parseInt(adapter.config.refreshBridgeApi)*1000));
+		refreshCycleBridgeApi = setTimeout(updaterBridgeApi, Math.round(parseInt(adapter.config.refreshBridgeApi)*1000));
 	}
 	else if (adapter.config.refreshBridgeApi == 0 && !unloaded && (!adapter.config.refreshBridgeApiType || adapter.config.refreshBridgeApiType == 'polling'))
 		adapter.log.info('Polling Nuki Bridge API deactivated.');
 }
 
+
+/**
+ * Bridge API updater
+ *
+ */
+function updaterBridgeApi(bridge)
+{
+	// update Nuki Bridge API
+	if (bridge)
+		getBridgeApi(bridge)
+	
+	else
+		for (let key in BRIDGES) {getBridgeApi(BRIDGES[key])}
+	
+	// set interval
+	if (!unloaded)
+		refreshCycleBridgeApi = setTimeout(updaterBridgeApi, Math.round(parseInt(adapter.config.refreshBridgeApi)*1000));
+	
+}
 
 /**
  * Retrieve from Bridge API.
@@ -496,10 +513,10 @@ function getBridgeApi(bridge)
 		adapter.log.warn('Failed retrieving /list from Nuki Bridge' + (bridge.data.bridge_name ? ' with name ' + bridge.data.bridge_name : (bridge.data.bridge_id ? ' with ID ' + bridge.data.bridge_id : (bridge.data.bridge_ip ? ' with ip ' + bridge.data.bridge_ip : ''))) + '!');
 		adapter.log.debug('getBridgeApi(): ' + err.message);
 		
-		if (err.message.indexOf('503') > -1)
+		if (err.message.indexOf('503') > -1 && !unloaded)
 		{
 			adapter.log.info('Trying again in 10s..');
-			setTimeout(updaterBridgeApi, 10*1000);
+			setTimeout(updaterBridgeApi, 10*1000, bridge);
 		}
 	});
 	
@@ -624,6 +641,8 @@ function getWebApi()
  */
 function updateLock(payload)
 {
+	library.set(Library.CONNECTION, true);
+	
 	// index Nuki
 	let type, path;
 	if (DEVICES[payload.nukiId] === undefined || !DEVICES[payload.nukiId].path)
@@ -709,7 +728,7 @@ function updateLock(payload)
  */
 function setAction(device, action, api = 'bridge', retry = 0)
 {
-	adapter.log.info('Triggered action -' + action.name + '- on Nuki ' + device.type + ' ' + device.name + '.');
+	adapter.log.info('Trigger action -' + action.name + '- on Nuki ' + device.type + ' ' + device.name + '.');
 	
 	// try Bridge API
 	if (device.instance !== undefined && device.instance !== null && api == 'bridge')
@@ -792,24 +811,54 @@ function setAction(device, action, api = 'bridge', retry = 0)
 function setCallbackNodes(bridgeId)
 {
 	let path = BRIDGES[bridgeId].data.path + '.callbacks';
-	library.del(path, true, () =>
+	let urls = {};
+	
+	// compare callback list with states
+	adapter.getStates(path + '.*', (err, states) =>
 	{
-		// create states for callbacks
-		let cbs = [];
+		// index states
+		for (let state in states)
+		{
+			if (state.substr(-4) == '.url' && states[state] && states[state].val)
+				urls[state.substr(-5, 1)] = states[state].val;
+		}
+		
+		// add new callbacks
+		let index = null, cbs = [];
 		CALLBACKS[bridgeId].forEach(cb =>
 		{
-			let node = path + '.' + _uuid(cb.url, _uuid.URL);
-			cbs.push({'callbackId': cb.callbackId, 'url': cb.url});
+			// search for callback URL
+			index = Object.values(urls).indexOf(cb.url);
+			cbs.push({'id': cb.callbackId, 'url': cb.url});
 			
-			library.set({ ...library.getNode('callbacks.callback'), 'node': node });
-			library.set({ ...library.getNode('callbacks.callback.url'), 'node': node + '.url' }, cb.url);
-			library.set({ ...library.getNode('callbacks.callback.delete'), 'node': node + '._delete'});
-			adapter.subscribeStates(node + '._delete'); // attach state listener
+			// add new URL
+			if (index === -1)
+			{
+				let node = path + '.' + cb.callbackId.toString();
+				library.set({ ...library.getNode('callbacks.callback'), 'node': node });
+				library.set({ ...library.getNode('callbacks.callback.id'), 'node': node + '.id' }, parseInt(cb.callbackId));
+				library.set({ ...library.getNode('callbacks.callback.url'), 'node': node + '.url' }, cb.url);
+				library.set({ ...library.getNode('callbacks.callback.delete'), 'node': node + '._delete'});
+			}
+			
+			// keep existing URLs
+			else
+			{
+				let key = Object.keys(urls)[index];
+				delete urls[key];
+			}
 		});
 		
 		// create channel and callback list
 		library.set({ ...library.getNode('callbacks'), 'node': path });
 		library.set({ ...library.getNode('callbacks.list'), 'node': path + '.list'}, JSON.stringify(cbs));
+		
+		// attach state listener
+		adapter.subscribeStates('*.callbacks.*._delete');
+		
+		// remove old callbacks
+		for (let key in urls)
+			library.del(path + '.' + key, true, () => adapter.log.debug('Deleted states for callback with URL ' + urls[key] + '.'));
 	});
 }
 

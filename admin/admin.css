@@ -2,11 +2,10 @@
  * Admin styles.
  *
  * @author Zefau <zefau@mailbox.org>
- * @version 0.3.2
- * @date 2019-08-18
+ * @version 0.3.4
+ * @date 2019-10-06
  *
  */
-.m select {display: block !important}
 .hidden {display: none}
 .box {
 	padding: 10px 5px 15px 5px !important;
@@ -41,6 +40,5 @@ p.errorMessage {
 pre {display: inline}
 
 .m [type="checkbox"] + span:not(.lever) {
-	height: auto;
 	margin-bottom: 3px;
 }

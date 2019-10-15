@@ -21,11 +21,18 @@
 	var lang = (navigator.languages != undefined ? navigator.languages[0] : navigator.language).substr(0, 2);
 	console.log('LANGUAGE: ' + lang);
 	
+	var STATES = ['logs', 'id', 'name'];
 	var logIDs = [], timeline = [];
 	var timer = 0;
 	var socketConnected;
 	var tl;
-	var instances = 0;
+	
+	// error
+	setTimeout(function()
+	{
+		$('#noNukiWebApi').text('Please activate Nuki Web API to retrieve log entries!');
+		
+	}, 5*1000);
 	
 	// add entries
 	function addTimeline(entries)
@@ -72,7 +79,7 @@
 	function showTimeline(entries)
 	{
 		console.log("Show timeline with " + timeline.length + " entries.");
-		console.log(JSON.stringify(timeline));
+		//console.log(JSON.stringify(timeline));
 		
 		$('.cd-timeline-block').not('.template').remove();
 		entries.forEach(function(entry) {addLog(entry)});
@@ -92,13 +99,24 @@
 		tpl.find('.cd-description').removeClass('hidden').find('.nuki-device').html('<img style="vertical-align: middle" src="'+ICONS['DEVICE']+'" />' + ' ' + entry.deviceType);
 		
 		if (entry.trigger != 0)
-			tpl.find('.cd-description').removeClass('hidden').find('.nuki-trigger').html('<img style="vertical-align: middle" src="'+ICONS['TRIGGER']+'" />' + ' ' + L(lang, TRIGGER[entry.trigger]));
+			tpl.find('.cd-description').removeClass('hidden').find('.nuki-trigger').html('| <img style="vertical-align: middle" src="'+ICONS['TRIGGER']+'" />' + ' ' + L(lang, TRIGGER[entry.trigger]));
 		
 		if (entry.state != 0)
-			tpl.find('.cd-description').removeClass('hidden').find('.nuki-state').html('<img style="vertical-align: middle" src="'+ICONS['STATES']+'" />' + ' ' + L(lang, 'not executed') + ' ' + L(lang, STATES[entry.state]));
+			tpl.find('.cd-description').removeClass('hidden').find('.nuki-state').html('| <img style="vertical-align: middle" src="'+ICONS['STATES']+'" />' + ' ' + L(lang, 'not executed') + ' ' + L(lang, STATES[entry.state]));
 		
 		if (entry.autoUnlock)
-			tpl.find('.cd-description').removeClass('hidden').find('.nuki-autoUnlock').html('<img style="vertical-align: middle" src="'+ICONS['AUTO_UNLOCK']+'" />' + ' ' + L(lang, 'AUTO_UNLOCK'));
+			tpl.find('.cd-description').removeClass('hidden').find('.nuki-autoUnlock').html('| <img style="vertical-align: middle" src="'+ICONS['AUTO_UNLOCK']+'" />' + ' ' + L(lang, 'AUTO_UNLOCK'));
+		
+		if (entry.openerLog && (entry.openerLog.activeCm || entry.openerLog.activeRto || entry.openerLog.flagGeoFence || entry.openerLog.flagForce || entry.openerLog.flagDoorbellSuppression))
+		{
+			tpl.find('.cd-description').removeClass('hidden').find('.nuki-log').html(
+				(entry.openerLog.activeCm ? '| CONTINUOUS MODE' : '') +
+				(entry.openerLog.activeRto ? '| RING TO OPEN' : '') +
+				(entry.openerLog.flagGeoFence ? '| GEO FENCE' : '') +
+				(entry.openerLog.flagForce ? '| FORCED' : '') +
+				(entry.openerLog.flagDoorbellSuppression ? '| DOORBELL SUPPRESSED' : '')
+			);
+		}
 		
 		$('#cd-timeline .cd-timeline-block').last().after(tpl);
 		$('#noNukiWebApi').remove();
@@ -129,6 +147,62 @@
 			$('[data-node="' + lock.nuki + '"]').html($('[data-node="' + lock.nuki + '"]').html().replace(RegExp('%' + lock.key + '%', 'gi'), lock.value));
 	}
 	
+	// updater
+	function updater(deviceType, instance)
+	{
+		console.log('Retrieving ' + deviceType + ' logs from instance ' + instance + '..');
+		servConn.getChildren('nuki-extended.' + instance + '.' + deviceType, function(err, _devices)
+		{
+			if (err !== null)
+			{
+				alert(err);
+				return;
+			}
+			
+			_devices.forEach(function(device)
+			{
+				servConn.getStates(STATES.map(state => device + '.' + state), function(err, _states)
+				{
+					if (err !== null)
+					{
+						alert(err);
+						return;
+					}
+					
+					if (_states !== null && _states !== undefined)
+					{
+						for (var key in _states)
+						{
+							var node = key.substr(key.lastIndexOf('.')+1);
+							if (STATES.indexOf(node) === -1)
+								continue;
+							
+							var content = _states[key].val;
+							
+							// add log entries
+							if (node == 'logs')
+							{
+								let entries = JSON.parse(content);
+								console.log('Found ' + entries.length + ' entries in ' + deviceType + ' log.');
+								addTimeline(entries);
+							}
+							
+							// add other information
+							else
+							{
+								addLock({'nuki': device, key: node, value: content});
+								$('[data-state="' + node + '"]').html(content);
+							}
+						}
+						
+						// updater
+						setTimeout(updater, 10*1000, deviceType, instance); // every 10s
+					}
+				});
+			});
+		});
+	}
+	
 	// page loaded
 	$(window).on('load', function()
 	{
@@ -154,9 +228,6 @@
 			$(window).trigger('scroll');
 		});
 		
-		// config
-		var STATES = ['logs', 'id', 'name'];
-		
 		//
 		// Vertical Timeline
 		tl = new Timeline();
@@ -181,74 +252,16 @@
 						servConn.getObject('nuki-extended.' + instance + '.info.connection', function(err, _instance)
 						{
 							if (_instance !== null)
-								instances = instances < instance ? instance : instances;
-						});
-					}
-					
-					// get logs from devices
-					['smartlocks', 'openers'].forEach(function(deviceType)
-					{
-						timer = timer + 1;
-						setTimeout(function updater()
-						{
-							for (let instance = 0; instance <= instances; instance++)
 							{
-								console.log('Retrieving ' + deviceType + ' logs from instance ' + instance + '..');
-								servConn.getChildren('nuki-extended.' + instance + '.' + deviceType, function(err, _devices)
+								// get logs from devices
+								['smartlocks', 'openers'].forEach(function(deviceType)
 								{
-									if (err !== null)
-									{
-										alert(err);
-										return;
-									}
-									
-									_devices.forEach(function(device)
-									{
-										servConn.getStates(STATES.map(state => device + '.' + state), function(err, _states)
-										{
-											if (err !== null)
-											{
-												alert(err);
-												return;
-											}
-											
-											if (_states !== null && _states !== undefined)
-											{
-												for (var key in _states)
-												{
-													var node = key.substr(key.lastIndexOf('.')+1);
-													if (STATES.indexOf(node) === -1)
-														continue;
-													
-													var content = _states[key].val;
-													
-													// add log entries
-													if (node == 'logs')
-													{
-														let entries = JSON.parse(content);
-														console.log('Found ' + entries.length + ' entries in ' + deviceType + ' log.');
-														addTimeline(entries);
-													}
-													
-													// add other information
-													else
-													{
-														addLock({'nuki': device, key: node, value: content});
-														$('[data-state="' + node + '"]').html(content);
-													}
-												}
-												
-												// updater
-												setTimeout(updater, 10*1000); // every 10s
-											}
-										});
-									});
+									timer = timer + 1;
+									setTimeout(updater, timer*1000, deviceType, instance);
 								});
 							}
-							
-						}, timer*1000);
-						
-					});
+						});
+					}
 				}
 			}
 		});
@@ -282,7 +295,7 @@
 		<li data-id="ALL" class="menu"><a class="filter active">Show all</a></li>
 	</ul>
 	
-	<p id="noNukiWebApi">Please activate Nuki Web API to retrieve log entries!</p>
+	<p id="noNukiWebApi">Loading log entries..</p>
 	
 	<div class="cd-timeline-block template hidden">
 		<div class="cd-timeline-img cd-icon"></div>
@@ -293,6 +306,7 @@
 				<span class="nuki-trigger"></span>
 				<span class="nuki-state"></span>
 				<span class="nuki-autoUnlock"></span>
+				<span class="nuki-log"></span>
 			</p>
 			<span class="cd-date"></span>
 		</div>

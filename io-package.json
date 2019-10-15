@@ -1,19 +1,19 @@
 {
     "common": {
         "name": "nuki-extended",
-        "version": "2.0.0-rc.3",
-        "title": "Nuki Lock & Opener",
+        "version": "2.0.0-rc.4",
+        "title": "Nuki Smartlock & Opener",
         "titleLang": {
-            "en": "Nuki Lock & Opener",
-            "de": "Nuki Lock & Opener",
-            "ru": "Nuki Lock & Opener",
-            "pt": "Nuki Lock & Opener",
-            "nl": "Nuki Lock & Opener",
-            "fr": "Nuki Lock & Opener",
-            "it": "Nuki Lock & Opener",
-            "es": "Nuki Lock & Opener",
-            "pl": "Nuki Lock & Opener",
-            "zh-cn": "Nuki Lock & Opener"
+            "en": "Nuki Smartlock & Opener",
+            "de": "Nuki Smartlock & Opener",
+            "ru": "Nuki Smartlock & Opener",
+            "pt": "Nuki Smartlock & Opener",
+            "nl": "Nuki Smartlock & Opener",
+            "fr": "Nuki Smartlock & Opener",
+            "it": "Nuki Smartlock & Opener",
+            "es": "Nuki Smartlock & Opener",
+            "pl": "Nuki Smartlock & Opener",
+            "zh-cn": "Nuki Smartlock & Opener"
         },
         "desc": {
             "en": "Control and monitor your Nuki Smartlock and Nuki Opener with ioBroker",
