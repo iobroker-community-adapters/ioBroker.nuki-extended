@@ -60,6 +60,7 @@ module.exports =
 	
 	// SMARTLOCK
 	'nukiId': {'state': 'id', 'description': 'ID of the Nuki', 'type': 'number', 'role': 'value'},
+	'nukiHexId': {'state': 'hex', 'description': 'Hex ID of the Nuki', 'type': 'string', 'role': 'text'},
 	'name': {'state': 'name', 'description': 'Name of the Bridge / Nuki', 'type': 'string', 'role': 'text'},
 	'bridge': {'state': 'bridgeId', 'description': 'Bridge ID of the Nuki', 'type': 'number', 'role': 'value'},
 	'deviceType': {'state': 'type', 'description': 'Type of device', 'type': 'number', 'role': 'value', 'common': {'states': {'0': 'Nuki Smart Lock', '2': 'Nuki Opener'}}},
@@ -67,6 +68,7 @@ module.exports =
 	
 	// SMARTLOCK - INFO
 	'info': {'state': 'info', 'description': 'Additional Information', 'role': 'channel'},
+	'smartlockId': {'state': 'info.smartlockId', 'description': 'The smartlock ID', 'type': 'number', 'role': 'value'},
 	'accountId': {'state': 'info.accountId', 'description': 'The account ID', 'type': 'number', 'role': 'value'},
 	'authId': {'state': 'info.authId', 'description': 'The authorization ID', 'type': 'number', 'role': 'value'},
 	'favorite': {'state': 'info.favorite', 'description': 'The favorite flag', 'type': 'boolean', 'role': 'indicator'},

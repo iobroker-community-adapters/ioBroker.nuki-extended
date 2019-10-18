@@ -166,7 +166,7 @@ function startAdapter(options)
 			}
 			
 			// Smartlock
-			let device = DEVICES[nukiId];
+			let device = DEVICES[getNukiHex(nukiId)];
 			action = { id: action };
 			
 			switch (device.type.toLowerCase())
@@ -493,33 +493,6 @@ function getBridgeApi(bridge)
 	})
 	.catch(err => adapter.log.debug('Error retrieving callbacks (' + JSON.stringify(err) + ')!'));
 	
-	// get nuki's
-	adapter.log.silly('Retrieving from Nuki Bridge API (Bridge ' + bridge.data.bridge_ip + ')..');
-	bridge.instance.list().then(nukis =>
-	{
-		nukis.forEach(payload =>
-		{
-			// remap states
-			payload.bridge = bridge.data.bridge_id !== '' ? bridge.data.bridge_id : undefined;
-			payload['state'] = payload['lastKnownState'];
-			delete payload['lastKnownState'];
-			
-			adapter.log.debug('getBridgeApi(): ' + JSON.stringify(payload));
-			updateLock(payload);
-		});
-	})
-	.catch(err =>
-	{
-		adapter.log.warn('Failed retrieving /list from Nuki Bridge' + (bridge.data.bridge_name ? ' with name ' + bridge.data.bridge_name : (bridge.data.bridge_id ? ' with ID ' + bridge.data.bridge_id : (bridge.data.bridge_ip ? ' with ip ' + bridge.data.bridge_ip : ''))) + '!');
-		adapter.log.debug('getBridgeApi(): ' + err.message);
-		
-		if (err.message.indexOf('503') > -1 && !unloaded)
-		{
-			adapter.log.info('Trying again in 10s..');
-			setTimeout(updaterBridgeApi, 10*1000, bridge);
-		}
-	});
-	
 	// get bridge info
 	bridge.instance.info().then(payload =>
 	{
@@ -557,6 +530,33 @@ function getBridgeApi(bridge)
 		adapter.log.warn('Failed retrieving /info from Nuki Bridge' + (bridge.data.bridge_name ? ' with name ' + bridge.data.bridge_name : (bridge.data.bridge_id ? ' with ID ' + bridge.data.bridge_id : (bridge.data.bridge_ip ? ' with ip ' + bridge.data.bridge_ip : ''))) + '!');
 		adapter.log.debug('getBridgeApi(): ' + err.message);
 	});
+	
+	// get nuki's
+	adapter.log.silly('Retrieving from Nuki Bridge API (Bridge ' + bridge.data.bridge_ip + ')..');
+	bridge.instance.list().then(nukis =>
+	{
+		nukis.forEach(payload =>
+		{
+			// remap states
+			payload.bridge = bridge.data.bridge_id !== '' ? bridge.data.bridge_id : undefined;
+			payload['state'] = payload['lastKnownState'];
+			delete payload['lastKnownState'];
+			
+			adapter.log.debug('getBridgeApi(): ' + JSON.stringify(payload));
+			updateLock(payload);
+		});
+	})
+	.catch(err =>
+	{
+		adapter.log.warn('Failed retrieving /list from Nuki Bridge' + (bridge.data.bridge_name ? ' with name ' + bridge.data.bridge_name : (bridge.data.bridge_id ? ' with ID ' + bridge.data.bridge_id : (bridge.data.bridge_ip ? ' with ip ' + bridge.data.bridge_ip : ''))) + '!');
+		adapter.log.debug('getBridgeApi(): ' + err.message);
+		
+		if (err.message.indexOf('503') > -1 && !unloaded)
+		{
+			adapter.log.info('Trying again in 10s..');
+			setTimeout(updaterBridgeApi, 10*1000, bridge);
+		}
+	});
 }
 
 
@@ -578,10 +578,9 @@ function getWebApi()
 		smartlocks.forEach(smartlock =>
 		{
 			// remap states
-			smartlock.nukiId = smartlock.smartlockId;
+			smartlock.nukiHexId = getNukiHex(smartlock.smartlockId);
 			smartlock.deviceType = smartlock.type;
 			if (smartlock.state) smartlock.state.timestamp = new Date().toISOString().substr(0,19) + '+00:00';
-			delete smartlock.smartlockId;
 			delete smartlock.type;
 			
 			adapter.log.debug('getWebApi(): ' + JSON.stringify(smartlock));
@@ -597,25 +596,25 @@ function getWebApi()
 			
 			// update lock
 			updateLock(smartlock);
-	
+			
 			// get logs
-			nukiWebApi.getSmartlockLogs(smartlock.nukiId, { limit: 1000 }).then(log =>
+			nukiWebApi.getSmartlockLogs(smartlock.smartlockId, { limit: 1000 }).then(log =>
 			{
-				library.set({node: DEVICES[smartlock.nukiId].path + '.logs', description: 'Logs / History of Nuki'}, JSON.stringify(log.slice(0, 250)));
+				library.set({node: DEVICES[smartlock.nukiHexId].path + '.logs', description: 'Logs / History of Nuki'}, JSON.stringify(log.slice(0, 250)));
 				
 			}).catch(err => {adapter.log.warn('getWebApi(): Error retrieving logs: ' + err.message)});
 			
 			// get users
 			if (adapter.config.syncUsers)
 			{
-				nukiWebApi.getSmartlockAuth(smartlock.nukiId).then(users =>
+				nukiWebApi.getSmartlockAuth(smartlock.smartlockId).then(users =>
 				{
-					library.set({ ...library.getNode('users'), 'node': DEVICES[smartlock.nukiId].path + '.users' });
+					library.set({ ...library.getNode('users'), 'node': DEVICES[smartlock.nukiHexId].path + '.users' });
 					users.forEach(user =>
 					{
 						user.name = user.name || 'unknown';
 						
-						let nodePath = DEVICES[smartlock.nukiId].path + '.users.' + library.clean(user.name, true, '_');
+						let nodePath = DEVICES[smartlock.nukiHexId].path + '.users.' + library.clean(user.name, true, '_');
 						library.set({node: nodePath, description: 'User ' + user.name, role: 'channel'});
 						readData('', user, nodePath);
 					});
@@ -636,6 +635,17 @@ function getWebApi()
 
 
 /**
+ *
+ *
+ * @see https://developer.nuki.io/t/nuki-opener-different-smartlock-id-in-bridge-api-compared-to-web-api/3195/2?u=zefau
+ *
+ */
+function getNukiHex(nukiId)
+{
+	return nukiId.toString(16).substr(-8);
+}
+
+/**
  * Update states of Nuki Door based on payload.
  *
  */
@@ -643,9 +653,13 @@ function updateLock(payload)
 {
 	library.set(Library.CONNECTION, true);
 	
+	// get Nuki Hex Id
+	if (!payload.nukiHexId)
+		payload.nukiHexId = getNukiHex(payload.nukiId);
+	
 	// index Nuki
 	let type, path;
-	if (DEVICES[payload.nukiId] === undefined || !DEVICES[payload.nukiId].path)
+	if (DEVICES[payload.nukiHexId] === undefined || !DEVICES[payload.nukiHexId].path)
 	{
 		let actions = null;
 		
@@ -681,7 +695,7 @@ function updateLock(payload)
 		
 		// index device
 		path = type.toLowerCase() + 's.' + library.clean(payload.name, true, '_');
-		DEVICES[payload.nukiId] = { id: payload.nukiId, name: payload.name, type: type, path: path, state: (payload.state && payload.state.state) || 0, bridge: null };
+		DEVICES[payload.nukiHexId] = { id: payload.nukiId, name: payload.name, type: type, path: path, state: (payload.state && payload.state.state) || 0, bridge: null };
 		
 		// add action
 		if (actions !== null)
@@ -693,22 +707,22 @@ function updateLock(payload)
 	
 	// retrieve Nuki name
 	else
-		path = DEVICES[payload.nukiId].path;
+		path = DEVICES[payload.nukiHexId].path;
 	
 	
 	// update bridge
 	if (payload.bridge !== undefined)
-		DEVICES[payload.nukiId].bridge = payload.bridge;
+		DEVICES[payload.nukiHexId].bridge = payload.bridge;
 	
 	// update instance
 	if (payload.nuki !== undefined)
-		DEVICES[payload.nukiId].instance = payload.nuki;
+		DEVICES[payload.nukiHexId].instance = payload.nuki;
 	
 	// add additional states
-	if (DEVICES[payload.nukiId].type == 'Smartlock' && payload.state.doorState)
+	if (DEVICES[payload.nukiHexId].type == 'Smartlock' && payload.state.doorState)
 		payload.state.closed = payload.state.doorState;
 	
-	if (DEVICES[payload.nukiId].type == 'Smartlock' && payload.state.state)
+	if (DEVICES[payload.nukiHexId].type == 'Smartlock' && payload.state.state)
 		payload.state.locked = payload.state.state;
 	
 	// remove unnecessary states
@@ -717,7 +731,7 @@ function updateLock(payload)
 	
 	// create / update device
 	adapter.log.debug('Updating lock ' + path + ' with payload: ' + JSON.stringify(payload));
-	library.set({node: path, description: '' + DEVICES[payload.nukiId].name, role: 'channel'});
+	library.set({node: path, description: '' + DEVICES[payload.nukiHexId].name, role: 'channel'});
 	readData('', payload, path);
 }
 

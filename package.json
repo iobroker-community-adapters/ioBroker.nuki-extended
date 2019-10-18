@@ -76,8 +76,7 @@
     "nuki-web-api": "^2.1.1",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
-    "sha.js": "^2.4.11",
-    "uuid": "^3.3.2"
+    "sha.js": "^2.4.11"
   },
   "deprecated": false,
   "description": "Nuki Smart Lock 2.0",
@@ -110,5 +109,5 @@
     "test:package": "mocha test/package --exit",
     "test:unit": "mocha test/unit --exit"
   },
-  "version": "2.0.0-rc.4"
+  "version": "2.0.0-rc.5"
 }

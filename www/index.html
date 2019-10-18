@@ -21,7 +21,7 @@
 	var lang = (navigator.languages != undefined ? navigator.languages[0] : navigator.language).substr(0, 2);
 	console.log('LANGUAGE: ' + lang);
 	
-	var STATES = ['logs', 'id', 'name'];
+	var STATES = ['logs', 'hex', 'name', 'type'];
 	var logIDs = [], timeline = [];
 	var timer = 0;
 	var socketConnected;
@@ -190,7 +190,7 @@
 							// add other information
 							else
 							{
-								addLock({'nuki': device, key: node, value: content});
+								addLock({'nuki': device, 'key': node.substr(node.lastIndexOf('.')+1), 'value': content});
 								$('[data-state="' + node + '"]').html(content);
 							}
 						}
@@ -209,7 +209,7 @@
 		// attach listener to filter
 		$('body').on('click', '.menu .filter', function(e)
 		{
-			let id = $(this).parent().data('id');
+			let id = $(this).parent().data('id') || parseInt($(this).parent().data('type') + $(this).parent().data('hex'), 16);
 			
 			// remove current selection
 			$('.menu .filter').removeClass('active');
