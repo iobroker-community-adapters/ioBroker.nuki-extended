@@ -710,6 +710,10 @@ function updateLock(payload)
 		path = DEVICES[payload.nukiHexId].path;
 	
 	
+	// update state
+	if (payload.deviceType == 2 && payload.state == 1 && payload.mode == 3) // change ONLINE & CONTINOUS to RING_TO_OPEN
+		payload.state = 3;
+	
 	// update bridge
 	if (payload.bridge !== undefined)
 		DEVICES[payload.nukiHexId].bridge = payload.bridge;
@@ -727,6 +731,7 @@ function updateLock(payload)
 	
 	// remove unnecessary states
 	if (payload.state && payload.state.stateName) delete payload.state.stateName;
+	if (payload.state && payload.state.deviceType) delete payload.state.deviceType;
 	if (payload.nuki) delete payload.nuki;
 	
 	// create / update device

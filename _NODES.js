@@ -74,7 +74,7 @@ module.exports =
 	'favorite': {'state': 'info.favorite', 'description': 'The favorite flag', 'type': 'boolean', 'role': 'indicator'},
 	'firmwareVersion': {'state': 'info.firmwareVersion', 'description': 'The firmware version', 'type': 'number', 'role': 'value'},
 	'hardwareVersion': {'state': 'info.hardwareVersion', 'description': 'The hardware version', 'type': 'number', 'role': 'value'},
-	'operationId': {'state': 'info.operationId', 'description': 'The operation id - if set the device is locked for another operation', 'type': 'number', 'role': 'value'},
+	'operationId': {'state': 'info.operationId', 'description': 'The operation id - if set the device is locked for another operation', 'type': 'string', 'role': 'text'},
 	'serverState': {'state': 'info.serverState', 'description': 'The server state', 'type': 'number', 'role': 'value', 'common': {'states': {'0': 'OK', '1': 'UNREGISTERED', '2': 'AUTH UUID INVALID', '3': 'AUTH INVALID', '4': 'OFFLINE'}}},
 	'adminPinState': {'state': 'info.adminPinState', 'description': 'The admin pin state', 'type': 'number', 'role': 'value', 'common': {'states': {'0': 'OK', '1': 'MISSING', '2': 'INVALID'}}},
 	'virtualDevice': {'state': 'info.virtualDevice', 'description': 'The flag indicating a virtual Smart Lock', 'type': 'boolean', 'role': 'indicator'},
@@ -84,6 +84,7 @@ module.exports =
 	// SMARTLOCK - STATE
 	'state': {'description': 'Current states', 'role': 'channel'},
 	'state.batteryCritical': {'description': 'States critical battery level', 'role': 'indicator.lowbat', 'type': 'boolean'},
+	'state.operationId': {'description': 'The operation id - if set the device is locked for another operation', 'type': 'string', 'role': 'text'},
 	'state.doorState': {'description': 'Current door-state of the Nuki', 'type': 'number', 'role': 'value', 'common': {'states': LOCK.DOOR}},
 	'state.lastAction': {'description': 'Last triggered action', 'type': 'number', 'role': 'value'},
 	'state.state': {'state': 'state.lockState', 'description': 'Current lock-state of the Nuki or Opener', 'type': 'number', 'role': 'value'},

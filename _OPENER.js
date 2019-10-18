@@ -1,7 +1,7 @@
 module.exports.STATES = {
 	"0": "UNTRAINED",
 	"1": "ONLINE",
-	"3": "RING_TO_OPEN_ACTIVE",
+	"3": "RING_TO_OPEN",
 	"5": "OPEN",
 	"7": "OPENING",
 	"253": "BOOT_RUN",
