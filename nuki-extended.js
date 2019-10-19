@@ -50,7 +50,7 @@ function startAdapter(options)
 	 */
 	adapter.on('ready', function()
 	{
-		library = new Library(adapter, { nodes: _NODES, updatesInLog: true });
+		library = new Library(adapter, { nodes: _NODES, updatesInLog: adapter.config.debugLog || false });
 		unloaded = false;
 		
 		// Check Node.js Version
@@ -493,6 +493,33 @@ function getBridgeApi(bridge)
 	})
 	.catch(err => adapter.log.debug('Error retrieving callbacks (' + JSON.stringify(err) + ')!'));
 	
+	// get nuki's
+	adapter.log.silly('Retrieving from Nuki Bridge API (Bridge ' + bridge.data.bridge_ip + ')..');
+	bridge.instance.list().then(nukis =>
+	{
+		nukis.forEach(payload =>
+		{
+			// remap states
+			payload.bridge = bridge.data.bridge_id !== '' ? bridge.data.bridge_id : undefined;
+			payload['state'] = payload['lastKnownState'];
+			delete payload['lastKnownState'];
+			
+			adapter.log.debug('getBridgeApi(): ' + JSON.stringify(payload));
+			updateLock(payload);
+		});
+	})
+	.catch(err =>
+	{
+		adapter.log.warn('Failed retrieving /list from Nuki Bridge' + (bridge.data.bridge_name ? ' with name ' + bridge.data.bridge_name : (bridge.data.bridge_id ? ' with ID ' + bridge.data.bridge_id : (bridge.data.bridge_ip ? ' with ip ' + bridge.data.bridge_ip : ''))) + '!');
+		adapter.log.debug('getBridgeApi(): ' + err.message);
+		
+		if (err.message.indexOf('503') > -1 && !unloaded)
+		{
+			adapter.log.info('Trying again in 10s..');
+			setTimeout(updaterBridgeApi, 10*1000, bridge);
+		}
+	});
+	
 	// get bridge info
 	bridge.instance.info().then(payload =>
 	{
@@ -529,33 +556,6 @@ function getBridgeApi(bridge)
 	{
 		adapter.log.warn('Failed retrieving /info from Nuki Bridge' + (bridge.data.bridge_name ? ' with name ' + bridge.data.bridge_name : (bridge.data.bridge_id ? ' with ID ' + bridge.data.bridge_id : (bridge.data.bridge_ip ? ' with ip ' + bridge.data.bridge_ip : ''))) + '!');
 		adapter.log.debug('getBridgeApi(): ' + err.message);
-	});
-	
-	// get nuki's
-	adapter.log.silly('Retrieving from Nuki Bridge API (Bridge ' + bridge.data.bridge_ip + ')..');
-	bridge.instance.list().then(nukis =>
-	{
-		nukis.forEach(payload =>
-		{
-			// remap states
-			payload.bridge = bridge.data.bridge_id !== '' ? bridge.data.bridge_id : undefined;
-			payload['state'] = payload['lastKnownState'];
-			delete payload['lastKnownState'];
-			
-			adapter.log.debug('getBridgeApi(): ' + JSON.stringify(payload));
-			updateLock(payload);
-		});
-	})
-	.catch(err =>
-	{
-		adapter.log.warn('Failed retrieving /list from Nuki Bridge' + (bridge.data.bridge_name ? ' with name ' + bridge.data.bridge_name : (bridge.data.bridge_id ? ' with ID ' + bridge.data.bridge_id : (bridge.data.bridge_ip ? ' with ip ' + bridge.data.bridge_ip : ''))) + '!');
-		adapter.log.debug('getBridgeApi(): ' + err.message);
-		
-		if (err.message.indexOf('503') > -1 && !unloaded)
-		{
-			adapter.log.info('Trying again in 10s..');
-			setTimeout(updaterBridgeApi, 10*1000, bridge);
-		}
 	});
 }
 
@@ -653,9 +653,15 @@ function updateLock(payload)
 {
 	library.set(Library.CONNECTION, true);
 	
-	// get Nuki Hex Id
-	if (!payload.nukiHexId)
+	// get NukiHexId or NukiId
+	if (payload.nukiId && !payload.nukiHexId)
 		payload.nukiHexId = getNukiHex(payload.nukiId);
+	
+	else if (!payload.nukiId && payload.nukiHexId)
+		payload.nukiId = parseInt(payload.nukiHexId, 16);
+	
+	else
+		return false;
 	
 	// index Nuki
 	let type, path;
