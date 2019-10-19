@@ -701,7 +701,7 @@ function updateLock(payload)
 		
 		// index device
 		path = type.toLowerCase() + 's.' + library.clean(payload.name, true, '_');
-		DEVICES[payload.nukiHexId] = { id: payload.nukiId, name: payload.name, type: type, path: path, state: (payload.state && payload.state.state) || 0, bridge: null };
+		DEVICES[payload.nukiHexId] = { 'id': payload.nukiId, 'name': payload.name, 'type': type, 'path': path, 'bridge': null };
 		
 		// add action
 		if (actions !== null)
@@ -717,8 +717,8 @@ function updateLock(payload)
 	
 	
 	// update state
-	if (payload.deviceType == 2 && payload.state == 1 && payload.mode == 3) // change ONLINE & CONTINOUS to RING_TO_OPEN
-		payload.state = 3;
+	if (payload.deviceType == 2 && payload.state && payload.state.state == 1 && payload.mode == 3) // change ONLINE & CONTINOUS to RING_TO_OPEN
+		payload.state.state = 3;
 	
 	// update bridge
 	if (payload.bridge !== undefined)
@@ -735,10 +735,12 @@ function updateLock(payload)
 	if (DEVICES[payload.nukiHexId].type == 'Smartlock' && payload.state.state)
 		payload.state.locked = payload.state.state;
 	
+	
 	// remove unnecessary states
 	if (payload.state && payload.state.stateName) delete payload.state.stateName;
 	if (payload.state && payload.state.deviceType) delete payload.state.deviceType;
 	if (payload.nuki) delete payload.nuki;
+	
 	
 	// create / update device
 	adapter.log.debug('Updating lock ' + path + ' with payload: ' + JSON.stringify(payload));
@@ -768,12 +770,12 @@ function setAction(device, action, api = 'bridge', retry = 0)
 			})
 			.catch(err =>
 			{
-				adapter.log.warn('Error triggering action -' + action.name + '- on Nuki ' + device.type + ' ' + device.name + '. See debug log for details.');
+				adapter.log.warn('Error triggering action -' + action.name + '- on Nuki ' + device.type + ' ' + device.name + ' (via Bridge API). See debug log for details.');
 				adapter.log.debug(err.message);
 				
 				// retry
 				retry++;
-				if (retry <= MAX_RETRY_ACTIONS)
+				if (retry >= MAX_RETRY_ACTIONS)
 					return Promise.resolve(false);
 				
 				if (nukiWebApi)
@@ -806,12 +808,12 @@ function setAction(device, action, api = 'bridge', retry = 0)
 			})
 			.catch(err =>
 			{
-				adapter.log.warn('Error triggering action -' + action.name + '- on Nuki ' + device.type + ' ' + device.name + '. See debug log for details.');
+				adapter.log.warn('Error triggering action -' + action.name + '- on Nuki ' + device.type + ' ' + device.name + ' (via Web API). See debug log for details.');
 				adapter.log.debug(err.message);
 				
 				// retry
 				retry++;
-				if (retry <= MAX_RETRY_ACTIONS)
+				if (retry >= MAX_RETRY_ACTIONS)
 					return Promise.resolve(false);
 				
 				adapter.log.info('Try again (' + retry + 'x) in 10s with Nuki Bridge API..');

@@ -5,7 +5,6 @@ This ioBroker adapter (formerly ioBroker.Nuki2) allows to control and monitor th
 ![Number of Installations](http://iobroker.live/badges/nuki-extended-installed.svg) ![Stable Version](http://iobroker.live/badges/nuki-extended-stable.svg) [![NPM version](http://img.shields.io/npm/v/iobroker.nuki-extended.svg)](https://www.npmjs.com/package/iobroker.nuki-extended)
 [![Travis CI](https://travis-ci.org/Zefau/ioBroker.nuki-extended.svg?branch=master)](https://travis-ci.org/Zefau/ioBroker.nuki-extended)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.nuki-extended.svg)](https://www.npmjs.com/package/iobroker.nuki-extended)
-[![Greenkeeper badge](https://badges.greenkeeper.io/Zefau/ioBroker.nuki-extended.svg)](https://greenkeeper.io/)
 
 [![NPM](https://nodei.co/npm/iobroker.nuki-extended.png?downloads=true)](https://nodei.co/npm/iobroker.nuki-extended/)
 
