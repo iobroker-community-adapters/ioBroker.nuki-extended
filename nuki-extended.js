@@ -798,14 +798,14 @@ function setAction(device, action, api = 'bridge', retry = 0)
 				if (nukiWebApi)
 				{
 					adapter.log.info('Try again (' + retry + 'x) with Nuki Web API..');
-					return setAction(device, 'web', retry);
+					return setAction(device, action, 'web', retry);
 				}
 				else
 				{
 					adapter.log.info('Try again (' + retry + 'x) in 10s with Nuki Bridge API..');
 					setTimeout(() =>
 					{
-						return setAction(device, 'bridge', retry);
+						return setAction(device, action, 'bridge', retry);
 						
 					}, 10*1000);
 				}
@@ -836,7 +836,7 @@ function setAction(device, action, api = 'bridge', retry = 0)
 				adapter.log.info('Try again (' + retry + 'x) in 10s with Nuki Bridge API..');
 				setTimeout(() =>
 				{
-					return setAction(device, 'bridge', retry);
+					return setAction(device, action, 'bridge', retry);
 					
 				}, 10*1000);
 			});
