@@ -14,8 +14,8 @@ module.exports.ACTIONS =
 	"1": "ACTIVE RTO",
 	"2": "DEACTIVATE RTO",
 	"3": "ELECTRIC STRIKE ACTUATION",
-	"6": "ACTIVATE CM",
-	"7": "DEACTIVATE CM"
+	"4": "ACTIVATE CM",
+	"5": "DEACTIVATE CM"
 };
 
 module.exports.BUTTON =

@@ -63,6 +63,7 @@
         "subscribe": "messagebox"
     },
     "native": {
+		"refreshBridgeApiType": "callback",
 		"syncConfig": true,
 		"syncUsers": true
 	},

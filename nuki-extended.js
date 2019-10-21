@@ -156,20 +156,20 @@ function startAdapter(options)
 		if (state === '_ACTION' && Number.isInteger(action) && action > 0 && object.ack !== true)
 		{
 			library._setValue(node, 0, true);
-			let nukiId = library.getDeviceState(path + '.id');
+			let nukiHexId = library.getDeviceState(path + '.hex');
 			
 			// ID or type could not be retrived
-			if (!nukiId)
+			if (!nukiHexId)
 			{
-				adapter.log.warn('Error triggering action on the Nuki device: No Nuki ID given!');
+				adapter.log.warn('Error triggering action on the Nuki device: No Nuki Hex ID given!');
 				return false;
 			}
 			
 			// Smartlock
-			let device = DEVICES[getNukiHex(nukiId)];
+			let device = DEVICES[nukiHexId];
 			action = { id: action };
 			
-			switch (device.type.toLowerCase())
+			switch (device.type && device.type.toLowerCase() || false)
 			{
 				case 'smartlock':
 					action.name = _LOCK.ACTIONS[action.id];
@@ -438,6 +438,10 @@ function initNukiAPIs()
 		adapter.log.info('Polling Nuki Web API deactivated.');
 	
 	// Bridge API
+	/*
+	 * REMOVE due to high load on Nuki Bridge
+	 * @see https://developer.nuki.io/t/random-http-503-unavailable/909
+	 *
 	if (!adapter.config.refreshBridgeApi)
 		adapter.config.refreshBridgeApi = 0;
 	
@@ -454,6 +458,9 @@ function initNukiAPIs()
 	}
 	else if (adapter.config.refreshBridgeApi == 0 && !unloaded && (!adapter.config.refreshBridgeApiType || adapter.config.refreshBridgeApiType == 'polling'))
 		adapter.log.info('Polling Nuki Bridge API deactivated.');
+	*/
+	
+	library.set(Library.CONNECTION, true);
 }
 
 
@@ -485,27 +492,19 @@ function getBridgeApi(bridge)
 	library.set(library.getNode('bridgeApiSync'), true, true);
 	library.set(library.getNode('bridgeApiLast'), new Date().toISOString().substr(0,19) + '+00:00');
 	
-	// get current callback URLs
-	bridge.instance.getCallbacks().then(cbs =>
-	{
-		CALLBACKS[bridge.data.bridge_id] = cbs;
-		setCallbackNodes(bridge.data.bridge_id);
-	})
-	.catch(err => adapter.log.debug('Error retrieving callbacks (' + JSON.stringify(err) + ')!'));
-	
-	// get nuki's
+	// get nuki devices from bridge
 	adapter.log.silly('Retrieving from Nuki Bridge API (Bridge ' + bridge.data.bridge_ip + ')..');
 	bridge.instance.list().then(nukis =>
 	{
-		nukis.forEach(payload =>
+		adapter.log.debug('getBridgeApi(): ' + JSON.stringify(nukis));
+		nukis.forEach(nuki =>
 		{
 			// remap states
-			payload.bridge = bridge.data.bridge_id !== '' ? bridge.data.bridge_id : undefined;
-			payload['state'] = payload['lastKnownState'];
-			delete payload['lastKnownState'];
+			nuki.bridge = bridge.data.bridge_id !== '' ? bridge.data.bridge_id : undefined;
+			nuki['state'] = nuki['lastKnownState'];
+			delete nuki['lastKnownState'];
 			
-			adapter.log.debug('getBridgeApi(): ' + JSON.stringify(payload));
-			updateLock(payload);
+			updateLock(nuki);
 		});
 	})
 	.catch(err =>
@@ -521,42 +520,57 @@ function getBridgeApi(bridge)
 	});
 	
 	// get bridge info
-	bridge.instance.info().then(payload =>
+	if (!bridge.data.bridge_id)
 	{
-		// enrich payload
-		payload.name = bridge.data.bridge_name;
-		payload.ip = bridge.data.bridge_ip;
-		payload.port = bridge.data.bridge_port || 8080;
-		
-		// get bridge ID if not given
-		if (bridge.data.bridge_id === undefined || bridge.data.bridge_id === '')
+		bridge.instance.info().then(payload =>
 		{
-			adapter.log.debug('Adding missing Bridge ID for bridge with IP ' + bridge.data.bridge_ip + '.');
-			bridge.data.bridge_id = payload.ids.serverId;
+			// enrich payload
+			payload.name = bridge.data.bridge_name;
+			payload.ip = bridge.data.bridge_ip;
+			payload.port = bridge.data.bridge_port || 8080;
 			
-			// update bridge ID in configuration
-			adapter.getForeignObject('system.adapter.' + adapter.namespace, (err, obj) =>
+			// get bridge ID if not given
+			if (bridge.data.bridge_id === undefined || bridge.data.bridge_id === '')
 			{
-				obj.native.bridges.forEach((entry, i) =>
+				adapter.log.debug('Adding missing Bridge ID for bridge with IP ' + bridge.data.bridge_ip + '.');
+				bridge.data.bridge_id = payload.ids.serverId;
+				
+				// update bridge ID in configuration
+				adapter.getForeignObject('system.adapter.' + adapter.namespace, (err, obj) =>
 				{
-					if (entry.bridge_ip === bridge.data.bridge_ip)
+					obj.native.bridges.forEach((entry, i) =>
 					{
-						obj.native.bridges[i].bridge_id = bridge.data.bridge_id;
-						adapter.setForeignObject(obj._id, obj);
-					}
+						if (entry.bridge_ip === bridge.data.bridge_ip)
+						{
+							obj.native.bridges[i].bridge_id = bridge.data.bridge_id;
+							adapter.setForeignObject(obj._id, obj);
+						}
+					});
 				});
-			});
-		}
-		
-		// set payload for bridge
-		library.set({node: bridge.data.path, description: 'Bridge ' + (bridge.data.bridge_name ? bridge.data.bridge_name + ' ' : '') + '(' + bridge.data.bridge_ip + ')', role: 'channel'});
-		readData('', payload, bridge.data.path);
-	})
-	.catch(err =>
+			}
+			
+			// set payload for bridge
+			library.set({node: bridge.data.path, description: 'Bridge ' + (bridge.data.bridge_name ? bridge.data.bridge_name + ' ' : '') + '(' + bridge.data.bridge_ip + ')', role: 'channel'});
+			readData('', payload, bridge.data.path);
+		})
+		.catch(err =>
+		{
+			adapter.log.warn('Failed retrieving /info from Nuki Bridge' + (bridge.data.bridge_name ? ' with name ' + bridge.data.bridge_name : (bridge.data.bridge_id ? ' with ID ' + bridge.data.bridge_id : (bridge.data.bridge_ip ? ' with ip ' + bridge.data.bridge_ip : ''))) + '!');
+			adapter.log.debug('getBridgeApi(): ' + err.message);
+		});
+	}
+	
+	// get current callback URLs
+	/*
+	 * REMOVE due to easing the Hardware Bridge and avoid another request on it
+	 *
+	bridge.instance.getCallbacks().then(cbs =>
 	{
-		adapter.log.warn('Failed retrieving /info from Nuki Bridge' + (bridge.data.bridge_name ? ' with name ' + bridge.data.bridge_name : (bridge.data.bridge_id ? ' with ID ' + bridge.data.bridge_id : (bridge.data.bridge_ip ? ' with ip ' + bridge.data.bridge_ip : ''))) + '!');
-		adapter.log.debug('getBridgeApi(): ' + err.message);
-	});
+		CALLBACKS[bridge.data.bridge_id] = cbs;
+		setCallbackNodes(bridge.data.bridge_id);
+	})
+	.catch(err => adapter.log.debug('Error retrieving callbacks (' + JSON.stringify(err) + ')!'));
+	*/
 }
 
 
@@ -575,15 +589,18 @@ function getWebApi()
 	// get nukis
 	nukiWebApi.getSmartlocks().then(smartlocks =>
 	{
+		adapter.log.debug('getWebApi(): ' + JSON.stringify(smartlocks));
 		smartlocks.forEach(smartlock =>
 		{
 			// remap states
 			smartlock.nukiHexId = getNukiHex(smartlock.smartlockId);
 			smartlock.deviceType = smartlock.type;
 			if (smartlock.state) smartlock.state.timestamp = new Date().toISOString().substr(0,19) + '+00:00';
-			delete smartlock.type;
 			
-			adapter.log.debug('getWebApi(): ' + JSON.stringify(smartlock));
+			// delete states (prefer Bridge API)
+			delete smartlock.type;
+			if (smartlock.state) delete smartlock.state.state;
+			if (smartlock.state) delete smartlock.state.mode;
 			
 			// get config
 			if (adapter.config.syncConfig !== true)
@@ -701,7 +718,7 @@ function updateLock(payload)
 		
 		// index device
 		path = type.toLowerCase() + 's.' + library.clean(payload.name, true, '_');
-		DEVICES[payload.nukiHexId] = { 'id': payload.nukiId, 'name': payload.name, 'type': type, 'path': path, 'bridge': null };
+		DEVICES[payload.nukiHexId] = { 'id': payload.nukiId, 'hex': payload.nukiHexId, 'smartlockId': parseInt(payload.deviceType + payload.nukiHexId, 16), 'name': payload.name, 'type': type, 'path': path, 'bridge': null };
 		
 		// add action
 		if (actions !== null)
@@ -755,7 +772,7 @@ function updateLock(payload)
  */
 function setAction(device, action, api = 'bridge', retry = 0)
 {
-	adapter.log.info('Trigger action -' + action.name + '- on Nuki ' + device.type + ' ' + device.name + '.');
+	adapter.log.info('Trigger action -' + action.name + '- on Nuki ' + device.type + ' ' + device.name + ' (via ' + library.ucFirst(api) + ' API).');
 	
 	// try Bridge API
 	if (device.instance !== undefined && device.instance !== null && api == 'bridge')
@@ -800,7 +817,7 @@ function setAction(device, action, api = 'bridge', retry = 0)
 	{
 		adapter.log.debug('Action applied on Web API.');
 		
-		nukiWebApi.setAction(device.id, action.id)
+		nukiWebApi.setAction(device.smartlockId, action.id)
 			.then(() =>
 			{
 				adapter.log.info('Successfully triggered action -' + action.name + '- on Nuki ' + device.type + ' ' + device.name + ' (via Web API).');
@@ -827,7 +844,14 @@ function setAction(device, action, api = 'bridge', retry = 0)
 	
 	// No API given
 	else
+	{
+		adapter.log.warn('Neither Bridge API or Web API initialized!');
+		adapter.log.debug('DEVICE:' + JSON.stringify(device));
+		adapter.log.debug('Bridge API:' + JSON.stringify(device.instance));
+		adapter.log.debug('Web API: ' + JSON.stringify(nukiWebApi));
+		
 		return Promise.resolve(false);
+	}
 }
 
 
