@@ -1,5 +1,5 @@
 {
-  "_from": "git+https://github.com/Zefau/ioBroker.nuki2.git#nuki-extended",
+  "_from": "git+https://github.com/Zefau/ioBroker.nuki-extended.git",
   "_id": "iobroker.nuki-extended@2.0.0",
   "_inBundle": false,
   "_integrity": "",
@@ -39,26 +39,26 @@
   },
   "_requested": {
     "type": "git",
-    "raw": "https://github.com/Zefau/ioBroker.nuki2.git#nuki-extended",
-    "rawSpec": "https://github.com/Zefau/ioBroker.nuki2.git#nuki-extended",
-    "saveSpec": "git+https://github.com/Zefau/ioBroker.nuki2.git#nuki-extended",
-    "fetchSpec": "https://github.com/Zefau/ioBroker.nuki2.git",
+    "raw": "https://github.com/Zefau/ioBroker.nuki-extended.git",
+    "rawSpec": "https://github.com/Zefau/ioBroker.nuki-extended.git",
+    "saveSpec": "git+https://github.com/Zefau/ioBroker.nuki-extended.git",
+    "fetchSpec": "https://github.com/Zefau/ioBroker.nuki-extended.git",
     "gitCommittish": "nuki-extended"
   },
   "_requiredBy": [
     "#USER",
     "/"
   ],
-  "_resolved": "git+https://github.com/Zefau/ioBroker.nuki2.git#c229acb4f905b4f583ba31a2828d6152d85da802",
+  "_resolved": "git+https://github.com/Zefau/ioBroker.nuki-extended.git#c229acb4f905b4f583ba31a2828d6152d85da802",
   "_shasum": "d5585826ae79a16ee7eaa01b0583fb238e1898b1",
-  "_spec": "https://github.com/Zefau/ioBroker.nuki2.git#nuki-extended",
+  "_spec": "https://github.com/Zefau/ioBroker.nuki-extended.git",
   "_where": "/opt/iobroker/node_modules",
   "author": {
     "name": "Zefau",
     "email": "zefau@mailbox.org"
   },
   "bugs": {
-    "url": "https://github.com/Zefau/ioBroker.nuki-extended/ioBroker.nuki-extended/issues"
+    "url": "https://github.com/Zefau/ioBroker.nuki-extended/issues"
   },
   "bundleDependencies": false,
   "contributors": [
@@ -87,7 +87,7 @@
     "gulp": "^4.0.1",
     "mocha": "^6.2.0"
   },
-  "homepage": "https://github.com/Zefau/ioBroker.nuki-extended/ioBroker.nuki-extended",
+  "homepage": "https://github.com/Zefau/ioBroker.nuki-extended",
   "keywords": [
     "ioBroker",
     "Nuki",
@@ -101,7 +101,7 @@
   "name": "iobroker.nuki-extended",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Zefau/ioBroker.nuki-extended/ioBroker.nuki-extended"
+    "url": "https://github.com/Zefau/ioBroker.nuki-extended"
   },
   "scripts": {
     "test": "npm run test:package && npm run test:unit",
