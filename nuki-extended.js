@@ -7,7 +7,7 @@ const _http = require('express')();
 const _parser = require('body-parser');
 const _ip = require('ip');
 
-const Bridge = require('./lib/nuki-bridge-api');
+const Bridge = require('nuki-bridge-api');
 const Nuki = require('nuki-web-api');
 
 
@@ -711,8 +711,6 @@ function updateLock(payload)
 	if (payload.state && payload.state.stateName) delete payload.state.stateName;
 	if (payload.state && payload.state.deviceType) delete payload.state.deviceType;
 	if (payload.nuki) delete payload.nuki;
-	
-	adapter.log.warn(JSON.stringify(DEVICES));
 	
 	// create / update device
 	adapter.log.debug('Updating device ' + path + ' with payload: ' + JSON.stringify(payload));
