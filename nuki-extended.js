@@ -31,8 +31,8 @@ let unloaded;
 let refreshCycleWebApi, refreshCycleBridgeApi;
 
 let setup = [];
-let nukiWebApi = null, BRIDGES = {}, DEVICES = {}, CALLBACKS = {};
-let listener = false;
+let BRIDGES = {}, DEVICES = {};
+let nukiWebApi = null, listener = false;
 
 
 /*
@@ -120,31 +120,31 @@ function startAdapter(options)
 		// apply an action on the callback
 		if (state === '_delete' && object && object.ack !== true)
 		{
-			let bridgeId = library.getDeviceState(root + '.bridgeId');
+			let bridgeIndex = library.getDeviceState(root + '.index');
 			let url = library.getDeviceState(path + '.url');
 			
 			// ID or url could not be retrived
-			if (!bridgeId || !url || url == '{}')
+			if (!bridgeIndex || !url || url == '{}')
 			{
 				adapter.log.warn('Error deleting callback: No Bridge ID or URL given!');
 				return;
 			}
 			
 			// delete callback
-			let callbackIndex = CALLBACKS[bridgeId].findIndex(cb => cb.url === url);
+			let callbackIndex = BRIDGES.callbacks[bridgeIndex].findIndex(cb => cb.url === url);
 			if (callbackIndex > -1)
 			{
-				CALLBACKS[bridgeId][callbackIndex].remove().then(() =>
+				BRIDGES.callbacks[bridgeIndex][callbackIndex].remove().then(() =>
 				{
 					adapter.log.info('Deleted callback with URL ' + url + '.');
 					
 					// delete objects
-					let path = BRIDGES[bridgeId].data.path + '.callbacks.' + CALLBACKS[bridgeId][callbackIndex].getCallbackId();
+					let path = BRIDGES[bridgeIndex].data.path + '.callbacks.' + BRIDGES.callbacks[bridgeIndex][callbackIndex].getCallbackId();
 					library.del(path, true);
 					
 					// update callback list
-					CALLBACKS[bridgeId].splice(callbackIndex, 1);
-					library._setValue(BRIDGES[bridgeId].data.path + '.callbacks.list', JSON.stringify(CALLBACKS[bridgeId].map(cb => {return {'id': cb.id, 'url': cb.url}})));
+					BRIDGES.callbacks[bridgeIndex].splice(callbackIndex, 1);
+					library._setValue(BRIDGES[bridgeIndex].data.path + '.callbacks.list', JSON.stringify(BRIDGES.callbacks[bridgeIndex].map(cb => {return {'id': cb.id, 'url': cb.url}})));
 				})
 				.catch(err => adapter.log.debug('Error removing callback (' + err.message + ')!'));
 			}
@@ -167,7 +167,7 @@ function startAdapter(options)
 			
 			// Smartlock
 			let device = DEVICES[nukiHexId];
-			action = { id: action };
+			action = { 'id': action };
 			
 			switch (device.type && device.type.toLowerCase() || false)
 			{
@@ -283,86 +283,39 @@ function initNukiAPIs()
 		// go through bridges
 		let listener = adapter.config.bridges.map((device, i) =>
 		{
-			let bridge_ident = device.bridge_name ? 'with name ' + device.bridge_name : (device.bridge_id ? 'with ID ' + device.bridge_id : 'with index ' + i);
+			// check if API settings are set
+			if (!device.bridge_name || !device.bridge_ip || !device.bridge_token)
+			{
+				adapter.log.warn('Name, IP or API token missing for bridge ' + bridge_ident + '! Please go to settings and fill in IP and the API token first!');
+				return Promise.resolve(false);
+			}
 			
 			// check if Bridge is enabled in settings
 			if (!device.active)
 			{
-				adapter.log.info('Bridge ' + bridge_ident + ' is disabled in adapter settings. Thus, ignored.');
-				return Promise.resolve(false);
-			}
-			
-			// check if API settings are set
-			if (!device.bridge_ip || !device.bridge_token)
-			{
-				adapter.log.warn('IP or API token missing for bridge ' + bridge_ident + '! Please go to settings and fill in IP and the API token first!');
+				adapter.log.info('Bridge with name ' + device.bridge_name + ' is disabled in adapter settings. Thus, ignored.');
 				return Promise.resolve(false);
 			}
 			
 			// initialize Nuki Bridge class
 			library.set(library.getNode('bridges'));
-			device.path = 'bridges.' + (device.bridge_name ? library.clean(device.bridge_name, true, '_') : device.bridge_id);
+			device.path = 'bridges.' + library.clean(device.bridge_name, true, '_');
 			
 			let bridge = {
 				'data': device,
+				'callbacks': [],
 				'instance': new Bridge.Bridge(device.bridge_ip, device.bridge_port || 8080, device.bridge_token)
 			};
 			
 			// index bridge
-			BRIDGES[device.bridge_id] = bridge;
+			bridge.data.index = i;
+			BRIDGES[i] = bridge;
 			
 			// get bridge info
 			getBridgeApi(bridge);
 			
 			// get current callback URLs
-			return bridge.instance.getCallbacks().then(cbs =>
-			{
-				adapter.log.debug('Retrieved current callbacks from Nuki Bridge ' + bridge_ident + '.');
-				CALLBACKS[device.bridge_id] = cbs;
-				
-				// check for enabled callback
-				if (adapter.config.refreshBridgeApiType == 'callback')
-				{
-					library.set(library.getNode('bridgeApiCallback'), true);
-					let url = 'http://' + _ip.address() + ':' + adapter.config.callbackPort + '/nuki-api-bridge'; // NOTE: https is not supported according to API documentation
-					
-					// attach callback
-					if (CALLBACKS[device.bridge_id].findIndex(cb => cb.url === url) === -1)
-					{
-						adapter.log.debug('Adding callback with URL ' + url + ' to Nuki Bridge ' + bridge_ident + '.');
-						
-						// set callback on bridge
-						bridge.instance.addCallback(_ip.address(), adapter.config.callbackPort, false)
-							.then(res =>
-							{
-								adapter.log.info('Callback (with URL ' + res.url + ') attached to Nuki Bridge ' + bridge_ident + '.');
-								CALLBACKS[device.bridge_id].push(res);
-								setCallbackNodes(device.bridge_id);
-							})
-							.catch(err =>
-							{
-								if (err && err.error && err.error.message === 'callback already added')
-									adapter.log.debug('Callback (with URL ' + url + ') already attached to Nuki Bridge ' + bridge_ident + '.');
-								
-								else
-								{
-									adapter.log.warn('Callback not attached due to error. See debug log for details.');
-									adapter.log.debug(err.message);
-								}
-							});
-					}
-					else
-					{
-						adapter.log.debug('Callback (with URL ' + url + ') already attached to Nuki Bridge ' + bridge_ident + '.');
-						setCallbackNodes(device.bridge_id);
-					}
-					
-					return Promise.resolve(true);
-				}
-				
-				return Promise.resolve(false);
-			})
-			.catch(err => adapter.log.debug('Error retrieving callbacks (' + JSON.stringify(err) + ')!'));
+			return getCallbacks(bridge);
 		});
 		
 		// attach server to listen (only one listener for all Nuki Bridges)
@@ -437,50 +390,64 @@ function initNukiAPIs()
 	else
 		adapter.log.info('Polling Nuki Web API deactivated.');
 	
-	// Bridge API
-	/*
-	 * REMOVE due to high load on Nuki Bridge
-	 * @see https://developer.nuki.io/t/random-http-503-unavailable/909
-	 *
-	if (!adapter.config.refreshBridgeApi)
-		adapter.config.refreshBridgeApi = 0;
-	
-	else if (adapter.config.refreshBridgeApi > 0 && adapter.config.refreshBridgeApi < 5)
-	{
-		adapter.log.warn('Due to performance reasons, the refresh rate can not be set to less than 5 seconds. Using 5 seconds now for Nuki Bridge API.');
-		adapter.config.refreshBridgeApi = 5;
-	}
-	
-	if (adapter.config.refreshBridgeApi > 0 && !unloaded && adapter.config.refreshBridgeApiType == 'polling')
-	{
-		adapter.log.info('Polling Nuki Bridge API with a frequency of ' + adapter.config.refreshBridgeApi + 's.');
-		refreshCycleBridgeApi = setTimeout(updaterBridgeApi, Math.round(parseInt(adapter.config.refreshBridgeApi)*1000));
-	}
-	else if (adapter.config.refreshBridgeApi == 0 && !unloaded && (!adapter.config.refreshBridgeApiType || adapter.config.refreshBridgeApiType == 'polling'))
-		adapter.log.info('Polling Nuki Bridge API deactivated.');
-	*/
 	
 	library.set(Library.CONNECTION, true);
 }
 
-
 /**
- * Bridge API updater
+ *
  *
  */
-function updaterBridgeApi(bridge)
+function getCallbacks(bridge)
 {
-	// update Nuki Bridge API
-	if (bridge)
-		getBridgeApi(bridge)
-	
-	else
-		for (let key in BRIDGES) {getBridgeApi(BRIDGES[key])}
-	
-	// set interval
-	if (!unloaded)
-		refreshCycleBridgeApi = setTimeout(updaterBridgeApi, Math.round(parseInt(adapter.config.refreshBridgeApi)*1000));
-	
+	return bridge.instance.getCallbacks().then(cbs =>
+	{
+		adapter.log.debug('Retrieved current callbacks from Nuki Bridge with name ' + bridge.data.bridge_name + '.');
+		BRIDGES[bridge.data.index].callbacks = cbs;
+		
+		// check for enabled callback
+		if (adapter.config.refreshBridgeApiType == 'callback')
+		{
+			library.set(library.getNode('bridgeApiCallback'), true);
+			let url = 'http://' + _ip.address() + ':' + adapter.config.callbackPort + '/nuki-api-bridge'; // NOTE: https is not supported according to API documentation
+			
+			// attach callback
+			if (BRIDGES[bridge.data.index].callbacks.findIndex(cb => cb.url === url) === -1)
+			{
+				adapter.log.debug('Adding callback with URL ' + url + ' to Nuki Bridge with name ' + bridge.data.bridge_name + '.');
+				
+				// set callback on bridge
+				bridge.instance.addCallback(_ip.address(), adapter.config.callbackPort, false)
+					.then(res =>
+					{
+						adapter.log.info('Callback (with URL ' + res.url + ') attached to Nuki Bridge with name ' + bridge.data.bridge_name + '.');
+						BRIDGES[bridge.data.index].callbacks.push(res);
+						setCallbackNodes(bridge.data.index);
+					})
+					.catch(err =>
+					{
+						if (err && err.error && err.error.message === 'callback already added')
+							adapter.log.debug('Callback (with URL ' + url + ') already attached to Nuki Bridge with name ' + bridge.data.bridge_name + '.');
+						
+						else
+						{
+							adapter.log.warn('Callback not attached due to error. See debug log for details.');
+							adapter.log.debug(err.message);
+						}
+					});
+			}
+			else
+			{
+				adapter.log.debug('Callback (with URL ' + url + ') already attached to Nuki Bridge with name ' + bridge.data.bridge_name + '.');
+				setCallbackNodes(bridge.data.index);
+			}
+			
+			return Promise.resolve(true);
+		}
+		
+		return Promise.resolve(false);
+	})
+	.catch(err => adapter.log.debug('Error retrieving callbacks (' + JSON.stringify(err) + ')!'));
 }
 
 /**
@@ -501,21 +468,21 @@ function getBridgeApi(bridge)
 		{
 			// remap states
 			nuki.bridge = bridge.data.bridge_id !== '' ? bridge.data.bridge_id : undefined;
-			nuki['state'] = nuki['lastKnownState'];
-			delete nuki['lastKnownState'];
+			nuki.state = nuki.lastKnownState;
+			delete nuki.lastKnownState;
 			
 			updateLock(nuki);
 		});
 	})
 	.catch(err =>
 	{
-		adapter.log.warn('Failed retrieving /list from Nuki Bridge' + (bridge.data.bridge_name ? ' with name ' + bridge.data.bridge_name : (bridge.data.bridge_id ? ' with ID ' + bridge.data.bridge_id : (bridge.data.bridge_ip ? ' with ip ' + bridge.data.bridge_ip : ''))) + '!');
+		adapter.log.warn('Failed retrieving /list from Nuki Bridge with name ' + bridge.data.bridge_name + '!');
 		adapter.log.debug('getBridgeApi(): ' + err.message);
 		
 		if (err.message.indexOf('503') > -1 && !unloaded)
 		{
 			adapter.log.info('Trying again in 10s..');
-			setTimeout(updaterBridgeApi, 10*1000, bridge);
+			setTimeout(getBridgeApi, 10*1000, bridge);
 		}
 	});
 	
@@ -555,22 +522,10 @@ function getBridgeApi(bridge)
 		})
 		.catch(err =>
 		{
-			adapter.log.warn('Failed retrieving /info from Nuki Bridge' + (bridge.data.bridge_name ? ' with name ' + bridge.data.bridge_name : (bridge.data.bridge_id ? ' with ID ' + bridge.data.bridge_id : (bridge.data.bridge_ip ? ' with ip ' + bridge.data.bridge_ip : ''))) + '!');
+			adapter.log.warn('Failed retrieving /info from Nuki Bridge with name ' + bridge.data.bridge_name + '!');
 			adapter.log.debug('getBridgeApi(): ' + err.message);
 		});
 	}
-	
-	// get current callback URLs
-	/*
-	 * REMOVE due to easing the Hardware Bridge and avoid another request on it
-	 *
-	bridge.instance.getCallbacks().then(cbs =>
-	{
-		CALLBACKS[bridge.data.bridge_id] = cbs;
-		setCallbackNodes(bridge.data.bridge_id);
-	})
-	.catch(err => adapter.log.debug('Error retrieving callbacks (' + JSON.stringify(err) + ')!'));
-	*/
 }
 
 
@@ -584,9 +539,8 @@ function getWebApi()
 	library.set(library.getNode('webApiSync'), true, true);
 	library.set(library.getNode('webApiLast'), new Date().toISOString().substr(0,19) + '+00:00');
 	
-	adapter.log.silly('getWebApi(): Retrieving from Nuki Web API..');
-	
 	// get nukis
+	adapter.log.silly('getWebApi(): Retrieving from Nuki Web API..');
 	nukiWebApi.getSmartlocks().then(smartlocks =>
 	{
 		adapter.log.debug('getWebApi(): ' + JSON.stringify(smartlocks));
@@ -758,9 +712,10 @@ function updateLock(payload)
 	if (payload.state && payload.state.deviceType) delete payload.state.deviceType;
 	if (payload.nuki) delete payload.nuki;
 	
+	adapter.log.warn(JSON.stringify(DEVICES));
 	
 	// create / update device
-	adapter.log.debug('Updating lock ' + path + ' with payload: ' + JSON.stringify(payload));
+	adapter.log.debug('Updating device ' + path + ' with payload: ' + JSON.stringify(payload));
 	library.set({node: path, description: '' + DEVICES[payload.nukiHexId].name, role: 'channel'});
 	readData('', payload, path);
 }
@@ -859,9 +814,9 @@ function setAction(device, action, api = 'bridge', retry = 0)
  * Refresh Callbacks of the Nuki Bridge.
  *
  */
-function setCallbackNodes(bridgeId)
+function setCallbackNodes(bridgeIndex)
 {
-	let path = BRIDGES[bridgeId].data.path + '.callbacks';
+	let path = BRIDGES[bridgeIndex].data.path + '.callbacks';
 	let urls = {};
 	
 	// compare callback list with states
@@ -876,7 +831,7 @@ function setCallbackNodes(bridgeId)
 		
 		// add new callbacks
 		let index = null, cbs = [];
-		CALLBACKS[bridgeId].forEach(cb =>
+		BRIDGES[bridgeIndex].callbacks.forEach(cb =>
 		{
 			// search for callback URL
 			index = Object.values(urls).indexOf(cb.url);
