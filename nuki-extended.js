@@ -286,7 +286,7 @@ function initNukiAPIs()
 			// check if API settings are set
 			if (!device.bridge_name || !device.bridge_ip || !device.bridge_token)
 			{
-				adapter.log.warn('Name, IP or API token missing for bridge ' + bridge_ident + '! Please go to settings and fill in IP and the API token first!');
+				adapter.log.warn('Name, IP or API token missing for bridge ' + device.bridge_name + '! Please go to settings and fill in IP and the API token first!');
 				return Promise.resolve(false);
 			}
 			
