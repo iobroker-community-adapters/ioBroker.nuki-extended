@@ -7,7 +7,7 @@ const _http = require('express')();
 const _parser = require('body-parser');
 const _ip = require('ip');
 
-const Bridge = require('./lib/nuki-bridge-api');
+const Bridge = require('nuki-bridge-api');
 const Nuki = require('nuki-web-api');
 
 
