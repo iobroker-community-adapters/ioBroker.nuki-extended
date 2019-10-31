@@ -14,6 +14,8 @@
     "donateInformation": "N'hésitez pas à suggérer de nouvelles fonctionnalités via Github ou ioBroker forum. Si vous aimez cet adaptateur, vous les bienvenus pour faire un don.",
     "donateTitle": "Soutenir le développement de la nuki-extension de Carte!",
     "enabled": "Activée",
+    "hashedToken": "Utilisation haché jetons",
+    "hashedToken_info": "En raison du fait que tous les transports de la communication à la Nuki Ponts sont en clair (par Nuki de la conception du système), cette option de hachage (crypter) votre plaine jeton avant de l'utiliser pour le pont de la communication. De cette façon, votre jeton ne sera pas révélé dans la communication non chiffrée.",
     "message_action-bridgeauth": "Pont récupéré. ",
     "message_action-connecting": "Connexion à l'adaptateur ..",
     "message_action-getbridges": "Récupérer les ponts ..",

@@ -14,6 +14,8 @@
     "donateInformation": "Neue Funktionen / Features können gerne über Github oder das ioBroker Forum angefragt werden. Wenn dieser Adapter gefällt / nützlich ist, sind Spenden herzlich Willkommen.",
     "donateTitle": "Unterstützung der Entwicklung des nuki-extended Adapters!",
     "enabled": "Aktiviert",
+    "hashedToken": "Verschlüsselte Tokens benutzen",
+    "hashedToken_info": "Aufgrund der unverschlüsselten Kommunikation mit der Nuki Bridge (aufgrund der Nuki System-Architektur) erlaubt diese Option den ebenfalls unverschlüsselten Token vor der Benutzung zu verschlüsseln. Durch die Verschlüsselung des Tokens bleibt der Token auf dem Kommunikationsweg verschlüsselt.",
     "message_action-bridgeauth": "Brücke abgerufen. ",
     "message_action-connecting": "Verbinde zum Adapter..",
     "message_action-getbridges": "Lade Bridges..",

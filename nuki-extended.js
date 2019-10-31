@@ -7,7 +7,7 @@ const _http = require('express')();
 const _parser = require('body-parser');
 const _ip = require('ip');
 
-const Bridge = require('nuki-bridge-api');
+const Bridge = require('./lib/nuki-bridge-api');
 const Nuki = require('nuki-web-api');
 
 
@@ -144,7 +144,7 @@ function startAdapter(options)
 					
 					// update callback list
 					BRIDGES.callbacks[bridgeIndex].splice(callbackIndex, 1);
-					library._setValue(BRIDGES[bridgeIndex].data.path + '.callbacks.list', JSON.stringify(BRIDGES.callbacks[bridgeIndex].map(cb => {return {'id': cb.id, 'url': cb.url}})));
+					library._setValue(BRIDGES[bridgeIndex].data.path + '.callbacks.list', JSON.stringify(BRIDGES.callbacks[bridgeIndex].map(cb => {return { 'id': cb.id, 'url': cb.url }})));
 				})
 				.catch(err => adapter.log.debug('Error removing callback (' + err.message + ')!'));
 			}
@@ -288,7 +288,7 @@ function initNukiAPIs()
 			let bridge = {
 				'data': device,
 				'callbacks': [],
-				'instance': new Bridge.Bridge(device.bridge_ip, device.bridge_port || 8080, device.bridge_token)
+				'instance': new Bridge.Bridge(device.bridge_ip, device.bridge_port || 8080, device.bridge_token, { 'forcePlainToken': adapter.config.hashedToken === true ? false : true })
 			};
 			
 			// index bridge
@@ -469,10 +469,10 @@ function getBridgeApi(bridge)
 	library.set(library.getNode('bridgeApiLast'), new Date().toISOString().substr(0,19) + '+00:00');
 	
 	// get nuki devices from bridge
-	adapter.log.silly('Retrieving from Nuki Bridge API (Bridge ' + bridge.data.bridge_ip + ')..');
+	adapter.log.silly('Retrieving from Nuki Bridge API (Bridge ' + bridge.data.bridge_ip + (adapter.config.hashedToken ? ' using hashed token' : '') + ')..');
 	bridge.instance.list().then(nukis =>
 	{
-		adapter.log.debug('getBridgeApi(): ' + JSON.stringify(nukis));
+		adapter.log.debug('getBridgeApi() [forcePlainToken: ' + (bridge.instance.forcePlainToken === true) + ']: ' + JSON.stringify(nukis));
 		nukis.forEach(nuki =>
 		{
 			// remap states
@@ -485,8 +485,9 @@ function getBridgeApi(bridge)
 	})
 	.catch(err =>
 	{
-		adapter.log.warn('Failed retrieving /list from Nuki Bridge with name ' + bridge.data.bridge_name + '!');
+		adapter.log.warn('Failed retrieving /list from Nuki Bridge with name ' + bridge.data.bridge_name + ' (forcePlainToken: ' + (bridge.instance.forcePlainToken === true) + ')!');
 		adapter.log.debug('getBridgeApi(): ' + err.message);
+		adapter.log.debug('_getTokenParams(): ' + JSON.stringify(bridge.instance._getTokenParams()));
 		
 		if ((err.message.indexOf('503') > -1 || err.message.indexOf('socket hang up') > -1) && !unloaded)
 		{
@@ -531,7 +532,7 @@ function getBridgeApi(bridge)
 		})
 		.catch(err =>
 		{
-			adapter.log.warn('Failed retrieving /info from Nuki Bridge with name ' + bridge.data.bridge_name + '!');
+			adapter.log.warn('Failed retrieving /info from Nuki Bridge with name ' + bridge.data.bridge_name + ' (forcePlainToken: ' + (bridge.instance.forcePlainToken === true) + ')!');
 			adapter.log.debug('getBridgeApi(): ' + err.message);
 		});
 	}

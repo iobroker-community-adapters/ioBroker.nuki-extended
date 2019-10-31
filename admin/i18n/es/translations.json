@@ -14,6 +14,8 @@
     "donateInformation": "Siéntase libre de sugerir nuevas características a través de Github o ioBroker foro. Si te gusta este adaptador, usted muy bienvenido a donar.",
     "donateTitle": "Apoyar el desarrollo de la nuki-extendida Adaptador!",
     "enabled": "Habilitado",
+    "hashedToken": "El uso de hash tokens",
+    "hashedToken_info": "Debido al hecho de que toda comunicación de transporte para el Nuki Puentes están cifrados (por Nuki diseño del sistema), esta opción hash (cifrar) su llanura token antes de usarla para el puente de comunicación. De esta manera, su llanura token no será revelada en la comunicación no cifrada.",
     "message_action-bridgeauth": "Puente recuperado. ",
     "message_action-connecting": "Conectando al adaptador ..",
     "message_action-getbridges": "Recuperar puentes.",

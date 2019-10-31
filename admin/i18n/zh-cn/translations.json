@@ -14,6 +14,8 @@
     "donateInformation": "随时提出新的功能，通过审查或ioBroker论坛。 如果你喜欢这个转接器，你非常受欢迎的捐赠。",
     "donateTitle": "支持发展nuki扩展适配器!",
     "enabled": "启用",
+    "hashedToken": "使用的散列的标记",
+    "hashedToken_info": "事实上，由于所有运输通信的Nuki桥梁是加密的(由Nuki系统的设计)，这种选项将哈希(encrypt)纯令牌在使用之前为桥梁沟通。 这样，普通的牌不会被发现在未加密的通信。",
     "message_action-bridgeauth": "检索桥。 ",
     "message_action-connecting": "连接适配器..",
     "message_action-getbridges": "检索桥梁..",

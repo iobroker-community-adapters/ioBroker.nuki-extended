@@ -14,6 +14,8 @@
     "donateInformation": "Feel free to suggest new features via Github or ioBroker forum. If you like this adapter, you very welcome to donate.",
     "donateTitle": "Support the development of the nuki-extended Adapter!",
     "enabled": "Enabled",
+    "hashedToken": "Use hashed tokens",
+    "hashedToken_info": "Due to the fact that all transport communication to the Nuki Bridges are unencrypted (by Nuki system design), this option will hash (encrypt) your plain token before using it for the bridge communication. This way, your plain token will not be revealed in the unencrypted communication.",
     "message_action-bridgeauth": "Retrieved bridge. <strong>Press the button of the bridge within 30 seconds to retrieve token</strong>.",
     "message_action-connecting": "Connecting to adapter..",
     "message_action-getbridges": "Retrieve bridges..",

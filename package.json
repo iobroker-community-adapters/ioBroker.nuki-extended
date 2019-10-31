@@ -106,7 +106,8 @@
     "test": "npm run test:package && npm run test:unit",
     "test:integration": "mocha test/integration --exit",
     "test:package": "mocha test/package --exit",
-    "test:unit": "mocha test/unit --exit"
+    "test:unit": "mocha test/unit --exit",
+    "translate": "gulp translateAndUpdateWordsJS"
   },
-  "version": "2.0.2"
+  "version": "2.0.3"
 }
