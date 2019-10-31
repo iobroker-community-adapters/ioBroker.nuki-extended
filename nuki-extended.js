@@ -426,6 +426,9 @@ function getCallbacks(bridge)
 				bridge.instance.addCallback(_ip.address(), adapter.config.callbackPort, false)
 					.then(res =>
 					{
+						if (!res || !res.url)
+							throw new Error(JSON.stringify(res));
+						
 						adapter.log.info('Callback (with URL ' + res.url + ') attached to Nuki Bridge with name ' + bridge.data.bridge_name + '.');
 						BRIDGES[bridge.data.index].callbacks.push(res);
 						setCallbackNodes(bridge.data.index);
@@ -462,7 +465,7 @@ function getCallbacks(bridge)
  */
 function getBridgeApi(bridge)
 {
-	library.set(library.getNode('bridgeApiSync'), true, true);
+	library.set(library.getNode('bridgeApiSync'), true, { 'force': true });
 	library.set(library.getNode('bridgeApiLast'), new Date().toISOString().substr(0,19) + '+00:00');
 	
 	// get nuki devices from bridge
@@ -485,7 +488,7 @@ function getBridgeApi(bridge)
 		adapter.log.warn('Failed retrieving /list from Nuki Bridge with name ' + bridge.data.bridge_name + '!');
 		adapter.log.debug('getBridgeApi(): ' + err.message);
 		
-		if (err.message.indexOf('503') > -1 && !unloaded)
+		if ((err.message.indexOf('503') > -1 || err.message.indexOf('socket hang up') > -1) && !unloaded)
 		{
 			adapter.log.info('Trying again in 10s..');
 			setTimeout(getBridgeApi, 10*1000, bridge);
@@ -542,7 +545,7 @@ function getBridgeApi(bridge)
 function getWebApi()
 {
 	if (!nukiWebApi) return;
-	library.set(library.getNode('webApiSync'), true, true);
+	library.set(library.getNode('webApiSync'), true, { 'force': true });
 	library.set(library.getNode('webApiLast'), new Date().toISOString().substr(0,19) + '+00:00');
 	
 	// get nukis

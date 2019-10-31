@@ -61,7 +61,7 @@ function _load(settings, onChange)
 		return;
 	
 	$('.value').each(function()
-	{            
+	{
 		var $this = $(this);
 		var id = $this.attr('id');
 		
