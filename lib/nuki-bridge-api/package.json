@@ -1,64 +1,29 @@
 {
-  "_args": [
-    [
-      "nuki-bridge-api@1.5.0",
-      "/opt/iobroker/node_modules/iobroker.nuki-extended"
-    ]
-  ],
-  "_from": "nuki-bridge-api@1.5.0",
-  "_id": "nuki-bridge-api@1.5.0",
-  "_inBundle": false,
-  "_integrity": "sha512-/l0zEAjfF0uW4DEO7e6IkZLH0M1ayofL/IMCsxB+s7DB71l8ZZ/9Kuj7ZgutU8QsUibT45pup/GhFpL/4dDfaw==",
-  "_location": "/nuki-bridge-api",
-  "_phantomChildren": {},
-  "_requested": {
-    "type": "version",
-    "registry": true,
-    "raw": "nuki-bridge-api@1.5.0",
-    "name": "nuki-bridge-api",
-    "escapedName": "nuki-bridge-api",
-    "rawSpec": "1.5.0",
-    "saveSpec": null,
-    "fetchSpec": "1.5.0"
+  "name": "nuki-bridge-api",
+  "version": "1.5.0",
+  "description": "An API for Nuki Bridge",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha -R spec ./test/"
   },
-  "_requiredBy": [
-    "/"
-  ],
-  "_resolved": "https://registry.npmjs.org/nuki-bridge-api/-/nuki-bridge-api-1.5.0.tgz",
-  "_spec": "1.5.0",
-  "_where": "/opt/iobroker/node_modules/iobroker.nuki-extended",
-  "author": {
-    "name": "Mik13"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Mik13/nuki-bridge-api.git"
   },
-  "bugs": {
-    "url": "https://github.com/Mik13/nuki-bridge-api/issues"
-  },
+  "author": "Mik13",
+  "license": "MIT",
   "dependencies": {
-    "bluebird": "^3.5.5",
+    "bluebird": "^3.7.1",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
-    "sha.js": "^2.4.11",
     "url-parse": "^1.4.7"
   },
-  "description": "An API for Nuki Bridge",
   "devDependencies": {
     "minimist": "^1.2.0",
-    "mocha": "^6.2.0",
+    "mocha": "^6.2.2",
     "nukiio-dummy-bridge": "git://github.com/Mik13/nukiio-dummy-bridge.git",
-    "sinon": "^7.4.2"
-  },
-  "homepage": "https://github.com/Mik13/nuki-bridge-api#readme",
-  "license": "MIT",
-  "main": "index.js",
-  "name": "nuki-bridge-api",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Mik13/nuki-bridge-api.git"
-  },
-  "scripts": {
-    "test": "mocha -R spec ./test/"
-  },
-  "version": "1.5.0"
+    "sinon": "^7.5.0"
+  }
 }

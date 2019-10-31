@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "nuki-extended",
-        "version": "2.0.1",
+        "version": "2.0.2",
         "title": "Nuki Smartlock & Opener",
         "titleLang": {
             "en": "Nuki Smartlock & Opener",
@@ -28,8 +28,14 @@
             "zh-cn": "控制和监视你的Nuki Smartlock和Nuki开与ioBroker"
         },
         "news": {
+            "2.0.2": {
+                "en": "- reintroduced support for hashed token on hardware bridges (see https://developer.nuki.io/page/nuki-bridge-http-api-190/4#heading--token)\n- added support for newly introduced nightmode (see https://nuki.io/de/blog/nuki-news-de/nuki-update-2019-der-winter-naht-sei-vorbereitet/)\n- fixed incorrect behavior when bridges are defined insufficiently (no name, ip or token provided)"
+            },
+            "2.0.1": {
+                "en": "- fixed missing 'bridge_name'"
+			},
             "2.0.0": {
-                "en": ""
+                "en": "NEW MAJOR VERSION\n- Support for Nuki Smartlock and Nuki Opener\n- Support for both Nuki Bridge API and Nuki Web API\n- Fallback to Nuki Web API in case applied actions on Nuki Bridge API fail, e.g. due to bridge error 503\n- Retry in case applied actions on Nuki Bridge API fail (when Nuki Web API is not used)\n- Option to regularly synchronise instead of using Bridge API callback (which may be delayed due to Hardware Bridge)\n- Refreshing all states of Nuki Web API when callback is received via Nuki Bridge API\n- Retrieve authorised users for Nuki Smartlock and Nuki Opener\n- Retrieve the configuration for Nuki Smartlock and Nuki Opener\n- Retrieve setup Nuki Notifications\n- Web Interface that shows the recent events from your Nuki Smartlock and Nuki Opener"
             }
         },
         "authors": [
@@ -63,9 +69,9 @@
         "subscribe": "messagebox"
     },
     "native": {
-		"refreshBridgeApiType": "callback",
-		"syncConfig": true,
-		"syncUsers": true
-	},
+        "refreshBridgeApiType": "callback",
+        "syncConfig": true,
+        "syncUsers": true
+    },
     "objects": []
 }

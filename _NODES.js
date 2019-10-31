@@ -92,7 +92,9 @@ module.exports =
 	'state.ringToOpenTimer': {'description': 'Remaining ring to open time', 'type': 'number', 'role': 'value'},
 	'state.trigger': {'description': 'The state trigger', 'type': 'number', 'role': 'value', 'common': {'states': {'0': 'SYSTEM', '1': 'MANUAL', '2': 'BUTTON', '3': 'AUTOMATIC', '4': 'WEB', '5': 'APP', '6': 'CONTINUOUS'}}},
 	'state.timestamp': {'description': 'Timestamp of last update', 'role': 'date'},
-	
+	'state.nightMode': {'description': 'Indicates if night mode is enabled', 'role': 'indicator', 'type': 'boolean'},
+	'state.deviceType': {'description': 'Type of device', 'type': 'number', 'role': 'value', 'common': {'states': {'0': 'Nuki Smart Lock', '2': 'Nuki Opener'}}},
+
 	'state.locked': {'state': 'state.locked', 'description': 'Indication if door is locked (boolean of lockState)', 'type': 'boolean', 'role': 'sensor.lock', 'common': {'states': {'0': 'false', '1': 'true', '2': 'false', '3': 'false', '4': 'true', '5': 'false', '6': 'false', '7': 'false', '254': 'false', '255': 'false'}}},
 	'state.closed': {'state': 'state.closed', 'description': 'Indication if door is closed (boolean of doorState)', 'type': 'boolean', 'role': 'sensor.lock', 'common': {'states': {'0': 'false', '1': 'false', '2': 'true', '3': 'false', '4': 'true', '5': 'false'}}},
 	

@@ -7,7 +7,7 @@ const _http = require('express')();
 const _parser = require('body-parser');
 const _ip = require('ip');
 
-const Bridge = require('nuki-bridge-api');
+const Bridge = require('./lib/nuki-bridge-api');
 const Nuki = require('nuki-web-api');
 
 
@@ -251,22 +251,6 @@ function initNukiAPIs()
 	library.set(library.getNode('bridgeApiSync'), false);
 	library.set(library.getNode('webApiSync'), false);
 	
-	/*
-	 * WEB API
-	 *
-	 */
-	if (!adapter.config.api_token)
-		adapter.log.info('No Nuki Web API token provided.');
-	
-	else
-	{
-		nukiWebApi = new Nuki(adapter.config.api_token);
-		setup.push('web_api');
-		
-		// get locks
-		getWebApi();
-	}
-	
 	
 	/*
 	 * BRIDGE API
@@ -320,9 +304,10 @@ function initNukiAPIs()
 		
 		// attach server to listen (only one listener for all Nuki Bridges)
 		// @see https://stackoverflow.com/questions/9304888/how-to-get-data-passed-from-a-form-in-express-node-js/38763341#38763341
-		Promise.all(listener).then(values =>
+		return Promise.all(listener).then(values =>
 		{
-			if (values.findIndex(el => el === true) > -1)
+			// attach callback
+			if (values.findIndex(el => el === 'attachListener') > -1)
 			{
 				_http.use(_parser.json());
 				_http.use(_parser.urlencoded({extended: false}));
@@ -356,42 +341,63 @@ function initNukiAPIs()
 				
 				_http.listen(adapter.config.callbackPort, () => adapter.log.info('Listening for Nuki events on port ' + adapter.config.callbackPort + '.'));
 			}
-			else
+			
+			// no callback
+			else if (values.findIndex(el => el === 'attachListener') === -1 && values.findIndex(el => el === 'doNotAttachListener') > -1)
 				adapter.log.info('Not listening for Nuki events.');
+			
+			// no bridges
+			else
+				return library.terminate('No bridges are sufficiently defined! Name, IP or token missing or all bridges deactivated!');
+			
+			/*
+			 * WEB API
+			 *
+			 */
+			if (!adapter.config.api_token)
+				adapter.log.info('No Nuki Web API token provided.');
+			
+			else
+			{
+				nukiWebApi = new Nuki(adapter.config.api_token);
+				setup.push('web_api');
+				
+				// get locks
+				getWebApi();
+				
+				// periodically refresh settings
+				if (!adapter.config.refreshWebApi)
+					adapter.config.refreshWebApi = 0;
+				
+				else if (adapter.config.refreshWebApi > 0 && adapter.config.refreshWebApi < 5)
+				{
+					adapter.log.warn('Due to performance reasons, the refresh rate can not be set to less than 5 seconds. Using 5 seconds now for Nuki Web API.');
+					adapter.config.refreshWebApi = 5;
+				}
+				
+				if (adapter.config.refreshWebApi > 0 && !unloaded)
+				{
+					adapter.log.info('Polling Nuki Web API with a frequency of ' + adapter.config.refreshWebApi + 's.');
+					refreshCycleWebApi = setTimeout(function updaterWebApi()
+					{
+						// update Nuki Web API
+						getWebApi();
+						
+						// set interval
+						if (!unloaded)
+							refreshCycleWebApi = setTimeout(updaterWebApi, Math.round(parseInt(adapter.config.refreshWebApi)*1000));
+						
+					}, Math.round(parseInt(adapter.config.refreshWebApi)*1000));
+				}
+				else
+					adapter.log.info('Polling Nuki Web API deactivated.');
+			}
+			
+			
+			library.set(Library.CONNECTION, true);
 		})
 		.catch(err => adapter.log.debug('Error resolving listeners (' + JSON.stringify(err) + ')!'));
 	}
-	
-	// periodically refresh settings
-	// Web API
-	if (!adapter.config.refreshWebApi)
-		adapter.config.refreshWebApi = 0;
-	
-	else if (adapter.config.refreshWebApi > 0 && adapter.config.refreshWebApi < 5)
-	{
-		adapter.log.warn('Due to performance reasons, the refresh rate can not be set to less than 5 seconds. Using 5 seconds now for Nuki Web API.');
-		adapter.config.refreshWebApi = 5;
-	}
-	
-	if (adapter.config.refreshWebApi > 0 && !unloaded)
-	{
-		adapter.log.info('Polling Nuki Web API with a frequency of ' + adapter.config.refreshWebApi + 's.');
-		refreshCycleWebApi = setTimeout(function updaterWebApi()
-		{
-			// update Nuki Web API
-			getWebApi();
-			
-			// set interval
-			if (!unloaded)
-				refreshCycleWebApi = setTimeout(updaterWebApi, Math.round(parseInt(adapter.config.refreshWebApi)*1000));
-			
-		}, Math.round(parseInt(adapter.config.refreshWebApi)*1000));
-	}
-	else
-		adapter.log.info('Polling Nuki Web API deactivated.');
-	
-	
-	library.set(Library.CONNECTION, true);
 }
 
 /**
@@ -442,10 +448,10 @@ function getCallbacks(bridge)
 				setCallbackNodes(bridge.data.index);
 			}
 			
-			return Promise.resolve(true);
+			return Promise.resolve('attachListener');
 		}
 		
-		return Promise.resolve(false);
+		return Promise.resolve('doNotAttachListener');
 	})
 	.catch(err => adapter.log.debug('Error retrieving callbacks (' + JSON.stringify(err) + ')!'));
 }

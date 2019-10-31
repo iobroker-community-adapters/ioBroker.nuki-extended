@@ -6,7 +6,7 @@
     "bridge_id": "Bridge ID",
     "bridge_info": "Die Verbindungseinstellungen für die Nuki Bridge (mit der <a href='https://developer.nuki.io/page/nuki-bridge-http-api-170/4/'>offiziellen Nuki Bridge API</a>).",
     "bridge_ip": "IP Adresse",
-    "bridge_name": "Bridge Name (optional)",
+    "bridge_name": "Bridge Name",
     "bridge_port": "Port",
     "bridge_token": "API Token",
     "button_closeModal": "Protokoll schließen",

@@ -6,7 +6,7 @@
     "bridge_id": "Bridge ID",
     "bridge_info": "The connection settings for the Nuki Bridge (using the <a href='https://developer.nuki.io/page/nuki-bridge-http-api-170/4/'>official Nuki Bridge API</a>). The REST API on the Nuki Bridge offers simple endpoints to list all available Nuki Smart Locks, retrieve their current lock state and perform lock operations.",
     "bridge_ip": "IP address",
-    "bridge_name": "Bridge Name (optional)",
+    "bridge_name": "Bridge Name",
     "bridge_port": "Port",
     "bridge_token": "API Token",
     "button_closeModal": "Close Log",
