@@ -16,6 +16,8 @@
     "enabled": "Habilitado",
     "hashedToken": "El uso de hash tokens",
     "hashedToken_info": "Debido al hecho de que toda comunicación de transporte para el Nuki Puentes están cifrados (por Nuki diseño del sistema), esta opción hash (cifrar) su llanura token antes de usarla para el puente de comunicación. De esta manera, su llanura token no será revelada en la comunicación no cifrada.",
+    "ip": "dirección IP",
+    "ip_info": "Opcionalmente, puede especificar una dirección IP para la devolución de llamada. ",
     "message_action-bridgeauth": "Puente recuperado. ",
     "message_action-connecting": "Conectando al adaptador ..",
     "message_action-getbridges": "Recuperar puentes.",

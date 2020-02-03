@@ -16,6 +16,8 @@
     "enabled": "Ingeschakeld",
     "hashedToken": "Gebruik hash penningen",
     "hashedToken_info": "Vanwege het feit dat alle vervoer communicatie naar de Nuki Bruggen zijn ongecodeerd (door Nuki ontwerp van het systeem), zal deze optie hash (coderen) van uw platte token voordat u deze voor de brug communicatie. Op deze manier, je een gewone kaart zal niet worden geopenbaard in de niet-gecodeerde communicatie.",
+    "ip": "IP adres",
+    "ip_info": "Optioneel kunt u een IP-adres opgeven voor de terugbelactie. ",
     "message_action-bridgeauth": "Gevonden brug. ",
     "message_action-connecting": "Verbinden met adapter ..",
     "message_action-getbridges": "Ophalen van bruggen ..",

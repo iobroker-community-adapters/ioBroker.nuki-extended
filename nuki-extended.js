@@ -153,6 +153,16 @@ function startAdapter(options)
 		}
 		
 		// apply an action on the door
+		let lockAction = Object.values(_LOCK.ACTIONS).indexOf(state.replace(/_/g, ' '));
+		let openerAction = Object.values(_OPENER.ACTIONS).indexOf(state.replace(/_/g, ' '));
+		
+		if (state !== '_ACTION' && (lockAction > -1 || openerAction > -1)) {
+			
+			state = '_ACTION';
+			action = lockAction > -1 ? lockAction : openerAction;
+			path = path.substr(0, path.lastIndexOf('.'));
+		}
+		
 		if (state === '_ACTION' && Number.isInteger(action) && action > 0 && object.ack !== true)
 		{
 			library._setValue(node, 0, true);
@@ -415,7 +425,7 @@ function getCallbacks(bridge)
 		if (adapter.config.refreshBridgeApiType == 'callback')
 		{
 			library.set(library.getNode('bridgeApiCallback'), true);
-			let url = 'http://' + _ip.address() + ':' + adapter.config.callbackPort + '/nuki-api-bridge'; // NOTE: https is not supported according to API documentation
+			let url = 'http://' + (adapter.config.callbackIp || _ip.address()) + ':' + adapter.config.callbackPort + '/nuki-api-bridge'; // NOTE: https is not supported according to API documentation
 			
 			// attach callback
 			if (BRIDGES[bridge.data.index].callbacks.findIndex(cb => cb.url === url) === -1)
@@ -423,7 +433,7 @@ function getCallbacks(bridge)
 				adapter.log.debug('Adding callback with URL ' + url + ' to Nuki Bridge with name ' + bridge.data.bridge_name + '.');
 				
 				// set callback on bridge
-				bridge.instance.addCallback(_ip.address(), adapter.config.callbackPort, false)
+				bridge.instance.addCallback(adapter.config.callbackIp || _ip.address(), adapter.config.callbackPort, false)
 					.then(res =>
 					{
 						if (!res || !res.url)
@@ -497,45 +507,42 @@ function getBridgeApi(bridge)
 	});
 	
 	// get bridge info
-	if (!bridge.data.bridge_id)
+	bridge.instance.info().then(payload =>
 	{
-		bridge.instance.info().then(payload =>
+		// enrich payload
+		payload.name = bridge.data.bridge_name;
+		payload.ip = bridge.data.bridge_ip;
+		payload.port = bridge.data.bridge_port || 8080;
+		
+		// get bridge ID if not given
+		if (bridge.data.bridge_id === undefined || bridge.data.bridge_id === '')
 		{
-			// enrich payload
-			payload.name = bridge.data.bridge_name;
-			payload.ip = bridge.data.bridge_ip;
-			payload.port = bridge.data.bridge_port || 8080;
+			adapter.log.debug('Adding missing Bridge ID for bridge with IP ' + bridge.data.bridge_ip + '.');
+			bridge.data.bridge_id = payload.ids.serverId;
 			
-			// get bridge ID if not given
-			if (bridge.data.bridge_id === undefined || bridge.data.bridge_id === '')
+			// update bridge ID in configuration
+			adapter.getForeignObject('system.adapter.' + adapter.namespace, (err, obj) =>
 			{
-				adapter.log.debug('Adding missing Bridge ID for bridge with IP ' + bridge.data.bridge_ip + '.');
-				bridge.data.bridge_id = payload.ids.serverId;
-				
-				// update bridge ID in configuration
-				adapter.getForeignObject('system.adapter.' + adapter.namespace, (err, obj) =>
+				obj.native.bridges.forEach((entry, i) =>
 				{
-					obj.native.bridges.forEach((entry, i) =>
+					if (entry.bridge_ip === bridge.data.bridge_ip)
 					{
-						if (entry.bridge_ip === bridge.data.bridge_ip)
-						{
-							obj.native.bridges[i].bridge_id = bridge.data.bridge_id;
-							adapter.setForeignObject(obj._id, obj);
-						}
-					});
+						obj.native.bridges[i].bridge_id = bridge.data.bridge_id;
+						adapter.setForeignObject(obj._id, obj);
+					}
 				});
-			}
-			
-			// set payload for bridge
-			library.set({node: bridge.data.path, description: 'Bridge ' + (bridge.data.bridge_name ? bridge.data.bridge_name + ' ' : '') + '(' + bridge.data.bridge_ip + ')', role: 'channel'});
-			readData('', payload, bridge.data.path);
-		})
-		.catch(err =>
-		{
-			adapter.log.warn('Failed retrieving /info from Nuki Bridge with name ' + bridge.data.bridge_name + ' (forcePlainToken: ' + (bridge.instance.forcePlainToken === true) + ')!');
-			adapter.log.debug('getBridgeApi(): ' + err.message);
-		});
-	}
+			});
+		}
+		
+		// set payload for bridge
+		library.set({node: bridge.data.path, description: 'Bridge ' + (bridge.data.bridge_name ? bridge.data.bridge_name + ' ' : '') + '(' + bridge.data.bridge_ip + ')', role: 'channel'});
+		readData('', payload, bridge.data.path);
+	})
+	.catch(err =>
+	{
+		adapter.log.warn('Failed retrieving /info from Nuki Bridge with name ' + bridge.data.bridge_name + ' (forcePlainToken: ' + (bridge.instance.forcePlainToken === true) + ')!');
+		adapter.log.debug('getBridgeApi(): ' + err.message);
+	});
 }
 
 
@@ -687,8 +694,18 @@ function updateLock(payload)
 		// add action
 		if (actions !== null)
 		{
-			library.set({ ...library.getNode('action'), 'node': path + '._ACTION', 'common': { 'write': true, 'states': actions }}, 0);
-			adapter.subscribeStates(path + '._ACTION'); // attach state listener
+			let actionPath = path + '._ACTION';
+			library.set({ ...library.getNode('action'), 'node': actionPath, 'common': { 'write': true, 'states': actions }}, 0);
+			adapter.subscribeStates(actionPath); // attach state listener
+			
+			for (let key in actions) {
+				
+				if (key > 0) {
+					let action = actions[key];
+					library.set({ 'description': 'Trigger ' + action + ' action', 'type': 'boolean', 'role': 'button', 'node': actionPath + '.' + action.replace(/ /g, '_'), 'common': { 'write': true }}, false);
+					adapter.subscribeStates(actionPath + '.' + action.replace(/ /g, '_')); // attach state listener
+				}
+			}
 		}
 	}
 	
@@ -716,6 +733,9 @@ function updateLock(payload)
 	if (DEVICES[payload.nukiHexId].type == 'Smartlock' && payload.state.state)
 		payload.state.locked = payload.state.state;
 	
+	if (payload.state.state && payload.state.state !== library.getDeviceState(path + '.state.lockState')) {
+		payload.state.lastStateUpdate = Date.now();
+	}
 	
 	// remove unnecessary states
 	if (payload.state && payload.state.stateName) delete payload.state.stateName;

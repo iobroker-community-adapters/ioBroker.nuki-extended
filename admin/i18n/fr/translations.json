@@ -16,6 +16,8 @@
     "enabled": "Activée",
     "hashedToken": "Utilisation haché jetons",
     "hashedToken_info": "En raison du fait que tous les transports de la communication à la Nuki Ponts sont en clair (par Nuki de la conception du système), cette option de hachage (crypter) votre plaine jeton avant de l'utiliser pour le pont de la communication. De cette façon, votre jeton ne sera pas révélé dans la communication non chiffrée.",
+    "ip": "adresse IP",
+    "ip_info": "Facultativement, vous pouvez spécifier une adresse IP pour le rappel. ",
     "message_action-bridgeauth": "Pont récupéré. ",
     "message_action-connecting": "Connexion à l'adaptateur ..",
     "message_action-getbridges": "Récupérer les ponts ..",

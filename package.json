@@ -75,13 +75,13 @@
     "nuki-bridge-api": "^1.5.0",
     "nuki-web-api": "^2.1.1",
     "request": "^2.88.0",
-    "request-promise": "^4.2.4"
+    "request-promise": "^4.2.5"
   },
   "deprecated": false,
   "description": "Nuki Smart Lock 2.0",
   "devDependencies": {
-    "@iobroker/testing": "^2.0.1",
-    "axios": "^0.19.0",
+    "@iobroker/testing": "^2.0.2",
+    "axios": "^0.19.2",
     "chai": "^4.2.0",
     "gulp": "^4.0.2",
     "mocha": "^7.0.1"
@@ -109,5 +109,5 @@
     "test:unit": "mocha test/unit --exit",
     "translate": "gulp translateAndUpdateWordsJS"
   },
-  "version": "2.0.3"
+  "version": "2.1.0"
 }

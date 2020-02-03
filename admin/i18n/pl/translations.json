@@ -16,6 +16,8 @@
     "enabled": "Włączone",
     "hashedToken": "Używać хэшированные uchwyty",
     "hashedToken_info": "Z racji tego, że wszystkie pojazdy komunikacji w Нуки mosty w postaci niezaszyfrowanej (przy projektowaniu systemu Нуки), ten parametr kraty (szyfrowania) zwykły marker, zanim go używać do komunikacyjnego mostu. W ten sposób zwykły znacznik nie zostanie ujawniona w przypadku niezaszyfrowanej związku.",
+    "ip": "adres IP",
+    "ip_info": "Opcjonalnie możesz podać adres IP dla oddzwaniania. ",
     "message_action-bridgeauth": "Odebrany most. ",
     "message_action-connecting": "Łączenie z adapterem ..",
     "message_action-getbridges": "Pobieraj mosty ..",

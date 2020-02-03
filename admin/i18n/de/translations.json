@@ -16,6 +16,8 @@
     "enabled": "Aktiviert",
     "hashedToken": "Verschlüsselte Tokens benutzen",
     "hashedToken_info": "Aufgrund der unverschlüsselten Kommunikation mit der Nuki Bridge (aufgrund der Nuki System-Architektur) erlaubt diese Option den ebenfalls unverschlüsselten Token vor der Benutzung zu verschlüsseln. Durch die Verschlüsselung des Tokens bleibt der Token auf dem Kommunikationsweg verschlüsselt.",
+    "ip": "IP Adresse",
+    "ip_info": "Optional kann eine Callback IP angegeben werden, wenn ioBroker z.B. im Docker läuft. Wird keine IP angegeben, wird die ioBroker IP verwendet.",
     "message_action-bridgeauth": "Brücke abgerufen. ",
     "message_action-connecting": "Verbinde zum Adapter..",
     "message_action-getbridges": "Lade Bridges..",

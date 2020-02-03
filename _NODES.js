@@ -91,7 +91,8 @@ module.exports =
 	'state.mode': {'description': 'Operation Mode of the Nuki or Opener', 'type': 'number', 'role': 'value', 'common': {'states': {'0': 'UNINITIALIZED', '1': 'PAIRING', '2': 'NORMAL', '3': 'CONTINUOUS', '4': 'MAINTENANCE'}}},
 	'state.ringToOpenTimer': {'description': 'Remaining ring to open time', 'type': 'number', 'role': 'value'},
 	'state.trigger': {'description': 'The state trigger', 'type': 'number', 'role': 'value', 'common': {'states': {'0': 'SYSTEM', '1': 'MANUAL', '2': 'BUTTON', '3': 'AUTOMATIC', '4': 'WEB', '5': 'APP', '6': 'CONTINUOUS'}}},
-	'state.timestamp': {'description': 'Timestamp of last update', 'role': 'date'},
+	'state.timestamp': {'state': 'state.lastDataUpdate', 'description': 'Timestamp of last data update / refresh', 'role': 'date'},
+	'state.lastStateUpdate': {'description': 'Timestamp of last state change', 'role': 'date'},
 	'state.nightMode': {'description': 'Indicates if night mode is enabled', 'role': 'indicator', 'type': 'boolean'},
 	'state.deviceType': {'description': 'Type of device', 'type': 'number', 'role': 'value', 'common': {'states': {'0': 'Nuki Smart Lock', '2': 'Nuki Opener'}}},
 

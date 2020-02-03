@@ -16,6 +16,8 @@
     "enabled": "ativado",
     "hashedToken": "O uso desordenado de tokens",
     "hashedToken_info": "Devido ao fato de que toda a comunicação de transporte para o Nuki Pontes são criptografadas (por Nuki projeto de sistema), esta opção irá hash (criptografar) simples do token antes de usá-lo para a ponte de comunicação. Desta forma, o simples token não será revelado na comunicação sem criptografia.",
+    "ip": "endereço de IP",
+    "ip_info": "Opcionalmente, você pode especificar um endereço IP para o retorno de chamada. ",
     "message_action-bridgeauth": "Ponte recuperada. ",
     "message_action-connecting": "Conectando ao adaptador ..",
     "message_action-getbridges": "Recuperar pontes ..",

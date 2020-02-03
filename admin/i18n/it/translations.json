@@ -16,6 +16,8 @@
     "enabled": "Abilitato",
     "hashedToken": "Utilizzare hash gettoni",
     "hashedToken_info": "A causa del fatto che tutti i mezzi di comunicazione per la Nuki Ponti sono in chiaro (da Nuki progettazione del sistema), questa opzione hash (cifra) pianura token prima di utilizzarlo per il ponte di comunicazione. In questo modo, il vostro normale token non sarà rivelato nella comunicazione non crittografata.",
+    "ip": "indirizzo IP",
+    "ip_info": "Facoltativamente, è possibile specificare un indirizzo IP per la richiamata. ",
     "message_action-bridgeauth": "Ponte recuperato. ",
     "message_action-connecting": "Connessione all'adattatore ..",
     "message_action-getbridges": "Recupera ponti",

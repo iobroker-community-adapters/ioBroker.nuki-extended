@@ -16,6 +16,8 @@
     "enabled": "启用",
     "hashedToken": "使用的散列的标记",
     "hashedToken_info": "事实上，由于所有运输通信的Nuki桥梁是加密的(由Nuki系统的设计)，这种选项将哈希(encrypt)纯令牌在使用之前为桥梁沟通。 这样，普通的牌不会被发现在未加密的通信。",
+    "ip": "IP地址",
+    "ip_info": "（可选）您可以为回调指定IP地址。",
     "message_action-bridgeauth": "检索桥。 ",
     "message_action-connecting": "连接适配器..",
     "message_action-getbridges": "检索桥梁..",
