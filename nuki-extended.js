@@ -163,7 +163,7 @@ function startAdapter(options)
 			path = path.substr(0, path.lastIndexOf('.'));
 		}
 		
-		if (state === '_ACTION' && Number.isInteger(action) && action > 0 && object.ack !== true)
+		if (state === '_ACTION' && Number.isInteger(action) && action > 0 && object && object.ack !== true)
 		{
 			library._setValue(node, 0, true);
 			let nukiHexId = library.getDeviceState(path + '.hex');
@@ -175,7 +175,7 @@ function startAdapter(options)
 				return false;
 			}
 			
-			// Smartlock
+			// get smartlock
 			let device = DEVICES[nukiHexId];
 			action = { 'id': action };
 			
@@ -198,6 +198,49 @@ function startAdapter(options)
 			
 			// apply action
 			setAction(device, action);
+		}
+		
+		// configuration
+		if (nukiWebApi !== null && object && object.ack !== true) {
+			
+			library.set({ node: node.replace(adapter.name + '.' + adapter.instance + '.', '') }, object.val);
+			
+			path = path.substr(0, path.lastIndexOf('.'));
+			let nukiHexId = library.getDeviceState(path + '.hex');
+			
+			// ID or type could not be retrived
+			if (!nukiHexId)
+			{
+				adapter.log.warn('Error triggering action on the Nuki device: No Nuki Hex ID given!');
+				return false;
+			}
+			
+			// get smartlock
+			let device = DEVICES[nukiHexId];
+			
+			// change config
+			if (node.indexOf('.config.') > -1) {
+				
+				nukiWebApi.setConfig(device.smartlockId, { ...device.config, [state]: action })
+					.then(res => adapter.log.info('Set configuration ' + state + ' to ' + action + '.'))
+					.catch(err => adapter.log.warn(err));
+			}
+			
+			// change advancedConfig
+			else if (node.indexOf('.advancedConfig.') > -1) {
+				
+				nukiWebApi.setAdvancedConfig(device.smartlockId, { ...device.advancedConfig, [state]: action })
+					.then(res => adapter.log.info('Set advanced configuration ' + state + ' to ' + action + '.'))
+					.catch(err => adapter.log.warn(err));
+			}
+			
+			// change openerAdvancedConfig
+			else if (node.indexOf('.openerAdvancedConfig.') > -1) {
+				
+				nukiWebApi.setAdvancedConfig(device.smartlockId, { ...device.openerAdvancedConfig, [state]: action })
+					.then(res => adapter.log.info('Set opener configuration ' + state + ' to ' + action + '.'))
+					.catch(err => adapter.log.warn(err));
+			}
 		}
 	});
 
@@ -726,6 +769,18 @@ function updateLock(payload)
 	if (payload.nuki !== undefined)
 		DEVICES[payload.nukiHexId].instance = payload.nuki;
 	
+	// update config
+	if (payload.config !== undefined)
+		DEVICES[payload.nukiHexId].config = payload.config;
+	
+	// update advancedConfig
+	if (payload.advancedConfig !== undefined)
+		DEVICES[payload.nukiHexId].advancedConfig = payload.advancedConfig;
+	
+	// update openerAdvancedConfig
+	if (payload.openerAdvancedConfig !== undefined)
+		DEVICES[payload.nukiHexId].openerAdvancedConfig = payload.openerAdvancedConfig;
+	
 	// add additional states
 	if (DEVICES[payload.nukiHexId].type == 'Smartlock' && payload.state.doorState)
 		payload.state.closed = payload.state.doorState;
@@ -951,11 +1006,17 @@ function readData(key, data, prefix)
 		if (node.state && node.state.indexOf('.') > -1 && (prefix + '.' + node.state.substr(0, node.state.lastIndexOf('.'))) != (prefix + '.' + key.substr(0, key.lastIndexOf('.'))))
 			readData(node.state.substr(0, node.state.indexOf('.')), { [node.state.substr(node.state.indexOf('.')+1)]: data }, prefix);
 		
-		// set state
+		// state
 		let state = JSON.parse(JSON.stringify(node)); // copy node
 		state.node = prefix + '.' + (node.state || key);
-		state.description = node.description || library.ucFirst(key.substr(key.lastIndexOf('.')+1))
-		library.set(state, data);
+		state.description = node.description || library.ucFirst(key.substr(key.lastIndexOf('.')+1));
+		
+		// config state
+		let config = (state.node.toLowerCase().indexOf('config') > -1);
+		
+		// set state
+		state.common = { ...node.common || {}, 'write': config }
+		library.set(state, data, { subscribe: config });
 	}
 }
 

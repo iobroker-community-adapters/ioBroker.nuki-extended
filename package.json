@@ -73,7 +73,7 @@
     "express": "^4.17.1",
     "ip": "^1.1.5",
     "nuki-bridge-api": "^1.5.0",
-    "nuki-web-api": "^2.1.1",
+    "nuki-web-api": "^2.2.1",
     "request": "^2.88.0",
     "request-promise": "^4.2.5"
   },
@@ -109,5 +109,5 @@
     "test:unit": "mocha test/unit --exit",
     "translate": "gulp translateAndUpdateWordsJS"
   },
-  "version": "2.1.0"
+  "version": "2.2.0"
 }
