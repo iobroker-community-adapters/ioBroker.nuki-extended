@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "nuki-extended",
-        "version": "2.1.0",
+        "version": "2.2.0",
         "title": "Nuki Smartlock & Opener",
         "titleLang": {
             "en": "Nuki Smartlock & Opener",

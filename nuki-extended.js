@@ -494,7 +494,7 @@ function getCallbacks(bridge)
 						else
 						{
 							adapter.log.warn('Callback not attached due to error. See debug log for details.');
-							adapter.log.debug(err.message);
+							adapter.log.debug(err.error.message);
 						}
 					});
 			}
