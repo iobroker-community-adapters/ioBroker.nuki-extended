@@ -7,7 +7,7 @@ const _http = require('express')();
 const _parser = require('body-parser');
 const _ip = require('ip');
 
-const Bridge = require('./lib/nuki-bridge-api');
+const Bridge = require('nuki-bridge-api');
 const Nuki = require('nuki-web-api');
 
 
@@ -73,9 +73,10 @@ function startAdapter(options)
 		{
 			if (err || !states) return;
 			
-			for (let state in states)
+			for (let state in states) {
 				library.setDeviceState(state.replace(adapterName + '.' + adapter.instance + '.', ''), states[state] && states[state].val);
-		
+			}
+			
 			// start
 			library.set(Library.CONNECTION, true);
 			initNukiAPIs();
@@ -242,6 +243,9 @@ function startAdapter(options)
 					.catch(err => adapter.log.warn(err));
 			}
 		}
+		else if (state !== '_ACTION' && state !== '_delete' && nukiWebApi === null && object && object.ack !== true) {
+			adapter.log.info('Nuki Web API needs to be configured to change configuration!');
+		}
 	});
 
 	/*
@@ -355,6 +359,9 @@ function initNukiAPIs()
 			return getCallbacks(bridge);
 		});
 		
+		// everything ok
+		library.set(Library.CONNECTION, true);
+		
 		// attach server to listen (only one listener for all Nuki Bridges)
 		// @see https://stackoverflow.com/questions/9304888/how-to-get-data-passed-from-a-form-in-express-node-js/38763341#38763341
 		return Promise.all(listener).then(values =>
@@ -400,18 +407,18 @@ function initNukiAPIs()
 				adapter.log.info('Not listening for Nuki events.');
 			
 			// no bridges
-			else
+			else {
 				return library.terminate('No bridges are sufficiently defined! Name, IP or token missing or all bridges deactivated!');
+			}
 			
 			/*
 			 * WEB API
 			 *
 			 */
-			if (!adapter.config.api_token)
+			if (!adapter.config.api_token) {
 				adapter.log.info('No Nuki Web API token provided.');
-			
-			else
-			{
+			}
+			else {
 				nukiWebApi = new Nuki(adapter.config.api_token);
 				setup.push('web_api');
 				
@@ -446,7 +453,7 @@ function initNukiAPIs()
 					adapter.log.info('Polling Nuki Web API deactivated.');
 			}
 			
-			
+			// everything ok
 			library.set(Library.CONNECTION, true);
 		})
 		.catch(err => adapter.log.debug('Error resolving listeners (' + JSON.stringify(err) + ')!'));
