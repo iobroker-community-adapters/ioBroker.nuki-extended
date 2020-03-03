@@ -176,7 +176,7 @@ module.exports =
 	'openerAdvancedConfig.electricStrikeDuration': {'description': 'Duration in ms of electric strike actuation (lock action 3 -electric strike actuation-)', 'type': 'number', 'role': 'value'},
 	'openerAdvancedConfig.disableRtoAfterRing': {'description': 'Flag to disable RTO after ring', 'type': 'boolean', 'role': 'value'},
 	'openerAdvancedConfig.rtoTimeout': {'description': 'After this period of time in minutes, RTO gets deactivated automatically', 'type': 'number', 'role': 'value'},
-	'openerAdvancedConfig.doorbellSuppression': {'description': 'The doorbell supression mode', 'type': 'number', 'role': 'value', 'common': {'states': {'0': 'NEVER', '1': 'ALWAYS', '2': 'RTO', '3': 'CONTINUOUS', '4': 'CONTINUOUS + RTO'}}},
+	'openerAdvancedConfig.doorbellSuppression': {'description': 'The doorbell supression mode', 'type': 'number', 'role': 'value', 'common': {'states': {'0': 'NEVER', '1': 'CONTINUOUS', '2': 'RTO', '3': 'CONTINUOUS+RTO', '4': 'DOORBELL', '5': 'CONTINUOUS + DOORBELL', '6': 'RTO + DOORBELL', '7': 'CONTINUOUS + RTO + DOORBELL'}}},
 	'openerAdvancedConfig.doorbellSuppressionDuration': {'description': 'Duration in ms of doorbell suppression (only in Operating mode 2 -digital Intercom-)', 'type': 'number', 'role': 'value'},
 	'openerAdvancedConfig.soundRing': {'description': 'The sound for ring', 'type': 'number', 'role': 'value', 'common': {'states': {'0': 'NO SOUND', '1': 'SOUND 1', '2': 'SOUND 2', '3': 'SOUND 3'}}},
 	'openerAdvancedConfig.soundOpen': {'description': 'The sound for open', 'type': 'number', 'role': 'value', 'common': {'states': {'0': 'NO SOUND', '1': 'SOUND 1', '2': 'SOUND 2', '3': 'SOUND 3'}}},

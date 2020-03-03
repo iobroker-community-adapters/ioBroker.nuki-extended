@@ -1,58 +1,30 @@
 {
-  "_from": "git+https://github.com/Zefau/ioBroker.nuki-extended.git",
-  "_id": "iobroker.nuki-extended@2.0.0",
+  "_from": "iobroker.nuki-extended@2.2.0",
+  "_id": "iobroker.nuki-extended@2.2.0",
   "_inBundle": false,
-  "_integrity": "",
+  "_integrity": "sha512-aL5O/2COd8GXtgu9hBN3jy1lCFHjkCVMoxK+nbvSdfqs6c1166aWYFcgrN+02VE6u9qIMTgaXXSI3CeFwCM1Qw==",
   "_location": "/iobroker.nuki-extended",
   "_phantomChildren": {
-    "accepts": "1.3.7",
-    "array-flatten": "1.1.1",
-    "bluebird": "3.5.4",
-    "body-parser": "1.19.0",
-    "content-type": "1.0.4",
-    "cookie-signature": "1.0.6",
-    "debug": "2.6.9",
-    "depd": "1.1.2",
-    "destroy": "1.0.4",
-    "encodeurl": "1.0.2",
-    "escape-html": "1.0.3",
-    "etag": "1.8.1",
-    "fresh": "0.5.2",
-    "http-errors": "1.7.2",
-    "merge-descriptors": "1.0.1",
-    "methods": "1.1.2",
-    "on-finished": "2.3.0",
-    "parseurl": "1.3.3",
-    "path-to-regexp": "0.1.7",
-    "proxy-addr": "2.0.5",
-    "qs": "6.7.0",
-    "request": "2.88.0",
-    "request-promise": "4.2.4",
-    "safe-buffer": "5.1.2",
-    "setprototypeof": "1.1.1",
-    "statuses": "1.5.0",
-    "type-is": "1.6.18",
-    "unpipe": "1.0.0",
-    "url-parse": "1.4.7",
-    "utils-merge": "1.0.1",
-    "vary": "1.1.2"
+    "@types/node": "13.7.7"
   },
   "_requested": {
-    "type": "git",
-    "raw": "https://github.com/Zefau/ioBroker.nuki-extended.git",
-    "rawSpec": "https://github.com/Zefau/ioBroker.nuki-extended.git",
-    "saveSpec": "git+https://github.com/Zefau/ioBroker.nuki-extended.git",
-    "fetchSpec": "https://github.com/Zefau/ioBroker.nuki-extended.git",
-    "gitCommittish": "nuki-extended"
+    "type": "version",
+    "registry": true,
+    "raw": "iobroker.nuki-extended@2.2.0",
+    "name": "iobroker.nuki-extended",
+    "escapedName": "iobroker.nuki-extended",
+    "rawSpec": "2.2.0",
+    "saveSpec": null,
+    "fetchSpec": "2.2.0"
   },
   "_requiredBy": [
     "#USER",
     "/"
   ],
-  "_resolved": "git+https://github.com/Zefau/ioBroker.nuki-extended.git#c229acb4f905b4f583ba31a2828d6152d85da802",
-  "_shasum": "d5585826ae79a16ee7eaa01b0583fb238e1898b1",
-  "_spec": "https://github.com/Zefau/ioBroker.nuki-extended.git",
-  "_where": "/opt/iobroker/node_modules",
+  "_resolved": "https://registry.npmjs.org/iobroker.nuki-extended/-/iobroker.nuki-extended-2.2.0.tgz",
+  "_shasum": "908910d9d228ce8ab5937c4dfbe6b83a426469fd",
+  "_spec": "iobroker.nuki-extended@2.2.0",
+  "_where": "/opt",
   "author": {
     "name": "Zefau",
     "email": "zefau@mailbox.org"
@@ -80,7 +52,7 @@
   "deprecated": false,
   "description": "Nuki Smart Lock 2.0",
   "devDependencies": {
-    "@iobroker/testing": "^2.0.2",
+    "@iobroker/testing": "^2.1.0",
     "axios": "^0.19.2",
     "chai": "^4.2.0",
     "gulp": "^4.0.2",
@@ -100,7 +72,7 @@
   "name": "iobroker.nuki-extended",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Zefau/ioBroker.nuki-extended"
+    "url": "git+https://github.com/Zefau/ioBroker.nuki-extended.git"
   },
   "scripts": {
     "test": "npm run test:package && npm run test:unit",
@@ -109,5 +81,5 @@
     "test:unit": "mocha test/unit --exit",
     "translate": "gulp translateAndUpdateWordsJS"
   },
-  "version": "2.2.0"
+  "version": "2.2.1"
 }

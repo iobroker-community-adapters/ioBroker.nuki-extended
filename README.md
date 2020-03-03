@@ -482,11 +482,12 @@ on({id: 'nuki-extended.0.smartlocks.home_door.state.lockState', change: 'any'}, 
 
 Please see [release page](https://github.com/Zefau/ioBroker.nuki-extended/releases) for changelog and detailed information.
 
+### v2.2.1  (2019-03-03)
+- (Zefau) fixed incorrect state mapping of state `openerAdvancedConfig.doorbellSuppression`
+- (Zefau) updated dependencies
+
 ### v2.2.0  (2019-02-16)
 - (Zefau) added possibility to change configuration of Nuki Smartlock or Nuki Opener (when using Web API)
-
-   __NOTE__: Please delete all `config`, `advancedConfig` and `openerAdvancedConfig` channels (states will be recreated to be editable)
-
 - (Zefau) updated dependencies
 
 ### v2.1.0  (2019-02-03)

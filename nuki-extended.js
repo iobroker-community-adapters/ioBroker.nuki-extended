@@ -172,7 +172,7 @@ function startAdapter(options)
 			// ID or type could not be retrived
 			if (!nukiHexId)
 			{
-				adapter.log.warn('Error triggering action on the Nuki device: No Nuki Hex ID given!');
+				adapter.log.warn('Error triggering action via Nuki Bridge API: No Nuki Hex ID given!');
 				return false;
 			}
 			
@@ -212,7 +212,7 @@ function startAdapter(options)
 			// ID or type could not be retrived
 			if (!nukiHexId)
 			{
-				adapter.log.warn('Error triggering action on the Nuki device: No Nuki Hex ID given!');
+				adapter.log.warn('Error triggering action via Nuki Web API: No Nuki Hex ID given!');
 				return false;
 			}
 			
