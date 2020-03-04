@@ -220,7 +220,10 @@ function startAdapter(options)
 			if (node.indexOf('.config.') > -1) {
 				
 				nukiWebApi.setConfig(device.smartlockId, { ...device.config, [state]: action })
-					.then(res => adapter.log.info('Set configuration ' + state + ' to ' + action + '.'))
+					.then(res => {
+						setTimeout(getWebApi, 3*1000);
+						adapter.log.info('Set configuration ' + state + ' to ' + action + '.');
+					})
 					.catch(err => adapter.log.warn(err));
 			}
 			
@@ -228,7 +231,10 @@ function startAdapter(options)
 			else if (node.indexOf('.advancedConfig.') > -1) {
 				
 				nukiWebApi.setAdvancedConfig(device.smartlockId, { ...device.advancedConfig, [state]: action })
-					.then(res => adapter.log.info('Set advanced configuration ' + state + ' to ' + action + '.'))
+					.then(res => {
+						setTimeout(getWebApi, 3*1000);
+						adapter.log.info('Set advanced configuration ' + state + ' to ' + action + '.');
+					})
 					.catch(err => adapter.log.warn(err));
 			}
 			
@@ -236,7 +242,10 @@ function startAdapter(options)
 			else if (node.indexOf('.openerAdvancedConfig.') > -1) {
 				
 				nukiWebApi.setAdvancedConfig(device.smartlockId, { ...device.openerAdvancedConfig, [state]: action })
-					.then(res => adapter.log.info('Set opener configuration ' + state + ' to ' + action + '.'))
+					.then(res => {
+						setTimeout(getWebApi, 3*1000);
+						adapter.log.info('Set opener configuration ' + state + ' to ' + action + '.');
+					})
 					.catch(err => adapter.log.warn(err));
 			}
 		}
