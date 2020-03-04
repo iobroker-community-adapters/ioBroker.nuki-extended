@@ -641,7 +641,7 @@ function getWebApi()
 			// get logs
 			nukiWebApi.getSmartlockLogs(smartlock.smartlockId, { limit: 1000 }).then(log =>
 			{
-				library.set({node: DEVICES[smartlock.nukiHexId].path + '.logs', description: 'Logs / History of Nuki'}, JSON.stringify(log.slice(0, 250)));
+				library.set({node: DEVICES[smartlock.nukiHexId].path + '.logs', description: 'Logs / History of Nuki', role: 'history'}, JSON.stringify(log.slice(0, 250)));
 				
 			}).catch(err => {adapter.log.warn('getWebApi(): Error retrieving logs: ' + err.message)});
 			
