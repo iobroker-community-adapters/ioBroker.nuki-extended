@@ -133,10 +133,9 @@ function startAdapter(options)
 			
 			// delete callback
 			let callbackIndex = BRIDGES.callbacks[bridgeIndex].findIndex(cb => cb.url === url);
-			if (callbackIndex > -1)
-			{
-				BRIDGES.callbacks[bridgeIndex][callbackIndex].remove().then(() =>
-				{
+			if (callbackIndex > -1) {
+				
+				BRIDGES.callbacks[bridgeIndex][callbackIndex].remove().then(() => {
 					adapter.log.info('Deleted callback with URL ' + url + '.');
 					
 					// delete objects
@@ -149,8 +148,9 @@ function startAdapter(options)
 				})
 				.catch(err => adapter.log.debug('Error removing callback (' + err.message + ')!'));
 			}
-			else
+			else {
 				adapter.log.warn('Error deleting callback with URL ' + url + ': ' + (err ? err.message : 'No Callback ID given!'));
+			}
 		}
 		
 		// apply an action on the door
@@ -164,14 +164,12 @@ function startAdapter(options)
 			path = path.substr(0, path.lastIndexOf('.'));
 		}
 		
-		if (state === '_ACTION' && Number.isInteger(action) && action > 0 && object && object.ack !== true)
-		{
+		if (state === '_ACTION' && Number.isInteger(action) && action > 0 && object && object.ack !== true) {
 			library._setValue(node, 0, true);
 			let nukiHexId = library.getDeviceState(path + '.hex');
 			
 			// ID or type could not be retrived
-			if (!nukiHexId)
-			{
+			if (!nukiHexId) {
 				adapter.log.warn('Error triggering action via Nuki Bridge API: No Nuki Hex ID given!');
 				return false;
 			}
@@ -180,7 +178,7 @@ function startAdapter(options)
 			let device = DEVICES[nukiHexId];
 			action = { 'id': action };
 			
-			switch (device.type && device.type.toLowerCase() || false)
+			switch ((device.type && device.type.toLowerCase()) || false)
 			{
 				case 'smartlock':
 					action.name = _LOCK.ACTIONS[action.id];
@@ -192,7 +190,7 @@ function startAdapter(options)
 					
 				case 'box':
 				default:
-					adapter.log.warn('Error triggering action on the Nuki device: Wrong Nuki type given!');
+					adapter.log.warn('Error triggering action via Nuki Bridge API: Wrong Nuki type given!');
 					return false;
 					break;
 			}
@@ -202,7 +200,7 @@ function startAdapter(options)
 		}
 		
 		// configuration
-		if (nukiWebApi !== null && object && object.ack !== true) {
+		if ((node.indexOf('.config.') > -1 || node.indexOf('.advancedConfig.') > -1 || node.indexOf('.openerAdvancedConfig.') > -1) && nukiWebApi !== null && object && object.ack !== true) {
 			
 			library.set({ node: node.replace(adapter.name + '.' + adapter.instance + '.', '') }, object.val);
 			
@@ -210,8 +208,7 @@ function startAdapter(options)
 			let nukiHexId = library.getDeviceState(path + '.hex');
 			
 			// ID or type could not be retrived
-			if (!nukiHexId)
-			{
+			if (!nukiHexId) {
 				adapter.log.warn('Error triggering action via Nuki Web API: No Nuki Hex ID given!');
 				return false;
 			}
@@ -403,8 +400,9 @@ function initNukiAPIs()
 			}
 			
 			// no callback
-			else if (values.findIndex(el => el === 'attachListener') === -1 && values.findIndex(el => el === 'doNotAttachListener') > -1)
+			else if (values.findIndex(el => el === 'attachListener') === -1 && values.findIndex(el => el === 'doNotAttachListener') > -1) {
 				adapter.log.info('Not listening for Nuki events.');
+			}
 			
 			// no bridges
 			else {
@@ -466,26 +464,22 @@ function initNukiAPIs()
  */
 function getCallbacks(bridge)
 {
-	return bridge.instance.getCallbacks().then(cbs =>
-	{
+	return bridge.instance.getCallbacks().then(cbs => {
 		adapter.log.debug('Retrieved current callbacks from Nuki Bridge with name ' + bridge.data.bridge_name + '.');
 		BRIDGES[bridge.data.index].callbacks = cbs;
 		
 		// check for enabled callback
-		if (adapter.config.refreshBridgeApiType == 'callback')
-		{
+		if (adapter.config.refreshBridgeApiType == 'callback') {
 			library.set(library.getNode('bridgeApiCallback'), true);
 			let url = 'http://' + (adapter.config.callbackIp || _ip.address()) + ':' + adapter.config.callbackPort + '/nuki-api-bridge'; // NOTE: https is not supported according to API documentation
 			
 			// attach callback
-			if (BRIDGES[bridge.data.index].callbacks.findIndex(cb => cb.url === url) === -1)
-			{
+			if (BRIDGES[bridge.data.index].callbacks.findIndex(cb => cb.url === url) === -1) {
 				adapter.log.debug('Adding callback with URL ' + url + ' to Nuki Bridge with name ' + bridge.data.bridge_name + '.');
 				
 				// set callback on bridge
 				bridge.instance.addCallback(adapter.config.callbackIp || _ip.address(), adapter.config.callbackPort, false)
-					.then(res =>
-					{
+					.then(res => {
 						if (!res || !res.url)
 							throw new Error(JSON.stringify(res));
 						
@@ -493,20 +487,20 @@ function getCallbacks(bridge)
 						BRIDGES[bridge.data.index].callbacks.push(res);
 						setCallbackNodes(bridge.data.index);
 					})
-					.catch(err =>
-					{
-						if (err && err.error && err.error.message === 'callback already added')
+					.catch(err => {
+						if (err && err.error && err.error.message === 'callback already added') {
 							adapter.log.debug('Callback (with URL ' + url + ') already attached to Nuki Bridge with name ' + bridge.data.bridge_name + '.');
-						
-						else
-						{
+						}
+						else if (BRIDGES[bridge.data.index].callbacks.length >= 3) {
+							adapter.log.warn('Callback not attached because too many Callbacks attached to the Nuki Bridge already! Please delete a callback!');
+						}
+						else {
 							adapter.log.warn('Callback not attached due to error. See debug log for details.');
 							adapter.log.debug(err.error.message);
 						}
 					});
 			}
-			else
-			{
+			else {
 				adapter.log.debug('Callback (with URL ' + url + ') already attached to Nuki Bridge with name ' + bridge.data.bridge_name + '.');
 				setCallbackNodes(bridge.data.index);
 			}
