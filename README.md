@@ -482,6 +482,9 @@ on({id: 'nuki-extended.0.smartlocks.home_door.state.lockState', change: 'any'}, 
 
 Please see [release page](https://github.com/Zefau/ioBroker.nuki-extended/releases) for changelog and detailed information.
 
+### v2.2.5 (2020-03-19)
+- (Zefau) fixed incorrect versioning
+
 ### v2.2.4 (2020-03-18)
 - (Zefau) fixed incorrect dates of version history (see [#60](https://github.com/Zefau/ioBroker.nuki-extended/issues/60))
 
