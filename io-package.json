@@ -93,8 +93,7 @@
     ],
     "localLink": "%web_protocol%://%ip%:%web_port%/nuki-extended/index.html",
     "messagebox": true,
-    "subscribe": "messagebox",
-    "installedFrom": "iobroker.nuki-extended@2.2.0"
+    "subscribe": "messagebox"
   },
   "native": {
     "refreshBridgeApiType": "callback",
