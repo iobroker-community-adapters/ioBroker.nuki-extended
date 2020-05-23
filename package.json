@@ -1,8 +1,8 @@
 {
-  "_from": "iobroker.nuki-extended@2.2.0",
-  "_id": "iobroker.nuki-extended@2.2.0",
+  "_from": "iobroker.nuki-extended@2.2.5",
+  "_id": "iobroker.nuki-extended@2.2.5",
   "_inBundle": false,
-  "_integrity": "sha512-aL5O/2COd8GXtgu9hBN3jy1lCFHjkCVMoxK+nbvSdfqs6c1166aWYFcgrN+02VE6u9qIMTgaXXSI3CeFwCM1Qw==",
+  "_integrity": "sha512-r1HM6OtBKjks3GFH21ba427Ag0nGXlaZ51jA8HIsmKKlgtn70u8smAe0lvh6OGOkhjBfSKzCiAY9WV91jIj3lQ==",
   "_location": "/iobroker.nuki-extended",
   "_phantomChildren": {
     "@types/node": "13.7.7"
@@ -10,21 +10,21 @@
   "_requested": {
     "type": "version",
     "registry": true,
-    "raw": "iobroker.nuki-extended@2.2.0",
+    "raw": "iobroker.nuki-extended@2.2.5",
     "name": "iobroker.nuki-extended",
     "escapedName": "iobroker.nuki-extended",
-    "rawSpec": "2.2.0",
+    "rawSpec": "2.2.5",
     "saveSpec": null,
-    "fetchSpec": "2.2.0"
+    "fetchSpec": "2.2.5"
   },
   "_requiredBy": [
     "#USER",
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/iobroker.nuki-extended/-/iobroker.nuki-extended-2.2.0.tgz",
-  "_shasum": "908910d9d228ce8ab5937c4dfbe6b83a426469fd",
-  "_spec": "iobroker.nuki-extended@2.2.0",
-  "_where": "/opt",
+  "_resolved": "https://registry.npmjs.org/iobroker.nuki-extended/-/iobroker.nuki-extended-2.2.5.tgz",
+  "_shasum": "2f2a89b952d05e77cad1495b49aaea20d13ae275",
+  "_spec": "iobroker.nuki-extended@2.2.5",
+  "_where": "/opt/iobroker",
   "author": {
     "name": "Zefau",
     "email": "zefau@mailbox.org"
@@ -40,7 +40,7 @@
     }
   ],
   "dependencies": {
-    "@iobroker/adapter-core": "^2.2.1",
+    "@iobroker/adapter-core": "^2.4.0",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "ip": "^1.1.5",
@@ -52,11 +52,11 @@
   "deprecated": false,
   "description": "Nuki Smart Lock 2.0",
   "devDependencies": {
-    "@iobroker/testing": "^2.1.0",
+    "@iobroker/testing": "^2.2.0",
     "axios": "^0.19.2",
     "chai": "^4.2.0",
     "gulp": "^4.0.2",
-    "mocha": "^7.0.1"
+    "mocha": "^7.2.0"
   },
   "homepage": "https://github.com/Zefau/ioBroker.nuki-extended",
   "keywords": [
