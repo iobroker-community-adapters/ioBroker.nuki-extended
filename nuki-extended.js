@@ -527,6 +527,7 @@ function getBridgeApi(bridge) {
 				// remap states
 				nuki.bridge = bridge.data.bridge_id !== '' ? bridge.data.bridge_id : undefined;
 				nuki.state = nuki.lastKnownState;
+				nuki.deviceType = nuki.deviceType || 0;
 				delete nuki.lastKnownState;
 				
 				updateLock(nuki);
@@ -582,9 +583,11 @@ function getBridgeApi(bridge) {
  *
  */
 function getWebApi() {
+	
 	if (!nukiWebApi) {
 		return;
 	}
+	
 	library.set(library.getNode('webApiSync'), true, { 'force': true });
 	library.set(library.getNode('webApiLast'), new Date().toISOString().substr(0,19) + '+00:00');
 	
@@ -689,11 +692,9 @@ function updateLock(payload) {
 	if (payload.nukiId && !payload.nukiHexId) {
 		payload.nukiHexId = getNukiHex(payload.nukiId);
 	}
-	
 	else if (!payload.nukiId && payload.nukiHexId) {
 		payload.nukiId = parseInt(payload.nukiHexId, 16);
 	}
-	
 	else {
 		return false;
 	}
