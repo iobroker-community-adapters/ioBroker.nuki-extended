@@ -1,29 +1,24 @@
 {
-  "_from": "iobroker.nuki-extended@2.2.5",
+  "_from": "https://github.com/Zefau/ioBroker.nuki-extended/tarball/f84bda2157dbe8849c7501a19f911cd2971f9e32",
   "_id": "iobroker.nuki-extended@2.2.5",
   "_inBundle": false,
-  "_integrity": "sha512-r1HM6OtBKjks3GFH21ba427Ag0nGXlaZ51jA8HIsmKKlgtn70u8smAe0lvh6OGOkhjBfSKzCiAY9WV91jIj3lQ==",
+  "_integrity": "sha512-4zpprUzk3sQogZaU1eAEXE4XQysai8SwKAfKlx4vFEGAyz+oQBPzoVFgL8o2QDHiRrDnNqzjQ92qw+f11ExTpQ==",
   "_location": "/iobroker.nuki-extended",
-  "_phantomChildren": {
-    "@types/node": "13.7.7"
-  },
+  "_phantomChildren": {},
   "_requested": {
-    "type": "version",
-    "registry": true,
-    "raw": "iobroker.nuki-extended@2.2.5",
-    "name": "iobroker.nuki-extended",
-    "escapedName": "iobroker.nuki-extended",
-    "rawSpec": "2.2.5",
-    "saveSpec": null,
-    "fetchSpec": "2.2.5"
+    "type": "remote",
+    "raw": "https://github.com/Zefau/ioBroker.nuki-extended/tarball/f84bda2157dbe8849c7501a19f911cd2971f9e32",
+    "rawSpec": "https://github.com/Zefau/ioBroker.nuki-extended/tarball/f84bda2157dbe8849c7501a19f911cd2971f9e32",
+    "saveSpec": "https://github.com/Zefau/ioBroker.nuki-extended/tarball/f84bda2157dbe8849c7501a19f911cd2971f9e32",
+    "fetchSpec": "https://github.com/Zefau/ioBroker.nuki-extended/tarball/f84bda2157dbe8849c7501a19f911cd2971f9e32"
   },
   "_requiredBy": [
     "#USER",
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/iobroker.nuki-extended/-/iobroker.nuki-extended-2.2.5.tgz",
-  "_shasum": "2f2a89b952d05e77cad1495b49aaea20d13ae275",
-  "_spec": "iobroker.nuki-extended@2.2.5",
+  "_resolved": "https://github.com/Zefau/ioBroker.nuki-extended/tarball/f84bda2157dbe8849c7501a19f911cd2971f9e32",
+  "_shasum": "af0ef523e1e7549eb9f073b2b8c12fb0ce45976d",
+  "_spec": "https://github.com/Zefau/ioBroker.nuki-extended/tarball/f84bda2157dbe8849c7501a19f911cd2971f9e32",
   "_where": "/opt/iobroker",
   "author": {
     "name": "Zefau",
@@ -44,6 +39,7 @@
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "ip": "^1.1.5",
+    "npm": "^6.14.6",
     "nuki-bridge-api": "^1.6.0",
     "nuki-web-api": "^2.2.1",
     "request": "^2.88.2",
@@ -56,7 +52,7 @@
     "axios": "^0.19.2",
     "chai": "^4.2.0",
     "gulp": "^4.0.2",
-    "mocha": "^8.0.1"
+    "mocha": "^7.2.0"
   },
   "homepage": "https://github.com/Zefau/ioBroker.nuki-extended",
   "keywords": [
@@ -81,5 +77,5 @@
     "test:unit": "mocha test/unit --exit",
     "translate": "gulp translateAndUpdateWordsJS"
   },
-  "version": "2.2.5"
+  "version": "2.2.6"
 }
