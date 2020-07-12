@@ -383,7 +383,7 @@ function initNukiAPIs() {
 						res.end();
 						
 						// update Web API as well
-						getWebApi();
+						setTimeout(getWebApi, 3*1000);
 					}
 					else {
 						adapter.log.warn('main(): ' + e.message);
