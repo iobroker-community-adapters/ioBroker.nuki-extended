@@ -120,29 +120,29 @@ function startAdapter(options) {
 		
 		// apply an action on the callback
 		if (state === '_delete' && object && object.ack !== true) {
-			let bridgeIndex = library.getDeviceState(root + '.index');
+			let bridgeId = library.getDeviceState(root + '.bridgeId');
 			let url = library.getDeviceState(path + '.url');
 			
 			// ID or url could not be retrived
-			if (!bridgeIndex || !url || url == '{}') {
+			if (!bridgeId || !url || url == '{}') {
 				adapter.log.warn('Error deleting callback: No Bridge ID or URL given!');
 				return;
 			}
 			
 			// delete callback
-			let callbackIndex = BRIDGES.callbacks[bridgeIndex].findIndex(cb => cb.url === url);
+			let callbackIndex = BRIDGES[bridgeId].callbacks.findIndex(cb => cb.url === url);
 			if (callbackIndex > -1) {
 				
-				BRIDGES.callbacks[bridgeIndex][callbackIndex].remove().then(() => {
+				BRIDGES[bridgeId].callbacks[callbackIndex].remove().then(() => {
 					adapter.log.info('Deleted callback with URL ' + url + '.');
 					
 					// delete objects
-					let path = BRIDGES[bridgeIndex].data.path + '.callbacks.' + BRIDGES.callbacks[bridgeIndex][callbackIndex].getCallbackId();
+					let path = BRIDGES[bridgeId].data.path + '.callbacks.' + BRIDGES[bridgeId].callbacks[callbackIndex].getCallbackId();
 					library.del(path, true);
 					
 					// update callback list
-					BRIDGES.callbacks[bridgeIndex].splice(callbackIndex, 1);
-					library._setValue(BRIDGES[bridgeIndex].data.path + '.callbacks.list', JSON.stringify(BRIDGES.callbacks[bridgeIndex].map(cb => {
+					BRIDGES[bridgeId].callbacks.splice(callbackIndex, 1);
+					library._setValue(BRIDGES[bridgeId].data.path + '.callbacks.list', JSON.stringify(BRIDGES[bridgeId].callbacks.map(cb => {
 						return { 'id': cb.id, 'url': cb.url };
 					})));
 				})
@@ -268,7 +268,7 @@ function startAdapter(options) {
 					let discovered = res.bridges;
 					adapter.log.info('Bridges discovered: ' + discovered.length);
 					adapter.log.debug(JSON.stringify(discovered));
-						
+					
 					library.msg(msg.from, msg.command, {result: true, bridges: discovered}, msg.callback);
 				})
 				.catch(err => {
@@ -343,8 +343,7 @@ function initNukiAPIs() {
 			};
 			
 			// index bridge
-			bridge.data.index = i;
-			BRIDGES[i] = bridge;
+			BRIDGES[bridge.data.bridge_id] = bridge;
 			
 			// get bridge info
 			getBridgeApi(bridge);
@@ -432,6 +431,7 @@ function initNukiAPIs() {
 				if (adapter.config.refreshWebApi > 0 && !unloaded) {
 					adapter.log.info('Polling Nuki Web API with a frequency of ' + adapter.config.refreshWebApi + 's.');
 					refreshCycleWebApi = setTimeout(function updaterWebApi() {
+						
 						// update Nuki Web API
 						getWebApi();
 						
@@ -459,9 +459,10 @@ function initNukiAPIs() {
  *
  */
 function getCallbacks(bridge) {
+	
 	return bridge.instance.getCallbacks().then(cbs => {
 		adapter.log.debug('Retrieved current callbacks from Nuki Bridge with name ' + bridge.data.bridge_name + '.');
-		BRIDGES[bridge.data.index].callbacks = cbs;
+		BRIDGES[bridge.data.bridge_id].callbacks = cbs;
 		
 		// check for enabled callback
 		if (adapter.config.refreshBridgeApiType == 'callback') {
@@ -469,7 +470,7 @@ function getCallbacks(bridge) {
 			let url = 'http://' + (adapter.config.callbackIp || _ip.address()) + ':' + adapter.config.callbackPort + '/nuki-api-bridge'; // NOTE: https is not supported according to API documentation
 			
 			// attach callback
-			if (BRIDGES[bridge.data.index].callbacks.findIndex(cb => cb.url === url) === -1) {
+			if (BRIDGES[bridge.data.bridge_id].callbacks.findIndex(cb => cb.url === url) === -1) {
 				adapter.log.debug('Adding callback with URL ' + url + ' to Nuki Bridge with name ' + bridge.data.bridge_name + '.');
 				
 				// set callback on bridge
@@ -480,14 +481,14 @@ function getCallbacks(bridge) {
 						}
 						
 						adapter.log.info('Callback (with URL ' + res.url + ') attached to Nuki Bridge with name ' + bridge.data.bridge_name + '.');
-						BRIDGES[bridge.data.index].callbacks.push(res);
-						setCallbackNodes(bridge.data.index);
+						BRIDGES[bridge.data.bridge_id].callbacks.push(res);
+						setCallbackNodes(bridge.data.bridge_id);
 					})
 					.catch(err => {
 						if (err && err.error && err.error.message === 'callback already added') {
 							adapter.log.debug('Callback (with URL ' + url + ') already attached to Nuki Bridge with name ' + bridge.data.bridge_name + '.');
 						}
-						else if (BRIDGES[bridge.data.index].callbacks.length >= 3) {
+						else if (BRIDGES[bridge.data.bridge_id].callbacks.length >= 3) {
 							adapter.log.warn('Callback not attached because too many Callbacks attached to the Nuki Bridge already! Please delete a callback!');
 						}
 						else {
@@ -498,7 +499,7 @@ function getCallbacks(bridge) {
 			}
 			else {
 				adapter.log.debug('Callback (with URL ' + url + ') already attached to Nuki Bridge with name ' + bridge.data.bridge_name + '.');
-				setCallbackNodes(bridge.data.index);
+				setCallbackNodes(bridge.data.bridge_id);
 			}
 			
 			return Promise.resolve('attachListener');
@@ -596,6 +597,7 @@ function getWebApi() {
 	nukiWebApi.getSmartlocks().then(smartlocks => {
 		adapter.log.debug('getWebApi(): ' + JSON.stringify(smartlocks));
 		smartlocks.forEach(smartlock => {
+			
 			// remap states
 			smartlock.nukiHexId = getNukiHex(smartlock.smartlockId);
 			smartlock.deviceType = smartlock.type;
@@ -901,12 +903,13 @@ function setAction(device, action, api = 'bridge', retry = 0) {
  * Refresh Callbacks of the Nuki Bridge.
  *
  */
-function setCallbackNodes(bridgeIndex) {
-	let path = BRIDGES[bridgeIndex].data.path + '.callbacks';
+function setCallbackNodes(bridgeId) {
+	let path = BRIDGES[bridgeId].data.path + '.callbacks';
 	let urls = {};
 	
 	// compare callback list with states
 	adapter.getStates(path + '.*', (err, states) => {
+		
 		// index states
 		for (let state in states) {
 			if (state.substr(-4) == '.url' && states[state] && states[state].val) {
@@ -916,7 +919,7 @@ function setCallbackNodes(bridgeIndex) {
 		
 		// add new callbacks
 		let index = null, cbs = [];
-		BRIDGES[bridgeIndex].callbacks.forEach(cb => {
+		BRIDGES[bridgeId].callbacks.forEach(cb => {
 			// search for callback URL
 			index = Object.values(urls).indexOf(cb.url);
 			cbs.push({'id': cb.callbackId, 'url': cb.url});

@@ -1,24 +1,27 @@
 {
-  "_from": "https://github.com/Zefau/ioBroker.nuki-extended/tarball/f84bda2157dbe8849c7501a19f911cd2971f9e32",
-  "_id": "iobroker.nuki-extended@2.2.5",
+  "_from": "iobroker.nuki-extended@2.2.6",
+  "_id": "iobroker.nuki-extended@2.2.6",
   "_inBundle": false,
-  "_integrity": "sha512-4zpprUzk3sQogZaU1eAEXE4XQysai8SwKAfKlx4vFEGAyz+oQBPzoVFgL8o2QDHiRrDnNqzjQ92qw+f11ExTpQ==",
+  "_integrity": "sha512-ngQjpLXFTb8gpcf7XnomQdd2jsYSo6e8ZhhCh05e+wRHq6LGuqr4T8llf3b9MVmCJkroNtxbBNimd5oU/jYtJw==",
   "_location": "/iobroker.nuki-extended",
   "_phantomChildren": {},
   "_requested": {
-    "type": "remote",
-    "raw": "https://github.com/Zefau/ioBroker.nuki-extended/tarball/f84bda2157dbe8849c7501a19f911cd2971f9e32",
-    "rawSpec": "https://github.com/Zefau/ioBroker.nuki-extended/tarball/f84bda2157dbe8849c7501a19f911cd2971f9e32",
-    "saveSpec": "https://github.com/Zefau/ioBroker.nuki-extended/tarball/f84bda2157dbe8849c7501a19f911cd2971f9e32",
-    "fetchSpec": "https://github.com/Zefau/ioBroker.nuki-extended/tarball/f84bda2157dbe8849c7501a19f911cd2971f9e32"
+    "type": "version",
+    "registry": true,
+    "raw": "iobroker.nuki-extended@2.2.6",
+    "name": "iobroker.nuki-extended",
+    "escapedName": "iobroker.nuki-extended",
+    "rawSpec": "2.2.6",
+    "saveSpec": null,
+    "fetchSpec": "2.2.6"
   },
   "_requiredBy": [
     "#USER",
     "/"
   ],
-  "_resolved": "https://github.com/Zefau/ioBroker.nuki-extended/tarball/f84bda2157dbe8849c7501a19f911cd2971f9e32",
-  "_shasum": "af0ef523e1e7549eb9f073b2b8c12fb0ce45976d",
-  "_spec": "https://github.com/Zefau/ioBroker.nuki-extended/tarball/f84bda2157dbe8849c7501a19f911cd2971f9e32",
+  "_resolved": "https://registry.npmjs.org/iobroker.nuki-extended/-/iobroker.nuki-extended-2.2.6.tgz",
+  "_shasum": "9ed1d3eb9d95d8f8041a88dc15a19289c62002c4",
+  "_spec": "iobroker.nuki-extended@2.2.6",
   "_where": "/opt/iobroker",
   "author": {
     "name": "Zefau",
@@ -39,11 +42,10 @@
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "ip": "^1.1.5",
-    "npm": "^6.14.6",
     "nuki-bridge-api": "^1.6.0",
     "nuki-web-api": "^2.2.1",
     "request": "^2.88.2",
-    "request-promise": "^4.2.5"
+    "request-promise": "^4.2.6"
   },
   "deprecated": false,
   "description": "Nuki Smart Lock 2.0",
@@ -77,5 +79,5 @@
     "test:unit": "mocha test/unit --exit",
     "translate": "gulp translateAndUpdateWordsJS"
   },
-  "version": "2.2.6"
+  "version": "2.2.7"
 }
