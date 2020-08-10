@@ -83,11 +83,15 @@ module.exports =
 	
 	// SMARTLOCK - STATE
 	'state': {'description': 'Current states', 'role': 'channel'},
-	'state.batteryCritical': {'description': 'States critical battery level', 'role': 'indicator.lowbat', 'type': 'boolean'},
+	'state.batteryCritical': {'description': 'Indicates critical battery level', 'role': 'indicator.lowbat', 'type': 'boolean'},
+	'state.batteryCharging': {'description': 'Indicates battery charging', 'role': 'indicator', 'type': 'boolean'},
+	'state.batteryChargeState': {'description': 'Indicates battery charge level', 'role': 'value', 'type': 'number'},
 	'state.operationId': {'description': 'The operation id - if set the device is locked for another operation', 'type': 'string', 'role': 'text'},
-	'state.doorState': {'description': 'Current door-state of the Nuki', 'type': 'number', 'role': 'value', 'common': {'states': LOCK.DOOR}},
+	'state.doorsensorState': {'state': 'state.doorState', 'description': 'Current door-state of the Nuki', 'type': 'number', 'role': 'value', 'common': {'states': LOCK.DOOR}},
+	'state.doorsensorStateName': {'state': 'state.doorStateName', 'description': 'Current door-state name of the Nuki', 'type': 'string', 'role': 'text'},
 	'state.lastAction': {'description': 'Last triggered action', 'type': 'number', 'role': 'value'},
 	'state.state': {'state': 'state.lockState', 'description': 'Current lock-state of the Nuki or Opener', 'type': 'number', 'role': 'value'},
+	'state.stateName': {'state': 'state.lockStateName', 'description': 'Current lock-state name of the Nuki or Opener', 'type': 'string', 'role': 'text'},
 	'state.mode': {'description': 'Operation Mode of the Nuki or Opener', 'type': 'number', 'role': 'value', 'common': {'states': {'0': 'UNINITIALIZED', '1': 'PAIRING', '2': 'NORMAL', '3': 'CONTINUOUS', '4': 'MAINTENANCE'}}},
 	'state.ringToOpenTimer': {'description': 'Remaining ring to open time', 'type': 'number', 'role': 'value'},
 	'state.trigger': {'description': 'The state trigger', 'type': 'number', 'role': 'value', 'common': {'states': {'0': 'SYSTEM', '1': 'MANUAL', '2': 'BUTTON', '3': 'AUTOMATIC', '4': 'WEB', '5': 'APP', '6': 'CONTINUOUS'}}},
@@ -164,7 +168,8 @@ module.exports =
 	'webConfig.batteryWarningPerMailEnabled': {'description': 'True if a battery warning is send via email', 'type': 'boolean', 'role': 'indicator'},
 	
 	// OPENER
-	
+	'state.ringactionState': {'state': 'state.ringState', 'description': 'Current ring-state of the Opener', 'type': 'boolean', 'role': 'indicator'},
+	'state.ringactionTimestamp': {'state': 'state.ringStateUpdate', 'description': 'Timestamp of last ring-state update', 'role': 'date'},
 	
 	// OPENER - OPENER ADVANCED CONFIG
 	'openerAdvancedConfig': {'description': 'Opener Configuration', 'role': 'channel'},

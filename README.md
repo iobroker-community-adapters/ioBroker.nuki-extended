@@ -482,6 +482,10 @@ on({id: 'nuki-extended.0.smartlocks.home_door.state.lockState', change: 'any'}, 
 
 Please see [release page](https://github.com/Zefau/ioBroker.nuki-extended/releases) for changelog and detailed information.
 
+### v2.3.0 (2020-08-10)
+- (Zefau) added support for the door sensor of the Nuki Smartlock (introduced with Bridge firmware 2.6.0 / 1.16.0)
+- (Zefau) added support for the ring bell action of the Nuki Opener (introduced with Bridge firmware 2.7.0 / 1.17.0)
+
 ### v2.2.6 (2020-07-14)
 - (Zefau) fixed Web API not refreshing correctly (see [#59](https://github.com/Zefau/ioBroker.nuki-extended/issues/59))
 - (Zefau) updated dependencies
