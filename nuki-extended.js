@@ -546,32 +546,52 @@ function getBridgeApi(bridge) {
 		});
 	
 	// get bridge info
-	bridge.instance.info().then(payload => {
-		// enrich payload
-		payload.name = bridge.data.bridge_name;
-		payload.ip = bridge.data.bridge_ip;
-		payload.port = bridge.data.bridge_port || 8080;
-		
-		// get bridge ID if not given
-		if (bridge.data.bridge_id === undefined || bridge.data.bridge_id === '') {
-			adapter.log.debug('Adding missing Bridge ID for bridge with IP ' + bridge.data.bridge_ip + '.');
-			bridge.data.bridge_id = payload.ids.serverId;
+	bridge.instance.info()
+		.then(payload => {
 			
-			// update bridge ID in configuration
-			adapter.getForeignObject('system.adapter.' + adapter.namespace, (err, obj) => {
-				obj.native.bridges.forEach((entry, i) => {
-					if (entry.bridge_ip === bridge.data.bridge_ip) {
-						obj.native.bridges[i].bridge_id = bridge.data.bridge_id;
-						adapter.setForeignObject(obj._id, obj);
-					}
+			// enrich payload
+			payload.name = bridge.data.bridge_name;
+			payload.ip = bridge.data.bridge_ip;
+			payload.port = bridge.data.bridge_port || 8080;
+			
+			// get log
+			/*
+			bridge.instance.log()
+				.then(log => {
+					adapter.log.warn(JSON.stringify(log));
+				})
+				.catch(err => {
+					adapter.log.warn('Failed retrieving /log from Nuki Bridge with name ' + bridge.data.bridge_name + ' (forcePlainToken: ' + (bridge.instance.forcePlainToken === true) + ')!');
+					adapter.log.debug('getBridgeApi(): ' + err.message);
 				});
-			});
-		}
-		
-		// set payload for bridge
-		library.set({node: bridge.data.path, description: 'Bridge ' + (bridge.data.bridge_name ? bridge.data.bridge_name + ' ' : '') + '(' + bridge.data.bridge_ip + ')', role: 'channel'});
-		readData('', payload, bridge.data.path);
-	})
+			*/
+			
+			// add bridge actions
+			payload.actions = payload.actions || {};
+			payload.actions.clearLog = false;
+			payload.actions.firmwareUpdate = false;
+			payload.actions.reboot = false;
+			
+			// get bridge ID if not given
+			if (bridge.data.bridge_id === undefined || bridge.data.bridge_id === '') {
+				adapter.log.debug('Adding missing Bridge ID for bridge with IP ' + bridge.data.bridge_ip + '.');
+				bridge.data.bridge_id = payload.ids.serverId;
+				
+				// update bridge ID in configuration
+				adapter.getForeignObject('system.adapter.' + adapter.namespace, (err, obj) => {
+					obj.native.bridges.forEach((entry, i) => {
+						if (entry.bridge_ip === bridge.data.bridge_ip) {
+							obj.native.bridges[i].bridge_id = bridge.data.bridge_id;
+							adapter.setForeignObject(obj._id, obj);
+						}
+					});
+				});
+			}
+			
+			// set payload for bridge
+			library.set({node: bridge.data.path, description: 'Bridge ' + (bridge.data.bridge_name ? bridge.data.bridge_name + ' ' : '') + '(' + bridge.data.bridge_ip + ')', role: 'channel'});
+			readData('', payload, bridge.data.path);
+		})
 		.catch(err => {
 			adapter.log.warn('Failed retrieving /info from Nuki Bridge with name ' + bridge.data.bridge_name + ' (forcePlainToken: ' + (bridge.instance.forcePlainToken === true) + ')!');
 			adapter.log.debug('getBridgeApi(): ' + err.message);

@@ -36,6 +36,8 @@ var LANG = {
 	
 	'AUTO_UNLOCK': {'en': 'automatically unlocked', 'de': 'automatisch aufgeschlossen'},
 	
+	'DOORBELL_RECOGNITION': {'en': 'Doorbell has ringed', 'de': 'Es hat an der Tür geklingelt'},
+	
 	'SYSTEM': {'en': 'System', 'de': 'System'},
 	'MANUAL': {'en': 'triggered manually', 'de': 'manuell ausgeführt'},
 	'BUTTON': {'en': 'trigged via button', 'de': 'per Button ausgeführt'},
