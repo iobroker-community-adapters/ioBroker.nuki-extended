@@ -486,17 +486,15 @@ This requires the ioBroker adapter ioBroker.telegram (https://github.com/iobroke
  * Alexa and Telegram to notify on Opener Ringing state
  *
  */
-on({id: 'nuki-extended.0.openers.opener.state.ringStateUpdate', change: "any", ack: true}, function (obj) {
-  var value = obj.state.val;
-  var oldValue = obj.oldState.val;
-  if (getState("nuki-extended.0.openers.opener.state.ringState").val == true) {
-    setState("alexa2.0.Echo-Devices.#YOUR ALEXA ID#.Commands.speak"/*speak*/, ('Somebody is ringing the doorbell.'));
-    sendTo("telegram", "send", {
-        text: 'The doorbell has been pushed.'
-    });
+let phrase = 'Somebody is ringing the doorbell.'; // Es hat an der Tür geklingelt
+on({id: 'nuki-extended.0.openers.opener.state.ringStateUpdate', change: "any", ack: true}, function (s) {
+  let state= s && s.state;
+
+  if (state.val === true) {
+    setState("alexa2.0.Echo-Devices.#YOUR ALEXA ID#.Commands.speak"/*speak*/, phrase);
+    sendTo("telegram", "send", { text: phrase });
   }
 });
-
 ```
 
 
