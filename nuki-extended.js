@@ -381,8 +381,10 @@ function initNukiAPIs() {
 						res.sendStatus(200);
 						res.end();
 						
-						// update Web API as well
-						setTimeout(getWebApi, 3*1000);
+						// update Web API as well if enabled
+						if (adapter.config.additionalWebApiCall) {
+							setTimeout(getWebApi, adapter.config.additionalWebApiTimeout*1000);
+						}
 					}
 					else {
 						adapter.log.warn('main(): ' + e.message);

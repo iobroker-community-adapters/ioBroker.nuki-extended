@@ -99,7 +99,8 @@
   "native": {
     "refreshBridgeApiType": "callback",
     "syncConfig": true,
-    "syncUsers": true
+    "syncUsers": true,
+    "additionalWebApiCall": true
   },
   "objects": []
 }
