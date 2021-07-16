@@ -1069,12 +1069,12 @@ function convertNode(node, data, prefix) {
 	}
 
 	// type is boolean, but states are given
-	if (node.type == 'boolean' && node.common && node.common.states) {
-		data = node.common.states[data] == 'true';
+	if (node.type === 'boolean' && node.common && node.common.states) {
+		data = node.common.states[data] === 'true';
 	}
 
 	// type is boolean, but number given
-	if (node.type == 'boolean' && Number.isInteger(data) && !(node.common && node.common.states)) {
+	if (node.type === 'boolean' && Number.isInteger(data) && !(node.common && node.common.states)) {
 		data = data === 1;
 	}
 
