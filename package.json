@@ -1,28 +1,4 @@
 {
-  "_from": "iobroker.nuki-extended@2.2.6",
-  "_id": "iobroker.nuki-extended@2.2.6",
-  "_inBundle": false,
-  "_integrity": "sha512-ngQjpLXFTb8gpcf7XnomQdd2jsYSo6e8ZhhCh05e+wRHq6LGuqr4T8llf3b9MVmCJkroNtxbBNimd5oU/jYtJw==",
-  "_location": "/iobroker.nuki-extended",
-  "_phantomChildren": {},
-  "_requested": {
-    "type": "version",
-    "registry": true,
-    "raw": "iobroker.nuki-extended@2.2.6",
-    "name": "iobroker.nuki-extended",
-    "escapedName": "iobroker.nuki-extended",
-    "rawSpec": "2.2.6",
-    "saveSpec": null,
-    "fetchSpec": "2.2.6"
-  },
-  "_requiredBy": [
-    "#USER",
-    "/"
-  ],
-  "_resolved": "https://registry.npmjs.org/iobroker.nuki-extended/-/iobroker.nuki-extended-2.2.6.tgz",
-  "_shasum": "9ed1d3eb9d95d8f8041a88dc15a19289c62002c4",
-  "_spec": "iobroker.nuki-extended@2.2.6",
-  "_where": "/opt/iobroker",
   "author": {
     "name": "Zefau",
     "email": "zefau@mailbox.org"
@@ -30,7 +6,6 @@
   "bugs": {
     "url": "https://github.com/Zefau/ioBroker.nuki-extended/issues"
   },
-  "bundleDependencies": false,
   "contributors": [
     {
       "name": "Zefau",
@@ -38,11 +13,11 @@
     }
   ],
   "dependencies": {
-    "@iobroker/adapter-core": "^2.4.0",
+    "@iobroker/adapter-core": "^2.5.0",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "ip": "^1.1.5",
-    "nuki-bridge-api": "^1.6.0",
+    "nuki-bridge-api": "^1.7.0",
     "nuki-web-api": "^2.2.1",
     "request": "^2.88.2",
     "request-promise": "^4.2.6"
@@ -50,11 +25,11 @@
   "deprecated": false,
   "description": "Nuki Smart Lock 2.0",
   "devDependencies": {
-    "@iobroker/testing": "^2.2.0",
-    "axios": "^0.20.0",
-    "chai": "^4.2.0",
+    "@iobroker/testing": "^2.4.4",
+    "axios": "^0.21.1",
+    "chai": "^4.3.4",
     "gulp": "^4.0.2",
-    "mocha": "^8.1.1"
+    "mocha": "^9.0.2"
   },
   "homepage": "https://github.com/Zefau/ioBroker.nuki-extended",
   "keywords": [
