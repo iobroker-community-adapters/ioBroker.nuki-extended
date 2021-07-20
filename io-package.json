@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "nuki-extended",
-    "version": "2.3.0",
+    "version": "2.3.1",
     "title": "Nuki Smartlock & Opener",
     "titleLang": {
       "en": "Nuki Smartlock & Opener",
@@ -28,6 +28,30 @@
       "zh-cn": "控制和监视你的Nuki Smartlock和Nuki开与ioBroker"
     },
     "news": {
+      "2.3.1": {
+        "en": "Optimize for js-controller 3.3 and warnings prevented",
+        "de": "Optimieren für js-controller 3.3 und Warnungen verhindert",
+        "ru": "Оптимизация для js-controller 3.3 и предотвращение предупреждений",
+        "pt": "Otimize para js-controller 3.3 e avisos evitados",
+        "nl": "Optimaliseren voor js-controller 3.3 en waarschuwingen voorkomen",
+        "fr": "Optimiser pour js-controller 3.3 et avertissements empêchés",
+        "it": "Ottimizza per js-controller 3.3 e avvisi evitati",
+        "es": "Optimizar para js-controller 3.3 y evitar advertencias",
+        "pl": "Optymalizacja pod kątem kontrolera js 3.3 i zapobieganie ostrzeżeniom",
+        "zh-cn": "针对 js-controller 3.3 进行优化并防止出现警告"
+      },
+      "2.3.0": {
+        "en": "support added for the door sensor of the Nuki Smartlock and the ring bell action of the Nuki Opener",
+        "de": "Unterstützung für den Türsensor des Nuki Smartlock und die Klingelfunktion des Nuki Opener hinzugefügt",
+        "ru": "добавлена поддержка датчика двери Nuki Smartlock и звонка в Nuki Opener",
+        "pt": "suporte adicionado para o sensor de porta do Nuki Smartlock e a ação da campainha do Nuki Opener",
+        "nl": "ondersteuning toegevoegd voor de deursensor van de Nuki Smartlock en de belactie van de Nuki Opener",
+        "fr": "support ajouté pour le capteur de porte du Nuki Smartlock et l'action de la sonnerie du Nuki Opener",
+        "it": "aggiunto il supporto per il sensore porta del Nuki Smartlock e l'azione del campanello del Nuki Opener",
+        "es": "soporte agregado para el sensor de puerta del Nuki Smartlock y la acción de timbre del Nuki Opener",
+        "pl": "dodano obsługę czujnika drzwi Nuki Smartlock i działania dzwonka Nuki Opener",
+        "zh-cn": "添加了对 Nuki Smartlock 的门传感器和 Nuki Opener 的响铃动作的支持"
+      },
       "2.0.2": {
         "en": "- reintroduced support for hashed token on hardware bridges (see https://developer.nuki.io/page/nuki-bridge-http-api-190/4#heading--token)\n- added support for newly introduced nightmode (see https://nuki.io/de/blog/nuki-news-de/nuki-update-2019-der-winter-naht-sei-vorbereitet/)\n- fixed incorrect behavior when bridges are defined insufficiently (no name, ip or token provided)",
         "de": "- wieder support für die Hash-token auf hardware-Brücken (siehe https://developer.nuki.io/page/nuki-bridge-http-api-190/4#heading--token)\n- Unterstützung für die neu eingeführten Nachtfunktion (siehe https://nuki.io/de/blog/nuki-news-de/nuki-update-2019-der-winter-naht-sei-vorbereitet/)\n- fixed falsche Verhalten beim Brücken definiert sind unzureichend (keine Namen, ip-oder token zur Verfügung gestellt)",
