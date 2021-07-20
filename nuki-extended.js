@@ -1061,7 +1061,7 @@ function convertNode(node, data, prefix) {
 	}
 
 	const dataType = typeof data;
-	if (node && node.desc === '(no description given)' && node.type === 'string' && !node.convert && dataType !== 'string') {
+	if (node && node.description === '(no description given)' && node.type === 'string' && !node.convert && dataType !== 'string') {
 		// it seems like a fallback object definition ... maybe we can fix the type
 		if (dataType === 'boolean' || dataType === 'number') {
 			node.type = dataType;
