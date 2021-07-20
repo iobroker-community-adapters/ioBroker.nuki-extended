@@ -135,7 +135,7 @@ module.exports =
 	'config.autoUnlatch': {'description': 'True if the door should be unlatched on unlocking (knob)', 'role': 'indicator', 'type': 'boolean'},
 	'config.pairingEnabled': {'description': 'True if the pairing is allowed via the smartlock button', 'role': 'indicator', 'type': 'boolean'},
 	'config.buttonEnabled': {'description': 'True if the button on the smartlock is enabled', 'role': 'indicator', 'type': 'boolean'},
-	'config.ledEnabled': {'description': 'True if the LED on the smartlock is enabled', 'role': 'indicator'},
+	'config.ledEnabled': {'description': 'True if the LED on the smartlock is enabled', 'role': 'indicator', 'type': 'boolean'},
 	'config.ledBrightness': {'description': 'The brightness of the LED: 0 (off) to 5 (max)', 'role': 'value.brightness', 'type': 'number'},
 	'config.fobPaired': {'description': 'True if a fob is paired with the smartlock', 'role': 'indicator', 'type': 'boolean'},
 	'config.fobAction1': {'description': 'The fob action if button is pressed once', 'type': 'number', 'role': 'value', 'common': {'states': {'0': 'NONE', '1': 'UNLOCK', '2': 'LOCK', '3': 'LOCK_N_GO', '4': 'INTELLIGENT'}}},
