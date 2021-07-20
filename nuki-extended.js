@@ -1060,7 +1060,15 @@ function convertNode(node, data, prefix) {
 		data = data.join(',');
 	}
 
-	if (node.type === 'number' && typeof data === 'string') {
+	const dataType = typeof data;
+	if (node && node.desc === '(no description given)' && node.type === 'string' && !node.convert && dataType !== 'string') {
+		// it seems like a fallback object definition ... maybe we can fix the type
+		if (dataType === 'boolean' || dataType === 'number') {
+			node.type = dataType;
+		}
+	}
+
+	if (node.type === 'number' && dataType === 'string') {
 		if (data.includes('.')) {
 			data = parseFloat(data);
 		} else {
