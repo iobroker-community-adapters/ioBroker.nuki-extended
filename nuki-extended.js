@@ -165,7 +165,7 @@ function startAdapter(options) {
 		}
 
 		if (state === '_ACTION' && Number.isInteger(action) && action > 0 && object && object.ack !== true) {
-			library._setValue(node, 0, true);
+			library._setValue(node, false, true);
 			let nukiHexId = library.getDeviceState(path + '.hex');
 
 			// ID or type could not be retrived
