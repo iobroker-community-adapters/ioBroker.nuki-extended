@@ -26,7 +26,7 @@
   "description": "Nuki Smart Lock 2.0",
   "devDependencies": {
     "@iobroker/testing": "^2.4.4",
-    "axios": "^0.21.1",
+    "axios": "^0.22.0",
     "chai": "^4.3.4",
     "gulp": "^4.0.2",
     "mocha": "^9.0.2"
