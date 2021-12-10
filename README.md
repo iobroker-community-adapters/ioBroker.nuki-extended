@@ -502,6 +502,9 @@ on({id: 'nuki-extended.0.openers.opener.state.ringStateUpdate', change: "any", a
 
 Please see [release page](https://github.com/Zefau/ioBroker.nuki-extended/releases) for changelog and detailed information.
 
+### v2.4.0 (2021-12-10)
+- (smaragdschlange) added support for Nuki Smart Door and Nuki Smart Lock 3.0 (Pro)
+
 ### v2.3.1 (2021-07-20)
 - (Apollon77) Optimize for js-controller 3.3 and warnings prevented
 

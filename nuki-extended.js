@@ -187,6 +187,10 @@ function startAdapter(options) {
 				action.name = _OPENER.ACTIONS[action.id];
 				break;
 
+			case 'smart door':
+				action.name = _LOCK.ACTIONS[action.id];
+				break;
+	
 			case 'box':
 			default:
 				adapter.log.warn('Error triggering action via Nuki Bridge API: Wrong Nuki type given!');
@@ -752,6 +756,20 @@ function updateLock(payload) {
 			actions = _OPENER.ACTIONS;
 		}
 
+		// Nuki Smart Door
+		if (payload.deviceType === 3) {
+			library.set(library.getNode('smartlocks'));
+			type = 'Smart Door';
+			actions = _LOCK.ACTIONS;
+		}
+
+		// Nuki Smartlock 3.0
+		if (payload.deviceType === 4) {
+			library.set(library.getNode('smartlocks'));
+			type = 'Smartlock';
+			actions = _LOCK.ACTIONS;
+		}
+
 		// index device
 		path = type.toLowerCase() + 's.' + library.clean(payload.name, true, '_');
 		DEVICES[payload.nukiHexId] = { 'id': payload.nukiId, 'hex': payload.nukiHexId, 'smartlockId': parseInt(payload.deviceType + payload.nukiHexId, 16), 'name': payload.name, 'type': type, 'path': path, 'bridge': null };
@@ -815,6 +833,14 @@ function updateLock(payload) {
 	}
 
 	if (DEVICES[payload.nukiHexId].type == 'Smartlock' && payload.state && payload.state.state) {
+		payload.state.locked = payload.state.state;
+	}
+
+	if (DEVICES[payload.nukiHexId].type == 'Smart Door' && payload.state && payload.state.doorState) {
+		payload.state.closed = payload.state.doorState;
+	}
+
+	if (DEVICES[payload.nukiHexId].type == 'Smart Door' && payload.state && payload.state.state) {
 		payload.state.locked = payload.state.state;
 	}
 
