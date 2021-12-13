@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "nuki-extended",
-    "version": "2.4.0",
+    "version": "2.3.1",
     "title": "Nuki Smartlock & Opener",
     "titleLang": {
       "en": "Nuki Smartlock & Opener",
@@ -28,18 +28,6 @@
       "zh-cn": "控制和监视你的Nuki Smartlock和Nuki开与ioBroker"
     },
     "news": {
-      "2.4.0": {
-        "en": "Added support for Smart Door and Nuki 3.0",
-        "de": "Unterstützung für Smart Door und Nuki 3.0 hinzugefügt",
-        "ru": "Добавлена поддержка Smart Door и Nuki 3.0.",
-        "pt": "Adicionado suporte para Smart Door e Nuki 3.0",
-        "nl": "Ondersteuning toegevoegd voor Smart Door en Nuki 3.0",
-        "fr": "Ajout du support pour Smart Door et Nuki 3.0",
-        "it": "Aggiunto supporto per Smart Door e Nuki 3.0",
-        "es": "Soporte agregado para Smart Door y Nuki 3.0",
-        "pl": "Dodano obsługę Smart Door i Nuki 3.0",
-        "zh-cn": "添加了对智能门和 Nuki 3.0 的支持"
-      },
       "2.3.1": {
         "en": "Optimize for js-controller 3.3 and warnings prevented",
         "de": "Optimieren für js-controller 3.3 und Warnungen verhindert",
