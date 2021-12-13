@@ -503,7 +503,7 @@ on({id: 'nuki-extended.0.openers.opener.state.ringStateUpdate', change: "any", a
 Please see [release page](https://github.com/Zefau/ioBroker.nuki-extended/releases) for changelog and detailed information.
 
 <!-- ### __WORK IN PROGRESS__ -->
-### __WORK IN PROGRESS__
+### 2.4.0 (2021-12-13)
 - (smaragdschlange) added support for Nuki Smart Door and Nuki Smart Lock 3.0 (Pro)
 
 ### v2.3.1 (2021-07-20)
@@ -566,7 +566,6 @@ Please see [release page](https://github.com/Zefau/ioBroker.nuki-extended/releas
 - (Zefau) added states for Nuki Notifications
 - (Zefau) added support for multiple devices (including Nuki Opener) on adapter web interface
 - (Zefau) added option to not retrieve all information (by deselecting `config` or `users`) via Nuki Web API
-
 
 ## Credits
 Thanks to [@Mik13](https://github.com/Mik13) for the [Nuki Bridge API implementation](https://github.com/Mik13/nuki-bridge-api#nuki-bridge-api).
