@@ -315,7 +315,7 @@ function initNukiAPIs() {
 	 *
 	 */
 	// check if bridges have been defined
-	if (adapter.config.bridges === undefined || adapter.config.bridges.length == 0) {
+	if ((adapter.config.bridges === undefined || adapter.config.bridges.length == 0) && adapter.config.refreshWebApi == 0) {
 		return library.terminate('No bridges have been defined in settings so far!');
 	}
 
@@ -405,7 +405,8 @@ function initNukiAPIs() {
 
 			// no bridges
 			else {
-				return library.terminate('No bridges are sufficiently defined! Name, IP or token missing or all bridges deactivated!');
+				//return library.terminate('No bridges are sufficiently defined! Name, IP or token missing or all bridges deactivated!');
+				adapter.log.info('No bridges are sufficiently defined! Name, IP or token missing or all bridges deactivated! - Continue with WebAPI');
 			}
 
 			/*
@@ -630,6 +631,7 @@ function getWebApi() {
 			}
 
 			// delete states (prefer Bridge API)
+			/*
 			delete smartlock.type;
 			if (smartlock.state) {
 				delete smartlock.state.state;
@@ -652,7 +654,7 @@ function getWebApi() {
 				if (smartlock.webConfig) {
 					delete smartlock.webConfig;
 				}
-			}
+			}*/
 
 			// update lock
 			updateLock(smartlock);
