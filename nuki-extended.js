@@ -198,7 +198,7 @@ function startAdapter(options) {
 			}
 
 			// apply action
-			setAction(device, action);
+			setAction(device, action, (NukiWepApi !== null && adapter.config.bridges.length == 0 ? 'web' : 'bridge'));
 		}
 
 		// configuration
@@ -315,7 +315,7 @@ function initNukiAPIs() {
 	 *
 	 */
 	// check if bridges have been defined
-	if (adapter.config.bridges === undefined || adapter.config.bridges.length == 0) {
+	if ((adapter.config.bridges === undefined || adapter.config.bridges.length == 0) && adapter.config.refreshWebApi == 0) {
 		return library.terminate('No bridges have been defined in settings so far!');
 	}
 
@@ -405,7 +405,7 @@ function initNukiAPIs() {
 
 			// no bridges
 			else {
-				return library.terminate('No bridges are sufficiently defined! Name, IP or token missing or all bridges deactivated!');
+				adapter.log.info('No bridges are sufficiently defined! Name, IP or token missing or all bridges deactivated!');
 			}
 
 			/*
