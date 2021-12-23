@@ -198,7 +198,7 @@ function startAdapter(options) {
 			}
 
 			// apply action
-			setAction(device, action, (NukiWepApi !== null && adapter.config.bridges.length == 0 ? 'web' : 'bridge'));
+			setAction(device, action, (nukiWebApi !== null && adapter.config.bridges.length == 0 ? 'web' : 'bridge'));
 		}
 
 		// configuration
