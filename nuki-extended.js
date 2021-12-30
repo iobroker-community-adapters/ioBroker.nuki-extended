@@ -628,29 +628,31 @@ function getWebApi() {
 			if (smartlock.state) {
 				smartlock.state.timestamp = new Date().toISOString().substr(0,19) + '+00:00';
 			}
+			
+			if(nukiWebApi === null || adapter.config.bridges.length > 0) {
+				// delete states (prefer Bridge API)
+				delete smartlock.type;
+				if (smartlock.state) {
+					delete smartlock.state.state;
+				}
+				if (smartlock.state) {
+					delete smartlock.state.mode;
+				}
 
-			// delete states (prefer Bridge API)
-			delete smartlock.type;
-			if (smartlock.state) {
-				delete smartlock.state.state;
-			}
-			if (smartlock.state) {
-				delete smartlock.state.mode;
-			}
-
-			// get config
-			if (adapter.config.syncConfig !== true) {
-				if (smartlock.config) {
-					delete smartlock.config;
-				}
-				if (smartlock.advancedConfig) {
-					delete smartlock.advancedConfig;
-				}
-				if (smartlock.openerAdvancedConfig) {
-					delete smartlock.openerAdvancedConfig;
-				}
-				if (smartlock.webConfig) {
-					delete smartlock.webConfig;
+				// get config
+				if (adapter.config.syncConfig !== true) {
+					if (smartlock.config) {
+						delete smartlock.config;
+					}
+					if (smartlock.advancedConfig) {
+						delete smartlock.advancedConfig;
+					}
+					if (smartlock.openerAdvancedConfig) {
+						delete smartlock.openerAdvancedConfig;
+					}
+					if (smartlock.webConfig) {
+						delete smartlock.webConfig;
+					}
 				}
 			}
 
