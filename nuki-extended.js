@@ -310,7 +310,7 @@ function initNukiAPIs() {
 	library.set(library.getNode('webApiSync'), false);
 	
 	
-	const hasBridge = adapter.config.bridges?.length > 0;
+	const hasBridge = adapter.config.bridges !== undefined && adapter.config.bridges.length > 0;
 	const hasWebApi = adapter.config.refreshWebApi !== 0;
 	
 	/*
