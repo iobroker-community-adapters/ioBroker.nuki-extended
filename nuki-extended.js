@@ -308,18 +308,71 @@ function initNukiAPIs() {
 	library.set(library.getNode('bridgeApiCallback'), false);
 	library.set(library.getNode('bridgeApiSync'), false);
 	library.set(library.getNode('webApiSync'), false);
-
-
+	
+	
+	const hasBridge = adapter.config.bridges?.length > 0;
+	const hasWebApi = adapter.config.refreshWebApi !== 0;
+	
 	/*
 	 * BRIDGE API
 	 *
 	 */
 	// check if bridges have been defined
-	if ((adapter.config.bridges === undefined || adapter.config.bridges.length == 0) && adapter.config.refreshWebApi == 0) {
-		return library.terminate('No bridges have been defined in settings so far!');
+	if (!hasBridge && !hasWebApi) {
+		return library.terminate('You either need a bridge or WebApi.');
 	}
-
-	else {
+	
+	if (hasWebApi) {
+		
+		
+		/*
+     * WEB API
+     *
+     */
+		if (!adapter.config.api_token) {
+			adapter.log.info('No Nuki Web API token provided.');
+		}
+		else {
+			nukiWebApi = new Nuki(adapter.config.api_token);
+			setup.push('web_api');
+			
+			// get locks
+			getWebApi();
+			
+			// periodically refresh settings
+			if (!adapter.config.refreshWebApi) {
+				adapter.config.refreshWebApi = 0;
+			}
+			
+			else if (adapter.config.refreshWebApi > 0 && adapter.config.refreshWebApi < 5) {
+				adapter.log.warn('Due to performance reasons, the refresh rate can not be set to less than 5 seconds. Using 5 seconds now for Nuki Web API.');
+				adapter.config.refreshWebApi = 5;
+			}
+			
+			if (adapter.config.refreshWebApi > 0 && !unloaded) {
+				adapter.log.info('Polling Nuki Web API with a frequency of ' + adapter.config.refreshWebApi + 's.');
+				refreshCycleWebApi = setTimeout(function updaterWebApi() {
+					
+					// update Nuki Web API
+					getWebApi();
+					
+					// set interval
+					if (!unloaded) {
+						refreshCycleWebApi = setTimeout(updaterWebApi, Math.round(parseInt(adapter.config.refreshWebApi)*1000));
+					}
+					
+				}, Math.round(parseInt(adapter.config.refreshWebApi)*1000));
+			}
+			else {
+				adapter.log.info('Polling Nuki Web API deactivated.');
+			}
+		}
+		
+		// everything ok
+		library.set(Library.CONNECTION, true);
+	}
+	
+	if (hasBridge) {
 		setup.push('bridge_api');
 
 		// go through bridges
@@ -407,52 +460,9 @@ function initNukiAPIs() {
 			else {
 				adapter.log.info('No bridges are sufficiently defined! Name, IP or token missing or all bridges deactivated!');
 			}
-
-			/*
-			 * WEB API
-			 *
-			 */
-			if (!adapter.config.api_token) {
-				adapter.log.info('No Nuki Web API token provided.');
-			}
-			else {
-				nukiWebApi = new Nuki(adapter.config.api_token);
-				setup.push('web_api');
-
-				// get locks
-				getWebApi();
-
-				// periodically refresh settings
-				if (!adapter.config.refreshWebApi) {
-					adapter.config.refreshWebApi = 0;
-				}
-
-				else if (adapter.config.refreshWebApi > 0 && adapter.config.refreshWebApi < 5) {
-					adapter.log.warn('Due to performance reasons, the refresh rate can not be set to less than 5 seconds. Using 5 seconds now for Nuki Web API.');
-					adapter.config.refreshWebApi = 5;
-				}
-
-				if (adapter.config.refreshWebApi > 0 && !unloaded) {
-					adapter.log.info('Polling Nuki Web API with a frequency of ' + adapter.config.refreshWebApi + 's.');
-					refreshCycleWebApi = setTimeout(function updaterWebApi() {
-
-						// update Nuki Web API
-						getWebApi();
-
-						// set interval
-						if (!unloaded) {
-							refreshCycleWebApi = setTimeout(updaterWebApi, Math.round(parseInt(adapter.config.refreshWebApi)*1000));
-						}
-
-					}, Math.round(parseInt(adapter.config.refreshWebApi)*1000));
-				}
-				else {
-					adapter.log.info('Polling Nuki Web API deactivated.');
-				}
-			}
-
-			// everything ok
-			library.set(Library.CONNECTION, true);
+				
+				// everything ok
+				library.set(Library.CONNECTION, true);
 		})
 			.catch(err => adapter.log.debug('Error resolving listeners (' + JSON.stringify(err) + ')!'));
 	}
