@@ -124,7 +124,7 @@ function startAdapter(options) {
 			let url = library.getDeviceState(path + '.url');
 
 			// ID or url could not be retrived
-			if (!bridgeId || !url || url == '{}') {
+			if (!bridgeId || !url || url === '{}') {
 				adapter.log.warn('Error deleting callback: No Bridge ID or URL given!');
 				return;
 			}
@@ -190,7 +190,7 @@ function startAdapter(options) {
 			case 'smart door':
 				action.name = _LOCK.ACTIONS[action.id];
 				break;
-	
+
 			case 'box':
 			default:
 				adapter.log.warn('Error triggering action via Nuki Bridge API: Wrong Nuki type given!');
@@ -396,7 +396,7 @@ function initNukiAPIs() {
 			let bridge = {
 				'data': device,
 				'callbacks': [],
-				'instance': new Bridge.Bridge(device.bridge_ip, device.bridge_port || 8080, device.bridge_token, { 'forcePlainToken': adapter.config.hashedToken === true ? false : true })
+				'instance': new Bridge.Bridge(device.bridge_ip, device.bridge_port || 8080, device.bridge_token, { 'forcePlainToken': adapter.config.hashedToken !== true })
 			};
 
 			// index bridge
@@ -479,7 +479,7 @@ function getCallbacks(bridge) {
 		BRIDGES[bridge.data.bridge_id].callbacks = cbs;
 
 		// check for enabled callback
-		if (adapter.config.refreshBridgeApiType == 'callback') {
+		if (adapter.config.refreshBridgeApiType === 'callback') {
 			library.set(library.getNode('bridgeApiCallback'), true);
 			let url = 'http://' + (adapter.config.callbackIp || _ip.address()) + ':' + adapter.config.callbackPort + '/nuki-api-bridge'; // NOTE: https is not supported according to API documentation
 
@@ -810,7 +810,7 @@ function updateLock(payload) {
 
 
 	// update state
-	if (payload.deviceType == 2 && payload.state && payload.state.state == 1 && payload.mode == 3) { // change ONLINE & CONTINOUS to RING_TO_OPEN
+	if (payload.deviceType === 2 && payload.state && payload.state.state === 1 && payload.mode === 3) { // change ONLINE & CONTINOUS to RING_TO_OPEN
 		payload.state.state = 3;
 	}
 
@@ -840,19 +840,19 @@ function updateLock(payload) {
 	}
 
 	// add additional states
-	if (DEVICES[payload.nukiHexId].type == 'Smartlock' && payload.state && payload.state.doorState) {
+	if (DEVICES[payload.nukiHexId].type === 'Smartlock' && payload.state && payload.state.doorState) {
 		payload.state.closed = payload.state.doorState;
 	}
 
-	if (DEVICES[payload.nukiHexId].type == 'Smartlock' && payload.state && payload.state.state) {
+	if (DEVICES[payload.nukiHexId].type === 'Smartlock' && payload.state && payload.state.state) {
 		payload.state.locked = payload.state.state;
 	}
 
-	if (DEVICES[payload.nukiHexId].type == 'Smart Door' && payload.state && payload.state.doorState) {
+	if (DEVICES[payload.nukiHexId].type === 'Smart Door' && payload.state && payload.state.doorState) {
 		payload.state.closed = payload.state.doorState;
 	}
 
-	if (DEVICES[payload.nukiHexId].type == 'Smart Door' && payload.state && payload.state.state) {
+	if (DEVICES[payload.nukiHexId].type === 'Smart Door' && payload.state && payload.state.state) {
 		payload.state.locked = payload.state.state;
 	}
 
@@ -886,7 +886,7 @@ function setAction(device, action, api = 'bridge', retry = 0) {
 	adapter.log.info('Trigger action -' + action.name + '- on Nuki ' + device.type + ' ' + device.name + ' (via ' + library.ucFirst(api) + ' API).');
 
 	// try Bridge API
-	if (device.instance !== undefined && device.instance !== null && api == 'bridge') {
+	if (device.instance !== undefined && device.instance !== null && api === 'bridge') {
 		adapter.log.debug('Action applied on Bridge API.');
 
 		device.instance.lockAction(action.id)
@@ -919,7 +919,7 @@ function setAction(device, action, api = 'bridge', retry = 0) {
 	}
 
 	// try Web API
-	else if (nukiWebApi !== null && api == 'web') {
+	else if (nukiWebApi !== null && api === 'web') {
 		adapter.log.debug('Action applied on Web API.');
 
 		nukiWebApi.setAction(device.smartlockId, action.id)
@@ -970,7 +970,7 @@ function setCallbackNodes(bridgeId) {
 
 		// index states
 		for (let state in states) {
-			if (state.substr(-4) == '.url' && states[state] && states[state].val) {
+			if (state.substr(-4) === '.url' && states[state] && states[state].val) {
 				urls[state.substr(-5, 1)] = states[state].val;
 			}
 		}
@@ -1037,11 +1037,11 @@ function readData(key, data, prefix) {
 	}
 
 	// loop nested data
-	if (data !== null && typeof data == 'object' && (!node.convert && node.convert != 'array')) {
+	if (data !== null && typeof data === 'object' && (!node.convert && node.convert !== 'array')) {
 		if (Object.keys(data).length > 0) {
 
 			// create channel
-			if (node.role == 'channel') {
+			if (node.role === 'channel') {
 				library.set({
 					node: prefix + '.' + (node.state || key),
 					role: 'channel',
@@ -1068,7 +1068,7 @@ function readData(key, data, prefix) {
 		}
 
 		// create channel if node.state is nested
-		if (node.state && node.state.indexOf('.') > -1 && (prefix + '.' + node.state.substr(0, node.state.lastIndexOf('.'))) != (prefix + '.' + key.substr(0, key.lastIndexOf('.')))) {
+		if (node.state && node.state.indexOf('.') > -1 && (prefix + '.' + node.state.substr(0, node.state.lastIndexOf('.'))) !== (prefix + '.' + key.substr(0, key.lastIndexOf('.')))) {
 			readData(node.state.substr(0, node.state.indexOf('.')), { [node.state.substr(node.state.indexOf('.')+1)]: data }, prefix);
 		}
 

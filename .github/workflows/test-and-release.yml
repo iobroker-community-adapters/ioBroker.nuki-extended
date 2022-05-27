@@ -56,7 +56,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 16.x]
+        node-version: [12.x, 14.x, 16.x, 18.x]
         os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
@@ -140,17 +140,17 @@ jobs:
           prerelease: ${{ contains(steps.extract_release.outputs.VERSION, '-') }}
           body: ${{ steps.extract_release.outputs.BODY }}
 
-      #- name: Notify Sentry.io about the release
-      #  run: |
-      #    npm i -g @sentry/cli
-      #    export SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
-      #    export SENTRY_URL=https://sentry.iobroker.net
-      #    export SENTRY_ORG=iobroker
-      #    export SENTRY_PROJECT=iobroker-nuki-extended
-      #    export SENTRY_VERSION=iobroker.nuki-extended@${{ steps.extract_release.outputs.VERSION }}
-      #    sentry-cli releases new $SENTRY_VERSION
-      #    sentry-cli releases set-commits $SENTRY_VERSION --auto
-      #    sentry-cli releases finalize $SENTRY_VERSION
+      - name: Notify Sentry.io about the release
+        run: |
+          npm i -g @sentry/cli
+          export SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
+          export SENTRY_URL=https://sentry.iobroker.net
+          export SENTRY_ORG=iobroker
+          export SENTRY_PROJECT=iobroker-nuki-extended
+          export SENTRY_VERSION=iobroker.nuki-extended@${{ steps.extract_release.outputs.VERSION }}
+          sentry-cli releases new $SENTRY_VERSION
+          sentry-cli releases set-commits $SENTRY_VERSION --auto
+          sentry-cli releases finalize $SENTRY_VERSION
 
-      #    Add the following line BEFORE finalize if sourcemap uploads are needed
-      #    sentry-cli releases files $SENTRY_VERSION upload-sourcemaps build/
+        # Add the following line BEFORE finalize if sourcemap uploads are needed
+        # sentry-cli releases files $SENTRY_VERSION upload-sourcemaps build/
