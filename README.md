@@ -505,6 +505,7 @@ Please see [release page](https://github.com/Zefau/ioBroker.nuki-extended/releas
 
 <!-- ### __WORK IN PROGRESS__ -->
 ### __WORK IN PROGRESS__
+- (StrathCole) Allow web-api-only operation
 - (Apollon77) Make compatible with Node.js 18.x
 - (Apollon77) Add Sentry for crash reporting
 
