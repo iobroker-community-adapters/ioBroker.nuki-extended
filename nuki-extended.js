@@ -8,7 +8,6 @@ const _parser = require('body-parser');
 const _ip = require('ip');
 
 const Bridge = require('nuki-bridge-api');
-const Nuki = require('nuki-web-api');
 
 
 /*
@@ -18,6 +17,8 @@ const Library = require(__dirname + '/lib/library.js');
 const _LOCK = require(__dirname + '/_LOCK.js');
 const _OPENER = require(__dirname + '/_OPENER.js');
 const _NODES = require(__dirname + '/_NODES.js');
+const WebApiHandler = require("./lib/web-api");
+const {NukiTools} = require("./lib/nuki-tools");
 
 
 /*
@@ -31,8 +32,8 @@ let unloaded;
 let refreshCycleWebApi, refreshCycleBridgeApi;
 
 let setup = [];
-let BRIDGES = {}, DEVICES = {};
-let nukiWebApi = null, listener = false;
+let BRIDGES = {};
+let nukiWebApi = new WebApiHandler(), listener = false;
 
 
 /*
@@ -52,7 +53,7 @@ function startAdapter(options) {
 		unloaded = false;
 
 		// Check Node.js Version
-		let version = parseInt(process.version.substr(1, process.version.indexOf('.')-1));
+		let version = parseInt(process.version.substring(1, process.version.indexOf('.')));
 		if (version <= 6) {
 			return library.terminate('This Adapter is not compatible with your Node.js Version ' + process.version + ' (must be >= Node.js v7).', true);
 		}
@@ -90,11 +91,8 @@ function startAdapter(options) {
 	adapter.on('unload', function(callback) {
 		try {
 			adapter.log.info('Adapter stopped und unloaded.');
-
+			nukiWebApi.unload();
 			unloaded = true;
-			if (refreshCycleWebApi) {
-				clearTimeout(refreshCycleWebApi);
-			}
 			if (refreshCycleBridgeApi) {
 				clearTimeout(refreshCycleBridgeApi);
 			}
@@ -113,9 +111,9 @@ function startAdapter(options) {
 	adapter.on('stateChange', function(node, object) {
 		adapter.log.debug('State of ' + node + ' has changed ' + JSON.stringify(object) + '.');
 
-		let state = node.substr(node.lastIndexOf('.')+1);
+		let state = node.substring(node.lastIndexOf('.')+1);
 		let action = object !== undefined && object !== null ? object.val : 0;
-		let path = node.substr(0, node.lastIndexOf('.')).replace(adapterName + '.' + adapter.instance + '.', '');
+		let path = node.substring(0, node.lastIndexOf('.')).replace(adapterName + '.' + adapter.instance + '.', '');
 		let root = path.split('.').slice(0, 2).join('.');
 
 		// apply an action on the callback
@@ -175,7 +173,7 @@ function startAdapter(options) {
 			}
 
 			// get smartlock
-			let device = DEVICES[nukiHexId];
+			let device = NukiTools.DEVICES[nukiHexId];
 			action = { 'id': action };
 
 			switch ((device.type && device.type.toLowerCase()) || false) {
@@ -198,11 +196,11 @@ function startAdapter(options) {
 			}
 
 			// apply action
-			setAction(device, action, (nukiWebApi !== null && adapter.config.bridges.length == 0 ? 'web' : 'bridge'));
+			setAction(device, action, (nukiWebApi.active && adapter.config.bridges.length === 0 ? 'web' : 'bridge'));
 		}
 
 		// configuration
-		if ((node.indexOf('.config.') > -1 || node.indexOf('.advancedConfig.') > -1 || node.indexOf('.openerAdvancedConfig.') > -1) && nukiWebApi !== null && object && object.ack !== true) {
+		if ((node.indexOf('.config.') > -1 || node.indexOf('.advancedConfig.') > -1 || node.indexOf('.openerAdvancedConfig.') > -1) && nukiWebApi.active && object && object.ack !== true) {
 
 			library.set({ node: node.replace(adapter.name + '.' + adapter.instance + '.', '') }, object.val);
 
@@ -216,42 +214,38 @@ function startAdapter(options) {
 			}
 
 			// get smartlock
-			let device = DEVICES[nukiHexId];
+			let device = NukiTools.DEVICES[nukiHexId];
 
 			// change config
 			if (node.indexOf('.config.') > -1) {
-
-				nukiWebApi.setConfig(device.smartlockId, { ...device.config, [state]: action })
-					.then(() => {
-						setTimeout(getWebApi, 3*1000);
-						adapter.log.info('Set configuration ' + state + ' to ' + action + '.');
-					})
-					.catch(err => adapter.log.warn(err));
+				nukiWebApi.setConfig(
+					device.smartlockId,
+					{ ...device.config, [state]: action },
+					state
+				);
 			}
 
 			// change advancedConfig
 			else if (node.indexOf('.advancedConfig.') > -1) {
 
-				nukiWebApi.setAdvancedConfig(device.smartlockId, { ...device.advancedConfig, [state]: action })
-					.then(() => {
-						setTimeout(getWebApi, 3*1000);
-						adapter.log.info('Set advanced configuration ' + state + ' to ' + action + '.');
-					})
-					.catch(err => adapter.log.warn(err));
+				nukiWebApi.setAdvancedConfig(
+					device.smartlockId,
+					{ ...device.advancedConfig, [state]: action },
+					state
+				);
 			}
 
 			// change openerAdvancedConfig
 			else if (node.indexOf('.openerAdvancedConfig.') > -1) {
 
-				nukiWebApi.setAdvancedConfig(device.smartlockId, { ...device.openerAdvancedConfig, [state]: action })
-					.then(() => {
-						setTimeout(getWebApi, 3*1000);
-						adapter.log.info('Set opener configuration ' + state + ' to ' + action + '.');
-					})
-					.catch(err => adapter.log.warn(err));
+				nukiWebApi.setAdvancedConfig(
+					device.smartlockId,
+					{ ...device.openerAdvancedConfig, [state]: action },
+					state
+				);
 			}
 		}
-		else if (state !== '_ACTION' && state !== '_delete' && nukiWebApi === null && object && object.ack !== true) {
+		else if (state !== '_ACTION' && state !== '_delete' && !nukiWebApi.active && object && object.ack !== true) {
 			adapter.log.info('Nuki Web API needs to be configured to change configuration!');
 		}
 	});
@@ -308,11 +302,11 @@ function initNukiAPIs() {
 	library.set(library.getNode('bridgeApiCallback'), false);
 	library.set(library.getNode('bridgeApiSync'), false);
 	library.set(library.getNode('webApiSync'), false);
-	
-	
+
+
 	const hasBridge = adapter.config.bridges !== undefined && adapter.config.bridges.length > 0;
 	const hasWebApi = adapter.config.refreshWebApi !== 0;
-	
+
 	/*
 	 * BRIDGE API
 	 *
@@ -321,151 +315,110 @@ function initNukiAPIs() {
 	if (!hasBridge && !hasWebApi) {
 		return library.terminate('You either need a bridge or WebApi.');
 	}
-	
-	if (hasWebApi) {
-		
-		
-		/*
-     * WEB API
-     *
-     */
-		if (!adapter.config.api_token) {
-			adapter.log.info('No Nuki Web API token provided.');
+
+	if (nukiWebApi.initialize(adapter, library)) {
+		setup.push('web_api');
+	}
+
+	if (!hasBridge) {
+		return;
+	}
+	setup.push('bridge_api');
+
+	// go through bridges
+	listener = adapter.config.bridges.map((device, i) => {
+		// check if API settings are set
+		if (!device.bridge_name || !device.bridge_ip || !device.bridge_token) {
+			adapter.log.warn('Name, IP or API token missing for bridge ' + device.bridge_name + '! Please go to settings and fill in IP and the API token first!');
+			return Promise.resolve(false);
 		}
+
+		// check if Bridge is enabled in settings
+		if (!device.active) {
+			adapter.log.info('Bridge with name ' + device.bridge_name + ' is disabled in adapter settings. Thus, ignored.');
+			return Promise.resolve(false);
+		}
+
+		// initialize Nuki Bridge class
+		library.set(library.getNode('bridges'));
+		device.path = 'bridges.' + library.clean(device.bridge_name, true, '_');
+
+		let bridge = {
+			'data': device,
+			'callbacks': [],
+			'instance': new Bridge.Bridge(device.bridge_ip, device.bridge_port || 8080, device.bridge_token, {'forcePlainToken': adapter.config.hashedToken !== true})
+		};
+
+		// index bridge
+		BRIDGES[bridge.data.bridge_id] = bridge;
+
+		// get bridge info
+		getBridgeApi(bridge);
+
+		// get current callback URLs
+		return getCallbacks(bridge);
+	});
+
+	// everything ok
+	library.set(Library.CONNECTION, true);
+
+	// attach server to listen (only one listener for all Nuki Bridges)
+	// @see https://stackoverflow.com/questions/9304888/how-to-get-data-passed-from-a-form-in-express-node-js/38763341#38763341
+	return Promise.all(listener).then(values => {
+		// attach callback
+		if (values.findIndex(el => el === 'attachListener') > -1) {
+			_http.use(_parser.json());
+			_http.use(_parser.urlencoded({extended: false}));
+
+			_http.post('/nuki-api-bridge', (req, res) => {
+				if (req && req.body) {
+					let payload = {
+						'nukiId': req.body.nukiId,
+						'state': {...req.body, 'timestamp': new Date().toISOString().substr(0, 19) + '+00:00'}
+					};
+					if (payload.state.nukiId) {
+						delete payload.state.nukiId;
+					}
+					if (payload.state.deviceType) {
+						delete payload.state.deviceType;
+					}
+
+					adapter.log.debug('Received payload via callback: ' + JSON.stringify(payload));
+					library.set(library.getNode('bridgeApiLast'), new Date().toISOString().substr(0, 19) + '+00:00');
+					library.set(library.getNode('bridgeApiCallback'), true);
+
+					NukiTools.updateLock(payload, library, adapter);
+					res.sendStatus(200);
+					res.end();
+
+					// update Web API as well
+					setTimeout(() => {
+						nukiWebApi.getWebApi()
+					}, 3 * 1000);
+				} else {
+					adapter.log.warn('main(): ' + e.message);
+					res.sendStatus(500);
+					res.end();
+				}
+			});
+
+			_http.listen(adapter.config.callbackPort, () => adapter.log.info('Listening for Nuki events on port ' + adapter.config.callbackPort + '.'));
+		}
+
+		// no callback
+		else if (values.findIndex(el => el === 'attachListener') === -1 && values.findIndex(el => el === 'doNotAttachListener') > -1) {
+			adapter.log.info('Not listening for Nuki events.');
+		}
+
+		// no bridges
 		else {
-			nukiWebApi = new Nuki(adapter.config.api_token);
-			setup.push('web_api');
-			
-			// get locks
-			getWebApi();
-			
-			// periodically refresh settings
-			if (!adapter.config.refreshWebApi) {
-				adapter.config.refreshWebApi = 0;
-			}
-			
-			else if (adapter.config.refreshWebApi > 0 && adapter.config.refreshWebApi < 5) {
-				adapter.log.warn('Due to performance reasons, the refresh rate can not be set to less than 5 seconds. Using 5 seconds now for Nuki Web API.');
-				adapter.config.refreshWebApi = 5;
-			}
-			
-			if (adapter.config.refreshWebApi > 0 && !unloaded) {
-				adapter.log.info('Polling Nuki Web API with a frequency of ' + adapter.config.refreshWebApi + 's.');
-				refreshCycleWebApi = setTimeout(function updaterWebApi() {
-					
-					// update Nuki Web API
-					getWebApi();
-					
-					// set interval
-					if (!unloaded) {
-						refreshCycleWebApi = setTimeout(updaterWebApi, Math.round(parseInt(adapter.config.refreshWebApi)*1000));
-					}
-					
-				}, Math.round(parseInt(adapter.config.refreshWebApi)*1000));
-			}
-			else {
-				adapter.log.info('Polling Nuki Web API deactivated.');
-			}
+			adapter.log.info('No bridges are sufficiently defined! Name, IP or token missing or all bridges deactivated!');
 		}
-		
-		// everything ok
-		library.set(Library.CONNECTION, true);
-	}
-	
-	if (hasBridge) {
-		setup.push('bridge_api');
-
-		// go through bridges
-		let listener = adapter.config.bridges.map((device, i) => {
-			// check if API settings are set
-			if (!device.bridge_name || !device.bridge_ip || !device.bridge_token) {
-				adapter.log.warn('Name, IP or API token missing for bridge ' + device.bridge_name + '! Please go to settings and fill in IP and the API token first!');
-				return Promise.resolve(false);
-			}
-
-			// check if Bridge is enabled in settings
-			if (!device.active) {
-				adapter.log.info('Bridge with name ' + device.bridge_name + ' is disabled in adapter settings. Thus, ignored.');
-				return Promise.resolve(false);
-			}
-
-			// initialize Nuki Bridge class
-			library.set(library.getNode('bridges'));
-			device.path = 'bridges.' + library.clean(device.bridge_name, true, '_');
-
-			let bridge = {
-				'data': device,
-				'callbacks': [],
-				'instance': new Bridge.Bridge(device.bridge_ip, device.bridge_port || 8080, device.bridge_token, { 'forcePlainToken': adapter.config.hashedToken !== true })
-			};
-
-			// index bridge
-			BRIDGES[bridge.data.bridge_id] = bridge;
-
-			// get bridge info
-			getBridgeApi(bridge);
-
-			// get current callback URLs
-			return getCallbacks(bridge);
-		});
 
 		// everything ok
 		library.set(Library.CONNECTION, true);
-
-		// attach server to listen (only one listener for all Nuki Bridges)
-		// @see https://stackoverflow.com/questions/9304888/how-to-get-data-passed-from-a-form-in-express-node-js/38763341#38763341
-		return Promise.all(listener).then(values => {
-			// attach callback
-			if (values.findIndex(el => el === 'attachListener') > -1) {
-				_http.use(_parser.json());
-				_http.use(_parser.urlencoded({extended: false}));
-
-				_http.post('/nuki-api-bridge', (req, res) => {
-					if (req && req.body) {
-						let payload = {'nukiId': req.body.nukiId, 'state': { ...req.body, 'timestamp': new Date().toISOString().substr(0,19) + '+00:00' }};
-						if (payload.state.nukiId) {
-							delete payload.state.nukiId;
-						}
-						if (payload.state.deviceType) {
-							delete payload.state.deviceType;
-						}
-
-						adapter.log.debug('Received payload via callback: ' + JSON.stringify(payload));
-						library.set(library.getNode('bridgeApiLast'), new Date().toISOString().substr(0,19) + '+00:00');
-						library.set(library.getNode('bridgeApiCallback'), true);
-
-						updateLock(payload);
-						res.sendStatus(200);
-						res.end();
-
-						// update Web API as well
-						setTimeout(getWebApi, 3*1000);
-					}
-					else {
-						adapter.log.warn('main(): ' + e.message);
-						res.sendStatus(500);
-						res.end();
-					}
-				});
-
-				_http.listen(adapter.config.callbackPort, () => adapter.log.info('Listening for Nuki events on port ' + adapter.config.callbackPort + '.'));
-			}
-
-			// no callback
-			else if (values.findIndex(el => el === 'attachListener') === -1 && values.findIndex(el => el === 'doNotAttachListener') > -1) {
-				adapter.log.info('Not listening for Nuki events.');
-			}
-
-			// no bridges
-			else {
-				adapter.log.info('No bridges are sufficiently defined! Name, IP or token missing or all bridges deactivated!');
-			}
-				
-				// everything ok
-				library.set(Library.CONNECTION, true);
-		})
-			.catch(err => adapter.log.debug('Error resolving listeners (' + JSON.stringify(err) + ')!'));
-	}
+	})
+		.catch(err => adapter.log.debug('Error resolving listeners (' + JSON.stringify(err) + ')!'));
 }
 
 /**
@@ -545,7 +498,7 @@ function getBridgeApi(bridge) {
 				nuki.deviceType = nuki.deviceType || 0;
 				delete nuki.lastKnownState;
 
-				updateLock(nuki);
+				NukiTools.updateLock(nuki, library, adapter);
 			});
 		})
 		.catch(err => {
@@ -604,277 +557,12 @@ function getBridgeApi(bridge) {
 
 			// set payload for bridge
 			library.set({node: bridge.data.path, description: 'Bridge ' + (bridge.data.bridge_name ? bridge.data.bridge_name + ' ' : '') + '(' + bridge.data.bridge_ip + ')', role: 'channel'});
-			readData('', payload, bridge.data.path);
+			library.readData('', payload, bridge.data.path);
 		})
 		.catch(err => {
 			adapter.log.warn('Failed retrieving /info from Nuki Bridge with name ' + bridge.data.bridge_name + ' (forcePlainToken: ' + (bridge.instance.forcePlainToken === true) + ')!');
 			adapter.log.debug('getBridgeApi(): ' + err.message);
 		});
-}
-
-
-/**
- * Retrieve from Web API.
- *
- */
-function getWebApi() {
-
-	if (!nukiWebApi) {
-		return;
-	}
-
-	library.set(library.getNode('webApiSync'), true, { 'force': true });
-	library.set(library.getNode('webApiLast'), new Date().toISOString().substr(0,19) + '+00:00');
-
-	// get nukis
-	adapter.log.silly('getWebApi(): Retrieving from Nuki Web API..');
-	nukiWebApi.getSmartlocks().then(smartlocks => {
-		adapter.log.debug('getWebApi(): ' + JSON.stringify(smartlocks));
-		smartlocks.forEach(smartlock => {
-
-			// remap states
-			smartlock.nukiHexId = getNukiHex(smartlock.smartlockId);
-			smartlock.deviceType = smartlock.type;
-			if (smartlock.state) {
-				smartlock.state.timestamp = new Date().toISOString().substr(0,19) + '+00:00';
-			}
-			
-			if(nukiWebApi === null || adapter.config.bridges.length > 0) {
-				// delete states (prefer Bridge API)
-				delete smartlock.type;
-				if (smartlock.state) {
-					delete smartlock.state.state;
-				}
-				if (smartlock.state) {
-					delete smartlock.state.mode;
-				}
-
-				// get config
-				if (adapter.config.syncConfig !== true) {
-					if (smartlock.config) {
-						delete smartlock.config;
-					}
-					if (smartlock.advancedConfig) {
-						delete smartlock.advancedConfig;
-					}
-					if (smartlock.openerAdvancedConfig) {
-						delete smartlock.openerAdvancedConfig;
-					}
-					if (smartlock.webConfig) {
-						delete smartlock.webConfig;
-					}
-				}
-			}
-
-			// update lock
-			updateLock(smartlock);
-
-			// get logs
-			nukiWebApi.getSmartlockLogs(smartlock.smartlockId, { limit: 1000 }).then(log => {
-				library.set({node: DEVICES[smartlock.nukiHexId].path + '.logs', description: 'Logs / History of Nuki', role: 'history'}, JSON.stringify(log.slice(0, 250)));
-
-			}).catch(err => {
-				adapter.log.warn('getWebApi(): Error retrieving logs: ' + err.message);
-			});
-
-			// get users
-			if (adapter.config.syncUsers) {
-				nukiWebApi.getSmartlockAuth(smartlock.smartlockId).then(users => {
-					library.set({ ...library.getNode('users'), 'node': DEVICES[smartlock.nukiHexId].path + '.users' });
-					users.forEach(user => {
-						user.name = user.name || 'unknown';
-
-						let nodePath = DEVICES[smartlock.nukiHexId].path + '.users.' + library.clean(user.name, true, '_');
-						library.set({node: nodePath, description: 'User ' + user.name, role: 'channel'});
-						readData('', user, nodePath);
-					});
-
-				}).catch(err => {
-					adapter.log.warn('getWebApi(): Error retrieving users: ' + err.message);
-				});
-			}
-		});
-
-	}).catch(err => {
-		adapter.log.warn('getWebApi(): Error retrieving smartlocks: ' + err.message);
-	});
-
-	// get notifications
-	nukiWebApi.getNotification().then(notifications => {
-		readData('notifications', notifications, 'info');
-
-	}).catch(err => {
-		adapter.log.warn('getWebApi(): Error retrieving notifications: ' + err.message);
-	});
-}
-
-
-/**
- *
- *
- * @see https://developer.nuki.io/t/nuki-opener-different-smartlock-id-in-bridge-api-compared-to-web-api/3195/2?u=zefau
- *
- */
-function getNukiHex(nukiId) {
-	return nukiId.toString(16).substr(-8);
-}
-
-/**
- * Update states of Nuki Door based on payload.
- *
- */
-function updateLock(payload) {
-	library.set(Library.CONNECTION, true);
-
-	// get NukiHexId or NukiId
-	if (payload.nukiId && !payload.nukiHexId) {
-		payload.nukiHexId = getNukiHex(payload.nukiId);
-	}
-	else if (!payload.nukiId && payload.nukiHexId) {
-		payload.nukiId = parseInt(payload.nukiHexId, 16);
-	}
-	else {
-		return false;
-	}
-
-	// index Nuki
-	let type, path;
-	if (DEVICES[payload.nukiHexId] === undefined || !DEVICES[payload.nukiHexId].path) {
-		let actions = null;
-
-		//
-		if (!payload.name || payload.deviceType === undefined) {
-			adapter.log.debug('Error updating device due to missing data (' + JSON.stringify(payload) + ').');
-			return false;
-		}
-
-		// Nuki Smartlock
-		if (payload.deviceType === 0 || !payload.deviceType) {
-			library.set(library.getNode('smartlocks'));
-			type = 'Smartlock';
-			actions = _LOCK.ACTIONS;
-		}
-
-		// Nuki Box
-		else if (payload.deviceType === 1) {
-			library.set(library.getNode('boxes'));
-			type = 'Box';
-		}
-
-		// Nuki Opener
-		else if (payload.deviceType === 2) {
-			library.set(library.getNode('openers'));
-			type = 'Opener';
-			actions = _OPENER.ACTIONS;
-		}
-
-		// Nuki Smart Door
-		if (payload.deviceType === 3) {
-			library.set(library.getNode('smartlocks'));
-			type = 'Smart Door';
-			actions = _LOCK.ACTIONS;
-		}
-
-		// Nuki Smartlock 3.0
-		if (payload.deviceType === 4) {
-			library.set(library.getNode('smartlocks'));
-			type = 'Smartlock';
-			actions = _LOCK.ACTIONS;
-		}
-
-		// index device
-		path = type.toLowerCase() + 's.' + library.clean(payload.name, true, '_');
-		DEVICES[payload.nukiHexId] = { 'id': payload.nukiId, 'hex': payload.nukiHexId, 'smartlockId': parseInt(payload.deviceType + payload.nukiHexId, 16), 'name': payload.name, 'type': type, 'path': path, 'bridge': null };
-
-		// add action
-		if (actions !== null) {
-			let actionPath = path + '._ACTION';
-			library.set({ ...library.getNode('action'), 'node': actionPath, 'common': { 'write': true, 'states': actions }}, 0);
-			adapter.subscribeStates(actionPath); // attach state listener
-
-			for (let key in actions) {
-
-				if (key > 0) {
-					let action = actions[key];
-					library.set({ 'description': 'Trigger ' + action + ' action', 'type': 'boolean', 'role': 'button', 'node': actionPath + '.' + action.replace(/ /g, '_'), 'common': { 'write': true }}, false);
-					adapter.subscribeStates(actionPath + '.' + action.replace(/ /g, '_')); // attach state listener
-				}
-			}
-		}
-	}
-
-	// retrieve Nuki name
-	else {
-		path = DEVICES[payload.nukiHexId].path;
-	}
-
-
-	// update state
-	if (payload.deviceType === 2 && payload.state && payload.state.state === 1 && payload.mode === 3) { // change ONLINE & CONTINOUS to RING_TO_OPEN
-		payload.state.state = 3;
-	}
-
-	// update bridge
-	if (payload.bridge !== undefined) {
-		DEVICES[payload.nukiHexId].bridge = payload.bridge;
-	}
-
-	// update instance
-	if (payload.nuki !== undefined) {
-		DEVICES[payload.nukiHexId].instance = payload.nuki;
-	}
-
-	// update config
-	if (payload.config !== undefined) {
-		DEVICES[payload.nukiHexId].config = payload.config;
-	}
-
-	// update advancedConfig
-	if (payload.advancedConfig !== undefined) {
-		DEVICES[payload.nukiHexId].advancedConfig = payload.advancedConfig;
-	}
-
-	// update openerAdvancedConfig
-	if (payload.openerAdvancedConfig !== undefined) {
-		DEVICES[payload.nukiHexId].openerAdvancedConfig = payload.openerAdvancedConfig;
-	}
-
-	// add additional states
-	if (DEVICES[payload.nukiHexId].type === 'Smartlock' && payload.state && payload.state.doorState) {
-		payload.state.closed = payload.state.doorState;
-	}
-
-	if (DEVICES[payload.nukiHexId].type === 'Smartlock' && payload.state && payload.state.state) {
-		payload.state.locked = payload.state.state;
-	}
-
-	if (DEVICES[payload.nukiHexId].type === 'Smart Door' && payload.state && payload.state.doorState) {
-		payload.state.closed = payload.state.doorState;
-	}
-
-	if (DEVICES[payload.nukiHexId].type === 'Smart Door' && payload.state && payload.state.state) {
-		payload.state.locked = payload.state.state;
-	}
-
-	if (payload.state && payload.state.state && payload.state.state !== library.getDeviceState(path + '.state.lockState')) {
-		payload.state.lastStateUpdate = Date.now();
-	}
-
-	// remove unnecessary states
-	if (payload.state && payload.state.stateName) {
-		delete payload.state.stateName;
-	}
-	if (payload.state && payload.state.deviceType) {
-		delete payload.state.deviceType;
-	}
-	if (payload.nuki) {
-		delete payload.nuki;
-	}
-
-	// create / update device
-	adapter.log.debug('Updating device ' + path + ' with payload: ' + JSON.stringify(payload));
-	library.set({node: path, description: '' + DEVICES[payload.nukiHexId].name, role: 'channel'});
-	readData('', payload, path);
 }
 
 
@@ -1010,121 +698,6 @@ function setCallbackNodes(bridgeId) {
 			library.del(path + '.' + key, true, () => adapter.log.debug('Deleted states for callback with URL ' + urls[key] + '.'));
 		}
 	});
-}
-
-
-/**
- * Read given data and set states.
- *
- */
-function readData(key, data, prefix) {
-
-	// only proceed if data is given
-	if (data === undefined || data === 'undefined') {
-		return false;
-	}
-
-	// get node details
-	key = key ? library.clean(key, false, '_') : '';
-	let node = library.getNode(prefix && prefix.indexOf('users.') > -1 ? 'users.' + key : key);
-
-	// add node details
-	if (key.indexOf('.state') > -1) {
-		node = Object.assign({}, node, {'common': {'states': prefix.indexOf('opener') === -1 ? _LOCK.STATES : _OPENER.STATES }});
-	}
-	if (key.indexOf('.lastAction') > -1) {
-		node = Object.assign({}, node, {'common': {'states': prefix.indexOf('opener') === -1 ? _LOCK.ACTIONS : _OPENER.ACTIONS }});
-	}
-
-	// loop nested data
-	if (data !== null && typeof data === 'object' && (!node.convert && node.convert !== 'array')) {
-		if (Object.keys(data).length > 0) {
-
-			// create channel
-			if (node.role === 'channel') {
-				library.set({
-					node: prefix + '.' + (node.state || key),
-					role: 'channel',
-					description: node.description || library.ucFirst(key.substr(key.lastIndexOf('.')+1))
-				});
-			}
-
-			// read nested data
-			for (let nestedKey in data) {
-				readData((key ? key + '.' : '') + nestedKey, data[nestedKey], prefix);
-			}
-		}
-	}
-
-	// write to states
-	else {
-
-		// convert data
-		data = convertNode(node, data, prefix);
-
-		// skip
-		if (node.skip) {
-			return;
-		}
-
-		// create channel if node.state is nested
-		if (node.state && node.state.indexOf('.') > -1 && (prefix + '.' + node.state.substr(0, node.state.lastIndexOf('.'))) !== (prefix + '.' + key.substr(0, key.lastIndexOf('.')))) {
-			readData(node.state.substr(0, node.state.indexOf('.')), { [node.state.substr(node.state.indexOf('.')+1)]: data }, prefix);
-		}
-
-		// state
-		let state = JSON.parse(JSON.stringify(node)); // copy node
-		state.node = prefix + '.' + (node.state || key);
-		state.description = node.description || library.ucFirst(key.substr(key.lastIndexOf('.')+1));
-
-		// config state
-		let config = (state.node.toLowerCase().indexOf('config') > -1);
-
-		// set state
-		state.common = { ...node.common || {}, 'write': config };
-		library.set(state, data, { subscribe: config });
-	}
-}
-
-
-/**
- * Convert.
- *
- */
-function convertNode(node, data, prefix) {
-
-	// flatten Array
-	if (Array.isArray(data)) {
-		data = data.join(',');
-	}
-
-	const dataType = typeof data;
-	if (node && node.description === '(no description given)' && node.type === 'string' && !node.convert && dataType !== 'string') {
-		// it seems like a fallback object definition ... maybe we can fix the type
-		if (dataType === 'boolean' || dataType === 'number') {
-			node.type = dataType;
-		}
-	}
-
-	if (node.type === 'number' && dataType === 'string') {
-		if (data.includes('.')) {
-			data = parseFloat(data);
-		} else {
-			data = parseInt(data);
-		}
-	}
-
-	// type is boolean, but states are given
-	if (node.type === 'boolean' && node.common && node.common.states) {
-		data = node.common.states[data] === 'true';
-	}
-
-	// type is boolean, but number given
-	if (node.type === 'boolean' && Number.isInteger(data) && !(node.common && node.common.states)) {
-		data = data === 1;
-	}
-
-	return data;
 }
 
 
