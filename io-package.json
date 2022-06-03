@@ -1,167 +1,167 @@
 {
-    "common": {
-        "name": "nuki-extended",
-        "version": "2.5.0",
-        "title": "Nuki Smartlock & Opener",
-        "titleLang": {
-            "en": "Nuki Smartlock & Opener",
-            "de": "Nuki Smartlock & Opener",
-            "ru": "Nuki Smartlock & Opener",
-            "pt": "Nuki Smartlock & Opener",
-            "nl": "Nuki Smartlock & Opener",
-            "fr": "Nuki Smartlock & Opener",
-            "it": "Nuki Smartlock & Opener",
-            "es": "Nuki Smartlock & Opener",
-            "pl": "Nuki Smartlock & Opener",
-            "zh-cn": "Nuki Smartlock & Opener"
-        },
-        "desc": {
-            "en": "Control and monitor your Nuki Smartlock and Nuki Opener with ioBroker",
-            "de": "Steuern und überwachen des Nuki Smartlocks und des Nuki Openers mit ioBroker",
-            "ru": "Контроль и мониторинг вашего Smartlock Нуки и Нуки открывалка с ioBroker",
-            "pt": "Controlar e monitorar seu Nuki Smartlock e Nuki Abridor com ioBroker",
-            "nl": "Controle en toezicht op uw Nuki Smartlock en Nuki Opener met ioBroker",
-            "fr": "Le contrôle et la surveillance de votre Nuki Smartlock et Nuki Ouvre-boîte avec ioBroker",
-            "it": "Controllo e monitoraggio del Nuki Smartlock e Nuki Lettore con ioBroker",
-            "es": "Control y monitoreo de su Nuki Smartlock y Nuki Abridor con ioBroker",
-            "pl": "Kontrola i monitorowanie twojego Smartlock Нуки i Нуки otwieracz do butelek z ioBroker",
-            "zh-cn": "控制和监视你的Nuki Smartlock和Nuki开与ioBroker"
-        },
-        "news": {
-            "2.5.0": {
-                "en": "Allow web-api-only operation\nMake compatible with Node.js 18.x\nAdd Sentry for crash reporting",
-                "de": "Nur-Web-API-Betrieb zulassen\nMit Node.js 18.x kompatibel machen\nFügen Sie Sentry für Absturzberichte hinzu",
-                "ru": "Разрешить работу только с веб-API\nСделать совместимым с Node.js 18.x\nДобавьте Sentry для отчетов о сбоях",
-                "pt": "Permitir operação somente de API da Web\nTornar compatível com Node.js 18.x\nAdicionar Sentinela para relatórios de falhas",
-                "nl": "Alleen web-api-bewerking toestaan\nCompatibel maken met Node.js 18.x\nSentry toevoegen voor crashrapportage",
-                "fr": "Autoriser le fonctionnement de l'API Web uniquement\nRendre compatible avec Node.js 18.x\nAjouter Sentry pour les rapports de plantage",
-                "it": "Consenti il funzionamento solo dell'api Web\nRendi compatibile con Node.js 18.x\nAggiungi Sentinella per la segnalazione degli arresti anomali",
-                "es": "Permitir la operación solo de API web\nHacer compatible con Node.js 18.x\nAgregar Sentry para informes de fallas",
-                "pl": "Zezwalaj tylko na działanie web-api\nZapewnij kompatybilność z Node.js 18.x\nDodaj Sentry do zgłaszania awarii",
-                "zh-cn": "允许仅 web-api 操作\n与 Node.js 18.x 兼容\n添加 Sentry 以进行崩溃报告"
-            },
-            "2.4.0": {
-                "en": "added support for Nuki Smart Door and Nuki Smart Lock 3.0 (Pro)",
-                "de": "Unterstützung für Nuki Smart Door und Nuki Smart Lock 3.0 (Pro) hinzugefügt",
-                "ru": "добавлена поддержка Nuki Smart Door и Nuki Smart Lock 3.0 (Pro)",
-                "pt": "adicionado suporte para Nuki Smart Door e Nuki Smart Lock 3.0 (Pro)",
-                "nl": "ondersteuning toegevoegd voor Nuki Smart Door en Nuki Smart Lock 3.0 (Pro)",
-                "fr": "ajout de la prise en charge de Nuki Smart Door et Nuki Smart Lock 3.0 (Pro)",
-                "it": "aggiunto il supporto per Nuki Smart Door e Nuki Smart Lock 3.0 (Pro)",
-                "es": "soporte agregado para Nuki Smart Door y Nuki Smart Lock 3.0 (Pro)",
-                "pl": "dodano wsparcie dla Nuki Smart Door i Nuki Smart Lock 3.0 (Pro)",
-                "zh-cn": "添加了对 Nuki Smart Door 和 Nuki Smart Lock 3.0 (Pro) 的支持"
-            },
-            "2.3.1": {
-                "en": "Optimize for js-controller 3.3 and warnings prevented",
-                "de": "Optimieren für js-controller 3.3 und Warnungen verhindert",
-                "ru": "Оптимизация для js-controller 3.3 и предотвращение предупреждений",
-                "pt": "Otimize para js-controller 3.3 e avisos evitados",
-                "nl": "Optimaliseren voor js-controller 3.3 en waarschuwingen voorkomen",
-                "fr": "Optimiser pour js-controller 3.3 et avertissements empêchés",
-                "it": "Ottimizza per js-controller 3.3 e avvisi evitati",
-                "es": "Optimizar para js-controller 3.3 y evitar advertencias",
-                "pl": "Optymalizacja pod kątem kontrolera js 3.3 i zapobieganie ostrzeżeniom",
-                "zh-cn": "针对 js-controller 3.3 进行优化并防止出现警告"
-            },
-            "2.3.0": {
-                "en": "support added for the door sensor of the Nuki Smartlock and the ring bell action of the Nuki Opener",
-                "de": "Unterstützung für den Türsensor des Nuki Smartlock und die Klingelfunktion des Nuki Opener hinzugefügt",
-                "ru": "добавлена поддержка датчика двери Nuki Smartlock и звонка в Nuki Opener",
-                "pt": "suporte adicionado para o sensor de porta do Nuki Smartlock e a ação da campainha do Nuki Opener",
-                "nl": "ondersteuning toegevoegd voor de deursensor van de Nuki Smartlock en de belactie van de Nuki Opener",
-                "fr": "support ajouté pour le capteur de porte du Nuki Smartlock et l'action de la sonnerie du Nuki Opener",
-                "it": "aggiunto il supporto per il sensore porta del Nuki Smartlock e l'azione del campanello del Nuki Opener",
-                "es": "soporte agregado para el sensor de puerta del Nuki Smartlock y la acción de timbre del Nuki Opener",
-                "pl": "dodano obsługę czujnika drzwi Nuki Smartlock i działania dzwonka Nuki Opener",
-                "zh-cn": "添加了对 Nuki Smartlock 的门传感器和 Nuki Opener 的响铃动作的支持"
-            },
-            "2.0.2": {
-                "en": "- reintroduced support for hashed token on hardware bridges (see https://developer.nuki.io/page/nuki-bridge-http-api-190/4#heading--token)\n- added support for newly introduced nightmode (see https://nuki.io/de/blog/nuki-news-de/nuki-update-2019-der-winter-naht-sei-vorbereitet/)\n- fixed incorrect behavior when bridges are defined insufficiently (no name, ip or token provided)",
-                "de": "- wieder support für die Hash-token auf hardware-Brücken (siehe https://developer.nuki.io/page/nuki-bridge-http-api-190/4#heading--token)\n- Unterstützung für die neu eingeführten Nachtfunktion (siehe https://nuki.io/de/blog/nuki-news-de/nuki-update-2019-der-winter-naht-sei-vorbereitet/)\n- fixed falsche Verhalten beim Brücken definiert sind unzureichend (keine Namen, ip-oder token zur Verfügung gestellt)",
-                "ru": "- восстановлена поддержка для хэшированных маркер на оборудовании мостов (см. https://developer.nuki.io/page/nuki-bridge-http-api-190/4#heading--token)\n- добавлена поддержка для вновь вводимых ночной режим (см. https://nuki.io/de/blog/nuki-news-de/nuki-update-2019-der-winter-naht-sei-vorbereitet/)\n- исправлено некорректное поведение, когда мосты определены недостаточно (нет имени, IP или маркер предусмотрено)",
-                "pt": "- reintrodução de apoio hash token de hardware pontes (ver https://developer.nuki.io/page/nuki-bridge-http-api-190/4#heading--token)\n- adicionado suporte para o recém-introduzido nightmode (ver https://nuki.io/de/blog/nuki-news-de/nuki-update-2019-der-winter-naht-sei-vorbereitet/)\n- corrigido o comportamento incorrecto quando as pontes são definidos de forma insuficiente (sem nome, ip ou token fornecido)",
-                "nl": "- weer ondersteuning voor gecodeerde token op hardware bruggen (zie https://developer.nuki.io/page/nuki-bridge-http-api-190/4#heading--token)\n- toegevoegde ondersteuning voor de nieuw geïntroduceerde nachtmodus (zie https://nuki.io/de/blog/nuki-news-de/nuki-update-2019-der-winter-naht-sei-vorbereitet/)\n- incorrect gedrag bij bruggen worden gedefinieerd onvoldoende (geen naam, ip-of token verstrekt)",
-                "fr": "- a réintroduit le soutien haché jeton sur le matériel ponts (voir https://developer.nuki.io/page/nuki-bridge-http-api-190/4#heading--token)\n- ajout du support pour le nouvellement introduit nightmode (voir https://nuki.io/de/blog/nuki-news-de/nuki-update-2019-der-winter-naht-sei-vorbereitet/)\n- correction d'un comportement incorrect lorsque les ponts sont définis de façon insuffisante (pas de nom, l'adresse ip ou le jeton fourni)",
-                "it": "- reintrodotto il supporto per hash token hardware ponti (vedi https://developer.nuki.io/page/nuki-bridge-http-api-190/4#heading--token)\n- aggiunto il supporto per la nuova introduzione nightmode (vedere https://nuki.io/de/blog/nuki-news-de/nuki-update-2019-der-winter-naht-sei-vorbereitet/)\n- un comportamento corretto quando i ponti sono definiti in modo insufficiente (nessun nome, l'indirizzo ip o token fornito)",
-                "es": " reintroducidas apoyo para los hash token de hardware puentes (ver https://developer.nuki.io/page/nuki-bridge-http-api-190/4#heading--token)\n- añadido soporte para los recién introducidos modo noche (ver https://nuki.io/de/blog/nuki-news-de/nuki-update-2019-der-winter-naht-sei-vorbereitet/)\n- corregido un comportamiento incorrecto cuando los puentes se definen de manera insuficiente (sin nombre, dirección ip o el token de siempre)",
-                "pl": "- przywrócony wsparcie dla mieszanych znacznik na sprzęcie mostów (zob. https://developer.nuki.io/page/nuki-bridge-http-api-190/4#heading--token)\n- dodano wsparcie dla nowo wprowadzanych tryb nocny (zob. https://nuki.io/de/blog/nuki-news-de/nuki-update-2019-der-winter-naht-sei-vorbereitet/)\n- poprawiono nieprawidłowe zachowanie, kiedy mosty są zdefiniowane za mało (nie ma nazwy, adresów IP lub token przewidziane)",
-                "zh-cn": "-重新支持哈希令牌的硬件上桥梁(见https://developer.nuki.io/page/nuki-bridge-http-api-190/4#heading--token)\n-增加支持新引进的夜间模式(见https://nuki.io/de/blog/nuki-news-de/nuki-update-2019-der-winter-naht-sei-vorbereitet/)\n-固定不正确的行为时桥梁的定义不足(没有姓名，知识产权或令牌供了)"
-            },
-            "2.0.1": {
-                "en": "- fixed missing 'bridge_name'",
-                "de": "- Feste fehlende 'bridge_name'",
-                "ru": "- исправлено отсутствие 'bridge_name'",
-                "pt": "- faltando fixo 'bridge_name'",
-                "nl": "- vaste ontbrekende 'bridge_name'",
-                "fr": "- correction d'disparus \"bridge_name'",
-                "it": "- fisso mancante 'bridge_name'",
-                "es": "- falta fijos 'bridge_name'",
-                "pl": "- naprawiono brak 'bridge_name'",
-                "zh-cn": "-固定失踪'bridge_name'"
-            },
-            "2.0.0": {
-                "en": "NEW MAJOR VERSION\n- Support for Nuki Smartlock and Nuki Opener\n- Support for both Nuki Bridge API and Nuki Web API\n- Fallback to Nuki Web API in case applied actions on Nuki Bridge API fail, e.g. due to bridge error 503\n- Retry in case applied actions on Nuki Bridge API fail (when Nuki Web API is not used)\n- Option to regularly synchronise instead of using Bridge API callback (which may be delayed due to Hardware Bridge)\n- Refreshing all states of Nuki Web API when callback is received via Nuki Bridge API\n- Retrieve authorised users for Nuki Smartlock and Nuki Opener\n- Retrieve the configuration for Nuki Smartlock and Nuki Opener\n- Retrieve setup Nuki Notifications\n- Web Interface that shows the recent events from your Nuki Smartlock and Nuki Opener",
-                "de": "NEUE MAJOR-VERSION\n- Unterstützung für Nuki Smartlock-und Nuki Opener\n- Unterstützung für beide Nuki Bridge API und Nuki Web-API\n- Fallback auf Nuki Web-API in Fall angewendet Aktionen auf Nuki Bridge-API fehl, z.B. wegen der Brücke-Fehler 503\n- Wiederholen in Fall angewendet Aktionen auf Nuki Bridge API fehlschlagen (wenn Nuki Web-API wird nicht verwendet)\n- Option, um regelmäßig zu synchronisieren, anstatt mit Bridge-API callback (kann verzögert werden durch Hardware-Brücke)\n- Aktualisieren aller Staaten von Nuki Web-API bei Rückruf erhielt über Nuki Bridge API\n- Abrufen von autorisierten Benutzern für Nuki Smartlock-und Nuki Opener\n- Rufen Sie die Konfiguration für Nuki Smartlock-und Nuki Opener\n- Abrufen von setup-Nuki-Benachrichtigungen\n- Web-Interface zeigt, dass die jüngsten Ereignisse von Ihren Nuki Smartlock-und Nuki Opener",
-                "ru": "НОВАЯ ОСНОВНАЯ ВЕРСИЯ\n- Поддержка Smartlock Нуки и Нуки открывалка\n- Поддержка как Нуки Нуки мост API и веб-API\n- Переход на Нуки веб-API в случае применения действий на Нуки API моста выполнена, например, из-за моста ошибка 503\n- Повторить в случае применения действий на Нуки мост API не (когда Нуки веб-API не используется)\n- Возможность регулярно синхронизировать вместо того, чтобы использовать мост API обратного вызова (который может быть отложено из-за аппаратных мостов)\n- Обновление всех штатах Нуки веб-API, когда обратный вызов поступает через Нуки мост API\n- Получение уполномоченными пользователями для Smartlock Нуки и Нуки открывалка\n- Получить конфигурацию для Smartlock Нуки и Нуки открывалка\n- Настройка получения уведомлений Нуки \n- Веб-интерфейс, который показывает последние события из своего Smartlock Нуки и Нуки открывалка",
-                "pt": "NOVA VERSÃO PRINCIPAL\n- Suporte para Nuki Smartlock e Nuki Abridor\n- Suporte para Nuki Ponte API e Nuki Web API\n- Fallback para Nuki Web API no caso aplicado ações em Nuki Ponte API falhar, e.g. devido à ponte de erro 503\n- Repetição em caso aplicado ações em Nuki Ponte API falha (quando Nuki Web API não é utilizado)\n- Opção para sincronizar regularmente em vez de usar a Ponte de retorno da API (que pode ser retardada devido à Ponte de Hardware)\n- Refrescante todos os estados do Nuki Web API, quando de retorno de chamada é recebida via Nuki Ponte API\n- Recuperar os utilizadores autorizados para Nuki Smartlock e Nuki Abridor\n- Recuperar a configuração para Nuki Smartlock e Nuki Abridor\n- Recuperar a instalação Nuki Notificações\n- Interface Web, que mostra os últimos acontecimentos de sua Nuki Smartlock e Nuki Abridor",
-                "nl": "NIEUWE GROTE VERSIE\n- Ondersteuning voor Nuki Smartlock en Nuki Opener\n- Ondersteuning voor zowel Nuki Brug API en Nuki Web API\n- Fallback Nuki Web API in geval toegepast acties op Nuki Brug API mislukken, bijvoorbeeld als de brug-fout 503\n- Opnieuw in geval toegepast acties op Nuki Brug API mislukken (als Nuki Web-API wordt niet gebruikt)\n- Optie om regelmatig te synchroniseren in plaats van het gebruik van de Brug API callback (die kan worden vertraagd als gevolg van een Hardware Brug)\n- Het vernieuwen van alle lidstaten van Nuki Web-API als callback wordt ontvangen via Nuki Brug API\n- Ophalen geautoriseerde gebruikers voor Nuki Smartlock en Nuki Opener\n- Het ophalen van de configuratie voor Nuki Smartlock en Nuki Opener\n- Ophalen setup Nuki Meldingen\n- Web-Interface die toont de recente gebeurtenissen uit uw Nuki Smartlock en Nuki Opener",
-                "fr": "NOUVELLE VERSION MAJEURE\n- Soutien de Nuki Smartlock et Nuki Ouvreur\n- Support pour les deux Nuki Pont de l'API et Nuki Web API\n- Secours à Nuki API Web dans le cas où les actions appliquées sur Nuki Pont de l'API de l'échec, dû par exemple à pont d'erreur 503\n- Nouvelle tentative dans le cas où les actions appliquées sur Nuki Pont de l'API de l'échec (quand Nuki Web de l'API n'est pas utilisé)\n- Option pour synchroniser régulièrement au lieu d'utiliser le Pont de l'API callback (qui peut être retardé en raison de Matériel de Pont)\n- Actualisation de tous les états de Nuki Web API lorsque le rappel est reçu par Nuki Pont de l'API\n- Récupérer les utilisateurs autorisés pour Nuki Smartlock et Nuki Ouvreur\n- Récupérer la configuration de Nuki Smartlock et Nuki Ouvreur\n- Récupérer le programme d'installation Nuki Notifications\n- Interface Web qui affiche les événements récents à partir de votre Nuki Smartlock et Nuki Ouvreur",
-                "it": "NUOVA VERSIONE\n- Supporto per Nuki Smartlock e Nuki Lettore\n- Supporto per Nuki Ponte API e Nuki Web API\n- Fallback per Nuki Web API in caso di azioni applicate su Nuki Ponte API non riescono, ad esempio a causa di ponte di errore 503\n- Riprova in caso di azioni applicate su Nuki Ponte API non riescono (quando Nuki Web API non è utilizzato)\n- Opzione per sincronizzare regolarmente invece di usare il Ponte di callback dell'API (che può essere ritardata a causa di Hardware Ponte)\n- Aggiornamento di tutti gli stati di Nuki Web API di callback viene ricevuto via Nuki Ponte API\n- Recuperare gli utenti autorizzati per Nuki Smartlock e Nuki Lettore\n- Recuperare la configurazione per Nuki Smartlock e Nuki Lettore\n- Recuperare l'installazione di Nuki Notifiche\n- Interfaccia Web che mostra le recenti eventi Nuki Smartlock e Nuki Lettore",
-                "es": "NUEVA VERSIÓN PRINCIPAL\n- Soporte para Nuki Smartlock y Abridor de Nuki\n- Soporte para ambos Nuki Puente de la API y API Web de Nuki\n- Fallback a Nuki Web API en el caso de las acciones aplicadas en Nuki Puente de la API de fallar, por ejemplo, debido al puente de error 503\n- Reintento en caso de que las acciones aplicadas en Nuki Puente de la API de falla (cuando Nuki Web de la API no se utiliza)\n- Opción regularmente sincronizar en lugar de utilizar el Puente de la API de devolución de llamada (que puede ser retrasado debido a Hardware Puente)\n- Refrescante todos los estados de Nuki Web de la API de devolución de llamada cuando se recibe a través de Nuki Puente de la API\n- Recuperar los usuarios autorizados para Nuki Smartlock y Abridor de Nuki\n- Recuperar la configuración de Nuki Smartlock y Abridor de Nuki\n- Recuperar la configuración de Notificaciones de Nuki\n- Interfaz Web que muestra los últimos acontecimientos de tu Nuki Smartlock y Abridor de Nuki",
-                "pl": "NOWA WERSJA GŁÓWNA\n- Wsparcie Smartlock Нуки i Нуки otwieracz\n- Wsparcie zarówno Нуки Нуки przednia API i web API\n- Przejście na Нуки web API w przypadku stosowania działań na Нуки API mostu wykonana, na przykład, z powodu mostu błąd 503\n- Powtórzyć w przypadku stosowania działań na Нуки przednia API nie (gdy Нуки web API nie jest używany)\n- Możliwość regularnie synchronizować zamiast używać przednia API oddzwonienia (który może być opóźnione z powodu sprzętu mostów)\n- Aktualizacja wszystkich stanach Нуки web API, kiedy oddzwanianie przepływa przez Нуки przednia API\n- Otrzymanie przez uprawnionych użytkowników do Smartlock Нуки i Нуки otwieracz\n- Zobacz konfigurację dla Smartlock Нуки i Нуки otwieracz\n- Konfiguracja powiadomień Нуки \n- Interfejs www, który pokazuje najnowsze wydarzenia ze swojego Smartlock Нуки i Нуки otwieracz",
-                "zh-cn": "新的主版本\n-支持Nuki Smartlock和Nuki开\n-支持Nuki桥API和Nuki网API\n-退回到Nuki网API情况下施加的行动Nuki桥API失败，例如由于桥的错误503\n-再试情况下施加的行动Nuki桥API失败(当Nuki网API是不使用)\n-选择定期同步，而不是使用桥API callback(其中可能会被延迟，由于硬件的桥)\n-爽的所有国家的Nuki网API当回收通过Nuki桥API\n-检索的授权用户Nuki Smartlock和Nuki开\n-检索的配置Nuki Smartlock和Nuki开\n-检索设置Nuki通知\n-Web界面，显示了最近的事件从你的Nuki Smartlock和Nuki开"
-            }
-        },
-        "authors": [
-            "Zefau <zefau@mailbox.org>"
-        ],
-        "license": "MIT",
-        "platform": "Javascript/Node.js",
-        "mode": "daemon",
-        "icon": "nuki-extended.png",
-        "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.nuki-extended/master/admin/nuki-extended.png",
-        "keywords": [
-            "nuki",
-            "smart",
-            "lock",
-            "opener"
-        ],
-        "readme": "https://github.com/iobroker-community-adapters/ioBroker.nuki-extended/blob/master/README.md",
-        "loglevel": "info",
-        "type": "hardware",
-        "materialize": true,
-        "compact": true,
-        "enabled": true,
-        "dependencies": [
-            {
-                "web": ">=1.7.1"
-            },
-            {
-                "js-controller": ">=2.0.0"
-            }
-        ],
-        "localLink": "%web_protocol%://%ip%:%web_port%/nuki-extended/index.html",
-        "messagebox": true,
-        "subscribe": "messagebox",
-        "connectionType": "local",
-        "dataSource": "push",
-        "tier": 2,
-        "restartAdapters": [
-            "web"
-        ],
-        "plugins": {
-            "sentry": {
-                "dsn": "https://a6ad1250ae2d4f95bade8638024aa984@sentry.iobroker.net/198"
-            }
-        }
+  "common": {
+    "name": "nuki-extended",
+    "version": "2.6.0",
+    "title": "Nuki Smartlock & Opener",
+    "titleLang": {
+      "en": "Nuki Smartlock & Opener",
+      "de": "Nuki Smartlock & Opener",
+      "ru": "Nuki Smartlock & Opener",
+      "pt": "Nuki Smartlock & Opener",
+      "nl": "Nuki Smartlock & Opener",
+      "fr": "Nuki Smartlock & Opener",
+      "it": "Nuki Smartlock & Opener",
+      "es": "Nuki Smartlock & Opener",
+      "pl": "Nuki Smartlock & Opener",
+      "zh-cn": "Nuki Smartlock & Opener"
     },
-    "native": {
-        "refreshBridgeApiType": "callback",
-        "syncConfig": true,
-        "syncUsers": true,
-        "additionalWebApiCall": true,
-        "additionalWebApiTimeout": 3
+    "desc": {
+      "en": "Control and monitor your Nuki Smartlock and Nuki Opener with ioBroker",
+      "de": "Steuern und überwachen des Nuki Smartlocks und des Nuki Openers mit ioBroker",
+      "ru": "Контроль и мониторинг вашего Smartlock Нуки и Нуки открывалка с ioBroker",
+      "pt": "Controlar e monitorar seu Nuki Smartlock e Nuki Abridor com ioBroker",
+      "nl": "Controle en toezicht op uw Nuki Smartlock en Nuki Opener met ioBroker",
+      "fr": "Le contrôle et la surveillance de votre Nuki Smartlock et Nuki Ouvre-boîte avec ioBroker",
+      "it": "Controllo e monitoraggio del Nuki Smartlock e Nuki Lettore con ioBroker",
+      "es": "Control y monitoreo de su Nuki Smartlock y Nuki Abridor con ioBroker",
+      "pl": "Kontrola i monitorowanie twojego Smartlock Нуки i Нуки otwieracz do butelek z ioBroker",
+      "zh-cn": "控制和监视你的Nuki Smartlock和Nuki开与ioBroker"
     },
-    "objects": []
+    "news": {
+      "2.6.0": {
+        "en": "Make additional refresh after callback configurable\nOptimizations and fixes",
+        "de": "Zusätzliche Aktualisierung nach Rückruf konfigurierbar machen\nOptimierungen und Korrekturen",
+        "ru": "Сделать дополнительное обновление после обратного вызова настраиваемым\nОптимизации и исправления",
+        "pt": "Tornar a atualização adicional após o retorno de chamada configurável\nOtimizações e correções",
+        "nl": "Extra verversen na terugbellen configureerbaar\nOptimalisaties en reparaties",
+        "fr": "Rendre l'actualisation supplémentaire après le rappel configurable\nOptimisations et correctifs",
+        "it": "Rendi configurabile un aggiornamento aggiuntivo dopo la richiamata\nOttimizzazioni e correzioni",
+        "es": "Hacer una actualización adicional después de la devolución de llamada configurable\nOptimizaciones y arreglos",
+        "pl": "Dokonaj dodatkowego odświeżenia po skonfigurowaniu wywołania zwrotnego\nOptymalizacje i poprawki",
+        "zh-cn": "可配置回调后进行额外刷新\n优化和修复"
+      },
+      "2.5.0": {
+        "en": "Allow web-api-only operation\nMake compatible with Node.js 18.x\nAdd Sentry for crash reporting",
+        "de": "Nur-Web-API-Betrieb zulassen\nMit Node.js 18.x kompatibel machen\nFügen Sie Sentry für Absturzberichte hinzu",
+        "ru": "Разрешить работу только с веб-API\nСделать совместимым с Node.js 18.x\nДобавьте Sentry для отчетов о сбоях",
+        "pt": "Permitir operação somente de API da Web\nTornar compatível com Node.js 18.x\nAdicionar Sentinela para relatórios de falhas",
+        "nl": "Alleen web-api-bewerking toestaan\nCompatibel maken met Node.js 18.x\nSentry toevoegen voor crashrapportage",
+        "fr": "Autoriser le fonctionnement de l'API Web uniquement\nRendre compatible avec Node.js 18.x\nAjouter Sentry pour les rapports de plantage",
+        "it": "Consenti il funzionamento solo dell'api Web\nRendi compatibile con Node.js 18.x\nAggiungi Sentinella per la segnalazione degli arresti anomali",
+        "es": "Permitir la operación solo de API web\nHacer compatible con Node.js 18.x\nAgregar Sentry para informes de fallas",
+        "pl": "Zezwalaj tylko na działanie web-api\nZapewnij kompatybilność z Node.js 18.x\nDodaj Sentry do zgłaszania awarii",
+        "zh-cn": "允许仅 web-api 操作\n与 Node.js 18.x 兼容\n添加 Sentry 以进行崩溃报告"
+      },
+      "2.4.0": {
+        "en": "added support for Nuki Smart Door and Nuki Smart Lock 3.0 (Pro)",
+        "de": "Unterstützung für Nuki Smart Door und Nuki Smart Lock 3.0 (Pro) hinzugefügt",
+        "ru": "добавлена поддержка Nuki Smart Door и Nuki Smart Lock 3.0 (Pro)",
+        "pt": "adicionado suporte para Nuki Smart Door e Nuki Smart Lock 3.0 (Pro)",
+        "nl": "ondersteuning toegevoegd voor Nuki Smart Door en Nuki Smart Lock 3.0 (Pro)",
+        "fr": "ajout de la prise en charge de Nuki Smart Door et Nuki Smart Lock 3.0 (Pro)",
+        "it": "aggiunto il supporto per Nuki Smart Door e Nuki Smart Lock 3.0 (Pro)",
+        "es": "soporte agregado para Nuki Smart Door y Nuki Smart Lock 3.0 (Pro)",
+        "pl": "dodano wsparcie dla Nuki Smart Door i Nuki Smart Lock 3.0 (Pro)",
+        "zh-cn": "添加了对 Nuki Smart Door 和 Nuki Smart Lock 3.0 (Pro) 的支持"
+      },
+      "2.3.1": {
+        "en": "Optimize for js-controller 3.3 and warnings prevented",
+        "de": "Optimieren für js-controller 3.3 und Warnungen verhindert",
+        "ru": "Оптимизация для js-controller 3.3 и предотвращение предупреждений",
+        "pt": "Otimize para js-controller 3.3 e avisos evitados",
+        "nl": "Optimaliseren voor js-controller 3.3 en waarschuwingen voorkomen",
+        "fr": "Optimiser pour js-controller 3.3 et avertissements empêchés",
+        "it": "Ottimizza per js-controller 3.3 e avvisi evitati",
+        "es": "Optimizar para js-controller 3.3 y evitar advertencias",
+        "pl": "Optymalizacja pod kątem kontrolera js 3.3 i zapobieganie ostrzeżeniom",
+        "zh-cn": "针对 js-controller 3.3 进行优化并防止出现警告"
+      },
+      "2.3.0": {
+        "en": "support added for the door sensor of the Nuki Smartlock and the ring bell action of the Nuki Opener",
+        "de": "Unterstützung für den Türsensor des Nuki Smartlock und die Klingelfunktion des Nuki Opener hinzugefügt",
+        "ru": "добавлена поддержка датчика двери Nuki Smartlock и звонка в Nuki Opener",
+        "pt": "suporte adicionado para o sensor de porta do Nuki Smartlock e a ação da campainha do Nuki Opener",
+        "nl": "ondersteuning toegevoegd voor de deursensor van de Nuki Smartlock en de belactie van de Nuki Opener",
+        "fr": "support ajouté pour le capteur de porte du Nuki Smartlock et l'action de la sonnerie du Nuki Opener",
+        "it": "aggiunto il supporto per il sensore porta del Nuki Smartlock e l'azione del campanello del Nuki Opener",
+        "es": "soporte agregado para el sensor de puerta del Nuki Smartlock y la acción de timbre del Nuki Opener",
+        "pl": "dodano obsługę czujnika drzwi Nuki Smartlock i działania dzwonka Nuki Opener",
+        "zh-cn": "添加了对 Nuki Smartlock 的门传感器和 Nuki Opener 的响铃动作的支持"
+      },
+      "2.0.2": {
+        "en": "- reintroduced support for hashed token on hardware bridges (see https://developer.nuki.io/page/nuki-bridge-http-api-190/4#heading--token)\n- added support for newly introduced nightmode (see https://nuki.io/de/blog/nuki-news-de/nuki-update-2019-der-winter-naht-sei-vorbereitet/)\n- fixed incorrect behavior when bridges are defined insufficiently (no name, ip or token provided)",
+        "de": "- wieder support für die Hash-token auf hardware-Brücken (siehe https://developer.nuki.io/page/nuki-bridge-http-api-190/4#heading--token)\n- Unterstützung für die neu eingeführten Nachtfunktion (siehe https://nuki.io/de/blog/nuki-news-de/nuki-update-2019-der-winter-naht-sei-vorbereitet/)\n- fixed falsche Verhalten beim Brücken definiert sind unzureichend (keine Namen, ip-oder token zur Verfügung gestellt)",
+        "ru": "- восстановлена поддержка для хэшированных маркер на оборудовании мостов (см. https://developer.nuki.io/page/nuki-bridge-http-api-190/4#heading--token)\n- добавлена поддержка для вновь вводимых ночной режим (см. https://nuki.io/de/blog/nuki-news-de/nuki-update-2019-der-winter-naht-sei-vorbereitet/)\n- исправлено некорректное поведение, когда мосты определены недостаточно (нет имени, IP или маркер предусмотрено)",
+        "pt": "- reintrodução de apoio hash token de hardware pontes (ver https://developer.nuki.io/page/nuki-bridge-http-api-190/4#heading--token)\n- adicionado suporte para o recém-introduzido nightmode (ver https://nuki.io/de/blog/nuki-news-de/nuki-update-2019-der-winter-naht-sei-vorbereitet/)\n- corrigido o comportamento incorrecto quando as pontes são definidos de forma insuficiente (sem nome, ip ou token fornecido)",
+        "nl": "- weer ondersteuning voor gecodeerde token op hardware bruggen (zie https://developer.nuki.io/page/nuki-bridge-http-api-190/4#heading--token)\n- toegevoegde ondersteuning voor de nieuw geïntroduceerde nachtmodus (zie https://nuki.io/de/blog/nuki-news-de/nuki-update-2019-der-winter-naht-sei-vorbereitet/)\n- incorrect gedrag bij bruggen worden gedefinieerd onvoldoende (geen naam, ip-of token verstrekt)",
+        "fr": "- a réintroduit le soutien haché jeton sur le matériel ponts (voir https://developer.nuki.io/page/nuki-bridge-http-api-190/4#heading--token)\n- ajout du support pour le nouvellement introduit nightmode (voir https://nuki.io/de/blog/nuki-news-de/nuki-update-2019-der-winter-naht-sei-vorbereitet/)\n- correction d'un comportement incorrect lorsque les ponts sont définis de façon insuffisante (pas de nom, l'adresse ip ou le jeton fourni)",
+        "it": "- reintrodotto il supporto per hash token hardware ponti (vedi https://developer.nuki.io/page/nuki-bridge-http-api-190/4#heading--token)\n- aggiunto il supporto per la nuova introduzione nightmode (vedere https://nuki.io/de/blog/nuki-news-de/nuki-update-2019-der-winter-naht-sei-vorbereitet/)\n- un comportamento corretto quando i ponti sono definiti in modo insufficiente (nessun nome, l'indirizzo ip o token fornito)",
+        "es": " reintroducidas apoyo para los hash token de hardware puentes (ver https://developer.nuki.io/page/nuki-bridge-http-api-190/4#heading--token)\n- añadido soporte para los recién introducidos modo noche (ver https://nuki.io/de/blog/nuki-news-de/nuki-update-2019-der-winter-naht-sei-vorbereitet/)\n- corregido un comportamiento incorrecto cuando los puentes se definen de manera insuficiente (sin nombre, dirección ip o el token de siempre)",
+        "pl": "- przywrócony wsparcie dla mieszanych znacznik na sprzęcie mostów (zob. https://developer.nuki.io/page/nuki-bridge-http-api-190/4#heading--token)\n- dodano wsparcie dla nowo wprowadzanych tryb nocny (zob. https://nuki.io/de/blog/nuki-news-de/nuki-update-2019-der-winter-naht-sei-vorbereitet/)\n- poprawiono nieprawidłowe zachowanie, kiedy mosty są zdefiniowane za mało (nie ma nazwy, adresów IP lub token przewidziane)",
+        "zh-cn": "-重新支持哈希令牌的硬件上桥梁(见https://developer.nuki.io/page/nuki-bridge-http-api-190/4#heading--token)\n-增加支持新引进的夜间模式(见https://nuki.io/de/blog/nuki-news-de/nuki-update-2019-der-winter-naht-sei-vorbereitet/)\n-固定不正确的行为时桥梁的定义不足(没有姓名，知识产权或令牌供了)"
+      },
+      "2.0.1": {
+        "en": "- fixed missing 'bridge_name'",
+        "de": "- Feste fehlende 'bridge_name'",
+        "ru": "- исправлено отсутствие 'bridge_name'",
+        "pt": "- faltando fixo 'bridge_name'",
+        "nl": "- vaste ontbrekende 'bridge_name'",
+        "fr": "- correction d'disparus \"bridge_name'",
+        "it": "- fisso mancante 'bridge_name'",
+        "es": "- falta fijos 'bridge_name'",
+        "pl": "- naprawiono brak 'bridge_name'",
+        "zh-cn": "-固定失踪'bridge_name'"
+      }
+    },
+    "authors": [
+      "Zefau <zefau@mailbox.org>"
+    ],
+    "license": "MIT",
+    "platform": "Javascript/Node.js",
+    "mode": "daemon",
+    "icon": "nuki-extended.png",
+    "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.nuki-extended/master/admin/nuki-extended.png",
+    "keywords": [
+      "nuki",
+      "smart",
+      "lock",
+      "opener"
+    ],
+    "readme": "https://github.com/iobroker-community-adapters/ioBroker.nuki-extended/blob/master/README.md",
+    "loglevel": "info",
+    "type": "hardware",
+    "materialize": true,
+    "compact": true,
+    "enabled": true,
+    "dependencies": [
+      {
+        "web": ">=1.7.1"
+      },
+      {
+        "js-controller": ">=2.0.0"
+      }
+    ],
+    "localLink": "%web_protocol%://%ip%:%web_port%/nuki-extended/index.html",
+    "messagebox": true,
+    "subscribe": "messagebox",
+    "connectionType": "local",
+    "dataSource": "push",
+    "tier": 2,
+    "restartAdapters": [
+      "web"
+    ],
+    "plugins": {
+      "sentry": {
+        "dsn": "https://a6ad1250ae2d4f95bade8638024aa984@sentry.iobroker.net/198"
+      }
+    }
+  },
+  "native": {
+    "refreshBridgeApiType": "callback",
+    "syncConfig": true,
+    "syncUsers": true,
+    "additionalWebApiCall": true,
+    "additionalWebApiTimeout": 3
+  },
+  "objects": []
 }

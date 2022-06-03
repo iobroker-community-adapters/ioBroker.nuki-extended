@@ -504,7 +504,7 @@ on({id: 'nuki-extended.0.openers.opener.state.ringStateUpdate', change: "any", a
 Please see [release page](https://github.com/Zefau/ioBroker.nuki-extended/releases) for changelog and detailed information.
 
 <!-- ### __WORK IN PROGRESS__ -->
-### __WORK IN PROGRESS__
+### 2.6.0 (2022-06-03)
 * (Matze2010) Make additional refresh after callback configurable
 * (theimo1221) Optimizations and fixes
 
