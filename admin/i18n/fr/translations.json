@@ -1,5 +1,7 @@
 {
     "add_bridge": "Ajouter un pont",
+    "additionalWebApiCall": "Effectuez une actualisation supplémentaire via WebAPI après chaque rappel",
+    "additionalWebApiTimeout": "Délai de rafraîchissement (en secondes)",
     "api_token": "Jeton API",
     "bridge": "Paramètres de connexion du pont Nuki",
     "bridge_callback": "Utiliser le rappel",

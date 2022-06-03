@@ -1,5 +1,7 @@
 {
     "add_bridge": "Add Bridge",
+    "additionalWebApiCall": "Do additional refresh via WebAPI after each callback",
+    "additionalWebApiTimeout": "Refresh delay (in seconds)",
     "api_token": "API Token",
     "bridge": "Connection settings of the Nuki Bridge",
     "bridge_callback": "Use Callback",

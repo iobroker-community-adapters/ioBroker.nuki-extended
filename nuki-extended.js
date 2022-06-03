@@ -67,6 +67,8 @@ function startAdapter(options) {
 			adapter.log.warn('The callback port (' + adapter.config.callbackPort + ') is incorrect. Provide a port between 10.000 and 65.535! Using port 51989 now.');
 			adapter.config.callbackPort = 51989;
 		}
+		adapter.config.additionalWebApiTimeout = parseInt(adapter.config.additionalWebApiTimeout, 10) || 3;
+		adapter.config.additionalWebApiCall = adapter.config.additionalWebApiCall !== undefined ? adapter.config.additionalWebApiCall : true;
 
 		// retrieve all values from states to avoid message "Unsubscribe from all states, except system's, because over 3 seconds the number of events is over 200 (in last second 0)"
 		adapter.getStates(adapterName + '.' + adapter.instance + '.*', (err, states) => {
@@ -392,9 +394,12 @@ function initNukiAPIs() {
 					res.end();
 
 					// update Web API as well
-					setTimeout(() => {
-						nukiWebApi.getWebApi()
-					}, 3 * 1000);
+					// update Web API as well if enabled
+					if (adapter.config.additionalWebApiCall) {
+						setTimeout(() => {
+							nukiWebApi.getWebApi()
+						}, adapter.config.additionalWebApiTimeout * 1000);
+					}
 				} else {
 					adapter.log.warn('main(): ' + e.message);
 					res.sendStatus(500);

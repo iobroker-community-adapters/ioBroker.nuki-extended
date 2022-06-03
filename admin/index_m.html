@@ -10,28 +10,28 @@
     <script type="text/javascript" src="../../lib/js/materialize.js"></script>
     <script type="text/javascript" src="../../js/adapter-settings.js"></script>
     <script type="text/javascript" src="words.js"></script>
-	
+
     <script type="text/javascript">
 	<!--
 	var bridgeList = [];
-	
+
 	// load
 	function load(settings, onChange)
 	{
 		bridges = settings.bridges || [];
 		values2table('bridges', bridges, onChange);
 		setBridgeIds(bridges);
-		
+
 		_load(settings, onChange);
 	}
-	
+
 	// save
 	function save(callback)
 	{
 		var obj = {bridges: table2values('bridges')};
 		_save(callback, obj);
 	}
-	
+
 	// get bridge ids
 	function getBridgeIds()
 	{
@@ -41,10 +41,10 @@
 		{
 			bridgeList.push(parseInt(bridge.bridge_id));
 		});
-		
+
 		return bridgeList;
 	}
-	
+
 	// set bridge ids
 	function setBridgeIds(bridges)
 	{
@@ -54,25 +54,25 @@
 			setBridgeId(i, bridge.bridge_id);
 		});
 	}
-	
+
 	// set bridge id
 	function setBridgeId(index, bridge_id)
 	{
 		var entry = $('#bridges [data-index="' + index + '"][data-name="bridge_id"]');
 		var element = $('#bridge_' + index + '-' + bridge_id);
-		
+
 		if (element.length == 0)
 			entry.after('<input class="values-input" style="width: 100%" type="text" value="' + bridge_id + '" id="bridge_' + index + '-' + bridge_id + '" disabled>');
 		else
 			element.text(bridge_id);
 	}
-	
+
 	// page loaded
 	var timer;
 	$(document).ready(function()
 	{
         $('.modal').modal(); // initialize all modals
-		
+
 		// set bridge id again when add button is pressed
 		$('body').on('click', '.table-button-add, .values-buttons', function()
 		{
@@ -81,33 +81,33 @@
 				setBridgeIds(table2values('bridges'));
 			}, 150);
 		});
-		
+
 		// discover bridges
 		$('.button-discover').on('click', function()
 		{
 			$('#modal').modal('open');
 			$('#log').html('');
 			_log(translateWord('message_action-connecting'));
-			
+
 			// timeout
 			var timeout = setTimeout(function() {_log(translateWord('message_error-noconnection'), 'error');}, 7000);
-			
+
 			// send request
 			sendTo(null, 'discover', null, function(res)
 			{
 				// refresh bridge list
 				bridgeList = getBridgeIds();
-				
+
 				// get bridges
 				_log(translateWord('message_info-connected'));
 				_log(translateWord('message_action-getbridges'));
 				clearTimeout(timeout);
-				
+
 				if (res.result === true)
 				{
 					_log(translateWord('message_success-gotbridges').replace(/%count%/gi, res.bridges.length), 'success');
 					console.log(JSON.stringify(res.bridges));
-					
+
 					var bridges = table2values('bridges');
 					res.bridges.forEach(function(bridge)
 					{
@@ -117,11 +117,11 @@
 							_log(translateWord('message_info-duplbridge').replace(/%id%/gi, bridge.bridgeId), 'info');
 							return;
 						}
-						
+
 						// error with no IP is given (applies for software bridges)
 						if (bridge.ip === undefined)
 							_log(translateWord('message_error-bridgeip').replace(/%id%/gi, bridge.bridgeId), 'error');
-						
+
 						// IP is given, trigger bridge auth
 						else
 						{
@@ -136,9 +136,9 @@
 								else
 									_log(translateWord('message_error-notoken').replace(/%id%/gi, bridge.bridgeId).replace(/%ip%/gi, bridge.ip), 'error');
 							});
-							
+
 						}
-						
+
 						// add to list
 						bridges.push({
 							'id': bridge.bridgeId,
@@ -148,7 +148,7 @@
 							'active': true
 						});
 					});
-					
+
 					values2table('bridges', bridges);
 					timer = setTimeout(function()
 					{
@@ -157,25 +157,25 @@
 						$('#callbackPort').trigger('change');
 					}, 150);
 				}
-				
+
 				// error
 				else
 					_log(translateWord('message_error-nobridges')+' ('+res.error+')', 'error');
 			});
 		});
-		
+
 	});
 	// -->
 	</script>
 	<script src="admin.js"></script>
 	<link rel="stylesheet" type="text/css" href="admin.css"/>
-	
+
 </head>
 <body>
 
 
 <div class="m adapter-container" id="settings">
-	
+
 	<!-- Modal Structure -->
 	<div id="modal" class="modal">
 		<div class="modal-content">
@@ -185,15 +185,15 @@
 					<ul id="log"></ul>
 				</div>
 			</div>
-			
+
 		</div>
 		<div class="modal-footer">
 			<a href="#!" class="btn waves-effect waves-green modal-close translate">button_closeModal</a>
 		</div>
 	</div>
-	
+
 	<div class="row">
-		
+
 		<!-- TABS -->
 		<div class="col s12">
 			<ul class="tabs">
@@ -204,10 +204,10 @@
 				<li class="tab col s3"><a target="_blank" class="translate" href="https://github.com/Zefau/ioBroker.nuki2#iobrokernuki2">tab_info</a></li>
 			</ul>
 		</div>
-		
+
 		<!-- DONATE -->
 		<div id="donate" class="col s12">
-		
+
 			<!-- Donation -->
 			<div class="row">
 				<div class="col s12 m12">
@@ -218,24 +218,24 @@
 					</div>
 					<div class="row box">
 						<p class="subtitle translate">donateInformation</p>
-						
+
 						<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin: 10 0 0 30">
 							<input type="hidden" name="cmd" value="_s-xclick" />
 							<input type="hidden" name="hosted_button_id" value="DJR9PHP53L8Q2" />
 							<input type="image" src="https://www.paypalobjects.com/webstatic/de_DE/i/de-pp-logo-200px.png" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
 							<img alt="" border="0" src="https://www.paypal.com/en_DE/i/scr/pixel.gif" width="1" height="1" />
 						</form>
-						
+
 					</div>
-					
+
 				</div>
 			</div>
-			
+
 		</div>
-		
+
 		<!-- CONFIG NUKI -->
 		<div id="tab_config_nuki" class="col s12 m12">
-			
+
 			<!-- WEB API -->
 			<div class="row" style="margin-bottom: 0">
 				<div class="col s12 m12">
@@ -255,10 +255,10 @@
 							<label for="api_token" class="translate">api_token</label>
 						</div>
 					</div>
-				
+
 				</div>
 			</div>
-			
+
 			<!-- Other -->
 			<div class="row">
 				<div class="col s12 m12">
@@ -280,6 +280,18 @@
 									<label for="refreshWebApi" class="translate">refresh</label>
 								</div>
 							</div>
+							<div class="row">
+								<div class="input-field col s6 m6">
+									<input class="value" id="additionalWebApiCall" type="checkbox" />
+									<label for="additionalWebApiCall" class="translate">additionalWebApiCall</label>
+								</div>
+							</div>
+							<div class="row">
+								<div class="input-field col s6 m6">
+									<input class="value" id="additionalWebApiTimeout" type="number" placeholder="3" />
+									<label for="additionalWebApiTimeout" class="translate">additionalWebApiTimeout</label>
+								</div>
+							</div>
 						</div>
 						<div class="col s6 m6">
 							<div class="row">
@@ -289,29 +301,29 @@
 							</div>
 							<div class="row">
 								<div class="input-field col s6 m6">
-									
+
 									<div style="display: block">
 										<input class="value" id="syncConfig" type="checkbox" />
 										<label for="syncConfig" class="translate">syncConfig</label>
 									</div>
-									
+
 									<div style="display: block">
 										<input class="value" id="syncUsers" type="checkbox" />
 										<label for="syncUsers" class="translate">syncUsers</label>
 									</div>
-									
+
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			
+
 		</div>
-		
+
 		<!-- CONFIG BRIDGE -->
 		<div id="tab_config_bridge" class="col s12 m12">
-			
+
 			<!-- BRIDGE API -->
 			<div class="row" style="margin-bottom: 0">
 				<div class="col s12 m12">
@@ -327,10 +339,10 @@
 					</div>
 					<div class="row">
 						<div class="col s12" id="bridges">
-						
+
 							<a class="btn waves-effect waves-light table-button-add"><i class="material-icons">add_circle</i> <span class="translate">add_bridge</span></a>
 							<a class="btn waves-effect waves-light button-discover"><i class="material-icons">search</i> <span class="translate">discover_bridges</span></a>
-							
+
 							<div class="table-values-div">
 								<table class="table-values">
 									<thead>
@@ -346,12 +358,12 @@
 									</thead>
 								</table>
 							</div>
-						
+
 						</div>
 					</div>
 				</div>
 			</div>
-			
+
 			<!-- Other -->
 			<div class="row">
 				<div class="col s12 m12">
@@ -363,23 +375,23 @@
 					<div class="row box">
 						<div class="col s4 m4">
 							<p class="subtitle translate">hashedToken_info</p>
-							
+
 							<input class="value" id="hashedToken" type="checkbox" />
 							<label for="hashedToken" class="translate">hashedToken</label>
 						</div>
 						<div class="col s4 m4">
 							<p class="subtitle translate">port_info</p>
-							
+
 							<input class="value" id="callbackPort" type="number" placeholder="51989" />
 							<label for="callbackPort" class="translate">port</label>
 						</div>
 						<div class="col s4 m4">
 							<p class="subtitle translate">ip_info</p>
-							
+
 							<input class="value" id="callbackIp" type="text" />
 							<label for="callbackIp" class="translate">ip</label>
 						</div>
-						
+
 						<!--
 						<div class="col s12 m12">
 							<div class="row">
@@ -388,7 +400,7 @@
 								</div>
 							</div>
 							<div class="row" style="margin-bottom: 0">
-							
+
 								<div class="col s4 m4">
 									<div class="row">
 										<div class="col s12 m12">
@@ -422,17 +434,17 @@
 										</div>
 									</div>
 								</div>
-							
+
 							</div>
 						</div>
 						-->
-						
+
 					</div>
 				</div>
 			</div>
-			
+
 		</div>
-		
+
 	</div>
 
 </div>

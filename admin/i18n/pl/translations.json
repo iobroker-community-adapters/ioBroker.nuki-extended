@@ -1,5 +1,7 @@
 {
     "add_bridge": "Dodaj most",
+    "additionalWebApiCall": "Wykonuj dodatkowe odświeżanie przez WebAPI po każdym wywołaniu zwrotnym",
+    "additionalWebApiTimeout": "Opóźnienie odświeżania (w sekundach)",
     "api_token": "Token API",
     "bridge": "Ustawienia połączenia mostu Nuki",
     "bridge_callback": "Użyj Callback",

@@ -1,5 +1,7 @@
 {
     "add_bridge": "Adicionar ponte",
+    "additionalWebApiCall": "Faça atualização adicional via WebAPI após cada retorno de chamada",
+    "additionalWebApiTimeout": "Atraso de atualização (em segundos)",
     "api_token": "Token da API",
     "bridge": "Configurações de conexão da ponte Nuki",
     "bridge_callback": "Use o retorno de chamada",

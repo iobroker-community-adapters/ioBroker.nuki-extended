@@ -1,5 +1,7 @@
 {
     "add_bridge": "Voeg Bridge toe",
+    "additionalWebApiCall": "Doe extra verversing via WebAPI na elke callback",
+    "additionalWebApiTimeout": "Vernieuwingsvertraging (in seconden)",
     "api_token": "API-token",
     "bridge": "Verbindingsinstellingen van de Nuki-brug",
     "bridge_callback": "Gebruik Callback",
