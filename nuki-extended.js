@@ -18,7 +18,7 @@ const _LOCK = require(__dirname + '/_LOCK.js');
 const _OPENER = require(__dirname + '/_OPENER.js');
 const _NODES = require(__dirname + '/_NODES.js');
 const WebApiHandler = require("./lib/web-api");
-const {NukiTools} = require("./lib/nuki-tools");
+const NukiTools = require("./lib/nuki-tools");
 
 
 /*
