@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "nuki-extended",
-    "version": "2.6.0",
+    "version": "2.6.1",
     "title": "Nuki Smartlock & Opener",
     "titleLang": {
       "en": "Nuki Smartlock & Opener",
@@ -28,6 +28,18 @@
       "zh-cn": "控制和监视你的Nuki Smartlock和Nuki开与ioBroker"
     },
     "news": {
+      "2.6.1": {
+        "en": "Fix Bridge functionality\nFix Admin display in dark mode",
+        "de": "Fix Bridge Funktionalität\nAdmin-Display im Dunkelmodus reparieren",
+        "ru": "Fix Функция моста\nFix Admin дисплей в темном режиме",
+        "pt": "Funcionalidade de Fix Bridge\nCorrigir exibição de administrador no modo escuro",
+        "nl": "Fix Bridge functionaris\nVertaling:",
+        "fr": "Fonctionnalité du pont\nFix Admin display in dark mode",
+        "it": "Funzionalità di Fix Bridge\nFissare il display Admin in modalità buio",
+        "es": "Función del puente fijo\nVisualización de Admin fijo en modo oscuro",
+        "pl": "Fix Bridge\nFix Admin wyświetlacz w trybie mrocznym",
+        "zh-cn": "Fix Bridge功能\nFix Admin在黑暗中展示"
+      },
       "2.6.0": {
         "en": "Make additional refresh after callback configurable\nOptimizations and fixes",
         "de": "Zusätzliche Aktualisierung nach Rückruf konfigurierbar machen\nOptimierungen und Korrekturen",
@@ -99,18 +111,6 @@
         "es": " reintroducidas apoyo para los hash token de hardware puentes (ver https://developer.nuki.io/page/nuki-bridge-http-api-190/4#heading--token)\n- añadido soporte para los recién introducidos modo noche (ver https://nuki.io/de/blog/nuki-news-de/nuki-update-2019-der-winter-naht-sei-vorbereitet/)\n- corregido un comportamiento incorrecto cuando los puentes se definen de manera insuficiente (sin nombre, dirección ip o el token de siempre)",
         "pl": "- przywrócony wsparcie dla mieszanych znacznik na sprzęcie mostów (zob. https://developer.nuki.io/page/nuki-bridge-http-api-190/4#heading--token)\n- dodano wsparcie dla nowo wprowadzanych tryb nocny (zob. https://nuki.io/de/blog/nuki-news-de/nuki-update-2019-der-winter-naht-sei-vorbereitet/)\n- poprawiono nieprawidłowe zachowanie, kiedy mosty są zdefiniowane za mało (nie ma nazwy, adresów IP lub token przewidziane)",
         "zh-cn": "-重新支持哈希令牌的硬件上桥梁(见https://developer.nuki.io/page/nuki-bridge-http-api-190/4#heading--token)\n-增加支持新引进的夜间模式(见https://nuki.io/de/blog/nuki-news-de/nuki-update-2019-der-winter-naht-sei-vorbereitet/)\n-固定不正确的行为时桥梁的定义不足(没有姓名，知识产权或令牌供了)"
-      },
-      "2.0.1": {
-        "en": "- fixed missing 'bridge_name'",
-        "de": "- Feste fehlende 'bridge_name'",
-        "ru": "- исправлено отсутствие 'bridge_name'",
-        "pt": "- faltando fixo 'bridge_name'",
-        "nl": "- vaste ontbrekende 'bridge_name'",
-        "fr": "- correction d'disparus \"bridge_name'",
-        "it": "- fisso mancante 'bridge_name'",
-        "es": "- falta fijos 'bridge_name'",
-        "pl": "- naprawiono brak 'bridge_name'",
-        "zh-cn": "-固定失踪'bridge_name'"
       }
     },
     "authors": [
