@@ -507,6 +507,7 @@ Please see [release page](https://github.com/Zefau/ioBroker.nuki-extended/releas
 
 ### __WORK IN PROGRESS__
 * (theimo1221) Fix Web Api Polling
+* (theimo1221) Fix Web Api SetAction Call
 
 ### 2.6.1 (2022-06-09)
 * (Apollon77) Fix Bridge functionality
