@@ -504,6 +504,10 @@ on({id: 'nuki-extended.0.openers.opener.state.ringStateUpdate', change: "any", a
 Please see [release page](https://github.com/Zefau/ioBroker.nuki-extended/releases) for changelog and detailed information.
 
 <!-- ### __WORK IN PROGRESS__ -->
+
+### __WORK IN PROGRESS__
+* (theimo1221) Fix Web Api Polling
+
 ### 2.6.1 (2022-06-09)
 * (Apollon77) Fix Bridge functionality
 * (simatec) Fix Admin display in dark mode
