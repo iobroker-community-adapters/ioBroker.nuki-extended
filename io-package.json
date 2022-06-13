@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "nuki-extended",
-    "version": "2.6.1",
+    "version": "2.6.2",
     "title": "Nuki Smartlock & Opener",
     "titleLang": {
       "en": "Nuki Smartlock & Opener",
@@ -28,6 +28,18 @@
       "zh-cn": "控制和监视你的Nuki Smartlock和Nuki开与ioBroker"
     },
     "news": {
+      "2.6.2": {
+        "en": "Fix Web Api Polling",
+        "de": "Web Api Polling",
+        "ru": "Fix Веб Апи Поллинг",
+        "pt": "Fix Web Api Polling",
+        "nl": "Fix Web Api Pol",
+        "fr": "Fix Web Api Polling",
+        "it": "Fissare Web Api Polling",
+        "es": "Fijar encuestas Web Api",
+        "pl": "Strona internetowa Api Poll",
+        "zh-cn": "Fix网站Api Polling"
+      },
       "2.6.1": {
         "en": "Fix Bridge functionality\nFix Admin display in dark mode",
         "de": "Fix Bridge Funktionalität\nAdmin-Display im Dunkelmodus reparieren",
@@ -99,18 +111,6 @@
         "es": "soporte agregado para el sensor de puerta del Nuki Smartlock y la acción de timbre del Nuki Opener",
         "pl": "dodano obsługę czujnika drzwi Nuki Smartlock i działania dzwonka Nuki Opener",
         "zh-cn": "添加了对 Nuki Smartlock 的门传感器和 Nuki Opener 的响铃动作的支持"
-      },
-      "2.0.2": {
-        "en": "- reintroduced support for hashed token on hardware bridges (see https://developer.nuki.io/page/nuki-bridge-http-api-190/4#heading--token)\n- added support for newly introduced nightmode (see https://nuki.io/de/blog/nuki-news-de/nuki-update-2019-der-winter-naht-sei-vorbereitet/)\n- fixed incorrect behavior when bridges are defined insufficiently (no name, ip or token provided)",
-        "de": "- wieder support für die Hash-token auf hardware-Brücken (siehe https://developer.nuki.io/page/nuki-bridge-http-api-190/4#heading--token)\n- Unterstützung für die neu eingeführten Nachtfunktion (siehe https://nuki.io/de/blog/nuki-news-de/nuki-update-2019-der-winter-naht-sei-vorbereitet/)\n- fixed falsche Verhalten beim Brücken definiert sind unzureichend (keine Namen, ip-oder token zur Verfügung gestellt)",
-        "ru": "- восстановлена поддержка для хэшированных маркер на оборудовании мостов (см. https://developer.nuki.io/page/nuki-bridge-http-api-190/4#heading--token)\n- добавлена поддержка для вновь вводимых ночной режим (см. https://nuki.io/de/blog/nuki-news-de/nuki-update-2019-der-winter-naht-sei-vorbereitet/)\n- исправлено некорректное поведение, когда мосты определены недостаточно (нет имени, IP или маркер предусмотрено)",
-        "pt": "- reintrodução de apoio hash token de hardware pontes (ver https://developer.nuki.io/page/nuki-bridge-http-api-190/4#heading--token)\n- adicionado suporte para o recém-introduzido nightmode (ver https://nuki.io/de/blog/nuki-news-de/nuki-update-2019-der-winter-naht-sei-vorbereitet/)\n- corrigido o comportamento incorrecto quando as pontes são definidos de forma insuficiente (sem nome, ip ou token fornecido)",
-        "nl": "- weer ondersteuning voor gecodeerde token op hardware bruggen (zie https://developer.nuki.io/page/nuki-bridge-http-api-190/4#heading--token)\n- toegevoegde ondersteuning voor de nieuw geïntroduceerde nachtmodus (zie https://nuki.io/de/blog/nuki-news-de/nuki-update-2019-der-winter-naht-sei-vorbereitet/)\n- incorrect gedrag bij bruggen worden gedefinieerd onvoldoende (geen naam, ip-of token verstrekt)",
-        "fr": "- a réintroduit le soutien haché jeton sur le matériel ponts (voir https://developer.nuki.io/page/nuki-bridge-http-api-190/4#heading--token)\n- ajout du support pour le nouvellement introduit nightmode (voir https://nuki.io/de/blog/nuki-news-de/nuki-update-2019-der-winter-naht-sei-vorbereitet/)\n- correction d'un comportement incorrect lorsque les ponts sont définis de façon insuffisante (pas de nom, l'adresse ip ou le jeton fourni)",
-        "it": "- reintrodotto il supporto per hash token hardware ponti (vedi https://developer.nuki.io/page/nuki-bridge-http-api-190/4#heading--token)\n- aggiunto il supporto per la nuova introduzione nightmode (vedere https://nuki.io/de/blog/nuki-news-de/nuki-update-2019-der-winter-naht-sei-vorbereitet/)\n- un comportamento corretto quando i ponti sono definiti in modo insufficiente (nessun nome, l'indirizzo ip o token fornito)",
-        "es": " reintroducidas apoyo para los hash token de hardware puentes (ver https://developer.nuki.io/page/nuki-bridge-http-api-190/4#heading--token)\n- añadido soporte para los recién introducidos modo noche (ver https://nuki.io/de/blog/nuki-news-de/nuki-update-2019-der-winter-naht-sei-vorbereitet/)\n- corregido un comportamiento incorrecto cuando los puentes se definen de manera insuficiente (sin nombre, dirección ip o el token de siempre)",
-        "pl": "- przywrócony wsparcie dla mieszanych znacznik na sprzęcie mostów (zob. https://developer.nuki.io/page/nuki-bridge-http-api-190/4#heading--token)\n- dodano wsparcie dla nowo wprowadzanych tryb nocny (zob. https://nuki.io/de/blog/nuki-news-de/nuki-update-2019-der-winter-naht-sei-vorbereitet/)\n- poprawiono nieprawidłowe zachowanie, kiedy mosty są zdefiniowane za mało (nie ma nazwy, adresów IP lub token przewidziane)",
-        "zh-cn": "-重新支持哈希令牌的硬件上桥梁(见https://developer.nuki.io/page/nuki-bridge-http-api-190/4#heading--token)\n-增加支持新引进的夜间模式(见https://nuki.io/de/blog/nuki-news-de/nuki-update-2019-der-winter-naht-sei-vorbereitet/)\n-固定不正确的行为时桥梁的定义不足(没有姓名，知识产权或令牌供了)"
       }
     },
     "authors": [
