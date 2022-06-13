@@ -615,7 +615,7 @@ function setAction(device, action, api = 'bridge', retry = 0) {
 	else if (nukiWebApi !== null && api === 'web') {
 		adapter.log.debug('Action applied on Web API.');
 
-		nukiWebApi.setAction(device.smartlockId, action.id)
+		nukiWebApi.api.setAction(device.smartlockId, action.id)
 			.then(() => {
 				adapter.log.info('Successfully triggered action -' + action.name + '- on Nuki ' + device.type + ' ' + device.name + ' (via Web API).');
 				return Promise.resolve(true);

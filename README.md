@@ -504,6 +504,10 @@ on({id: 'nuki-extended.0.openers.opener.state.ringStateUpdate', change: "any", a
 Please see [release page](https://github.com/Zefau/ioBroker.nuki-extended/releases) for changelog and detailed information.
 
 <!-- ### __WORK IN PROGRESS__ -->
+
+### __WORK IN PROGRESS__
+* (theimo1221) Fix Web Api SetAction Call
+
 ### 2.6.2 (2022-06-13)
 * (theimo1221) Fix Web Api Polling
 
