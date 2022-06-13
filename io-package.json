@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "nuki-extended",
-    "version": "2.6.2",
+    "version": "2.6.3",
     "title": "Nuki Smartlock & Opener",
     "titleLang": {
       "en": "Nuki Smartlock & Opener",
@@ -28,6 +28,18 @@
       "zh-cn": "控制和监视你的Nuki Smartlock和Nuki开与ioBroker"
     },
     "news": {
+      "2.6.3": {
+        "en": "Fix Web Api SetAction Call",
+        "de": "Web Api SetAction Call beheben",
+        "ru": "Fix Web Api SetAction Звонок",
+        "pt": "Fix Web Api SetAction Call",
+        "nl": "Quality over Quantity (QoQ) Releases Vertaling:",
+        "fr": "Correction Web Api SetAction Call",
+        "it": "Fissare Web Api SetAction Call",
+        "es": "Corregir Web Api SetAction Call",
+        "pl": "Strona internetowa Api SetA (ang.)",
+        "zh-cn": "Fix网站Api SetAction呼吁"
+      },
       "2.6.2": {
         "en": "Fix Web Api Polling",
         "de": "Web Api Polling",
@@ -99,18 +111,6 @@
         "es": "Optimizar para js-controller 3.3 y evitar advertencias",
         "pl": "Optymalizacja pod kątem kontrolera js 3.3 i zapobieganie ostrzeżeniom",
         "zh-cn": "针对 js-controller 3.3 进行优化并防止出现警告"
-      },
-      "2.3.0": {
-        "en": "support added for the door sensor of the Nuki Smartlock and the ring bell action of the Nuki Opener",
-        "de": "Unterstützung für den Türsensor des Nuki Smartlock und die Klingelfunktion des Nuki Opener hinzugefügt",
-        "ru": "добавлена поддержка датчика двери Nuki Smartlock и звонка в Nuki Opener",
-        "pt": "suporte adicionado para o sensor de porta do Nuki Smartlock e a ação da campainha do Nuki Opener",
-        "nl": "ondersteuning toegevoegd voor de deursensor van de Nuki Smartlock en de belactie van de Nuki Opener",
-        "fr": "support ajouté pour le capteur de porte du Nuki Smartlock et l'action de la sonnerie du Nuki Opener",
-        "it": "aggiunto il supporto per il sensore porta del Nuki Smartlock e l'azione del campanello del Nuki Opener",
-        "es": "soporte agregado para el sensor de puerta del Nuki Smartlock y la acción de timbre del Nuki Opener",
-        "pl": "dodano obsługę czujnika drzwi Nuki Smartlock i działania dzwonka Nuki Opener",
-        "zh-cn": "添加了对 Nuki Smartlock 的门传感器和 Nuki Opener 的响铃动作的支持"
       }
     },
     "authors": [
