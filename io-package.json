@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "nuki-extended",
-    "version": "2.6.3",
+    "version": "2.6.4",
     "title": "Nuki Smartlock & Opener",
     "titleLang": {
       "en": "Nuki Smartlock & Opener",
@@ -28,6 +28,18 @@
       "zh-cn": "控制和监视你的Nuki Smartlock和Nuki开与ioBroker"
     },
     "news": {
+      "2.6.4": {
+        "en": "Fix some crash cases reported by Sentry",
+        "de": "Beheben Sie einige Crashfälle gemeldet von Sentry",
+        "ru": "Исправить некоторые случаи аварии, описанные Сентри",
+        "pt": "Corrigir alguns casos de acidente relatados por Sentry",
+        "nl": "Regel een aantal crash gevallen",
+        "fr": "Correction de certains cas de crash signalés par Sentry",
+        "it": "Fissa alcuni casi di crash segnalati da Sentry",
+        "es": "Arreglar algunos casos de accidentes reportados por Sentry",
+        "pl": "Fix niektóre przypadki katastrofy odnotowane przez Sentry'a",
+        "zh-cn": "九例Sentry报告的一些事故"
+      },
       "2.6.3": {
         "en": "Fix Web Api SetAction Call",
         "de": "Web Api SetAction Call beheben",
@@ -99,18 +111,6 @@
         "es": "soporte agregado para Nuki Smart Door y Nuki Smart Lock 3.0 (Pro)",
         "pl": "dodano wsparcie dla Nuki Smart Door i Nuki Smart Lock 3.0 (Pro)",
         "zh-cn": "添加了对 Nuki Smart Door 和 Nuki Smart Lock 3.0 (Pro) 的支持"
-      },
-      "2.3.1": {
-        "en": "Optimize for js-controller 3.3 and warnings prevented",
-        "de": "Optimieren für js-controller 3.3 und Warnungen verhindert",
-        "ru": "Оптимизация для js-controller 3.3 и предотвращение предупреждений",
-        "pt": "Otimize para js-controller 3.3 e avisos evitados",
-        "nl": "Optimaliseren voor js-controller 3.3 en waarschuwingen voorkomen",
-        "fr": "Optimiser pour js-controller 3.3 et avertissements empêchés",
-        "it": "Ottimizza per js-controller 3.3 e avvisi evitati",
-        "es": "Optimizar para js-controller 3.3 y evitar advertencias",
-        "pl": "Optymalizacja pod kątem kontrolera js 3.3 i zapobieganie ostrzeżeniom",
-        "zh-cn": "针对 js-controller 3.3 进行优化并防止出现警告"
       }
     },
     "authors": [
