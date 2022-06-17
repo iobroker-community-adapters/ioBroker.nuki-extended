@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "nuki-extended",
-    "version": "2.6.4",
+    "version": "2.6.5",
     "title": "Nuki Smartlock & Opener",
     "titleLang": {
       "en": "Nuki Smartlock & Opener",
@@ -28,6 +28,18 @@
       "zh-cn": "控制和监视你的Nuki Smartlock和Nuki开与ioBroker"
     },
     "news": {
+      "2.6.5": {
+        "en": "Fix some crash cases reported by Sentry",
+        "de": "Beheben Sie einige Crashfälle gemeldet von Sentry",
+        "ru": "Исправить некоторые случаи аварии, описанные Сентри",
+        "pt": "Corrigir alguns casos de acidente relatados por Sentry",
+        "nl": "Regel een aantal crash gevallen",
+        "fr": "Correction de certains cas de crash signalés par Sentry",
+        "it": "Fissa alcuni casi di crash segnalati da Sentry",
+        "es": "Arreglar algunos casos de accidentes reportados por Sentry",
+        "pl": "Fix niektóre przypadki katastrofy odnotowane przez Sentry'a",
+        "zh-cn": "九例Sentry报告的一些事故"
+      },
       "2.6.4": {
         "en": "Fix some crash cases reported by Sentry",
         "de": "Beheben Sie einige Crashfälle gemeldet von Sentry",
@@ -99,18 +111,6 @@
         "es": "Permitir la operación solo de API web\nHacer compatible con Node.js 18.x\nAgregar Sentry para informes de fallas",
         "pl": "Zezwalaj tylko na działanie web-api\nZapewnij kompatybilność z Node.js 18.x\nDodaj Sentry do zgłaszania awarii",
         "zh-cn": "允许仅 web-api 操作\n与 Node.js 18.x 兼容\n添加 Sentry 以进行崩溃报告"
-      },
-      "2.4.0": {
-        "en": "added support for Nuki Smart Door and Nuki Smart Lock 3.0 (Pro)",
-        "de": "Unterstützung für Nuki Smart Door und Nuki Smart Lock 3.0 (Pro) hinzugefügt",
-        "ru": "добавлена поддержка Nuki Smart Door и Nuki Smart Lock 3.0 (Pro)",
-        "pt": "adicionado suporte para Nuki Smart Door e Nuki Smart Lock 3.0 (Pro)",
-        "nl": "ondersteuning toegevoegd voor Nuki Smart Door en Nuki Smart Lock 3.0 (Pro)",
-        "fr": "ajout de la prise en charge de Nuki Smart Door et Nuki Smart Lock 3.0 (Pro)",
-        "it": "aggiunto il supporto per Nuki Smart Door e Nuki Smart Lock 3.0 (Pro)",
-        "es": "soporte agregado para Nuki Smart Door y Nuki Smart Lock 3.0 (Pro)",
-        "pl": "dodano wsparcie dla Nuki Smart Door i Nuki Smart Lock 3.0 (Pro)",
-        "zh-cn": "添加了对 Nuki Smart Door 和 Nuki Smart Lock 3.0 (Pro) 的支持"
       }
     },
     "authors": [
