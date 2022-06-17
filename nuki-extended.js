@@ -653,7 +653,7 @@ function setAction(device, action, api = 'bridge', retry = 0) {
 		adapter.log.debug(`DEVICE:${JSON.stringify(device)}`);
 		adapter.log.debug(`api: ${api}`);
 		adapter.log.debug(`Bridge API:${JSON.stringify(device.instance)}`);
-		adapter.log.debug(`Web API: ${JSON.stringify(nukiWebApi)}`);
+		//adapter.log.debug(`Web API: ${JSON.stringify(nukiWebApi)}`);
 
 		return Promise.resolve(false);
 	}
