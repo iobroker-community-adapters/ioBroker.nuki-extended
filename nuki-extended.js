@@ -49,6 +49,7 @@ function startAdapter(options) {
 	 *
 	 */
 	adapter.on('ready', function() {
+		_http.on('error', err => adapter.log.error(err));
 		library = new Library(adapter, { nodes: _NODES, updatesInLog: adapter.config.debugLog || false });
 		unloaded = false;
 
