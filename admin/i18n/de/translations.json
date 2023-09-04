@@ -28,7 +28,7 @@
     "message_error-noconnection": "Keine Verbindung zum Adapter! Bitte zunächst den Adapter starten.",
     "message_error-notoken": "Token für Brücke %id% mit IP-Adresse %ip% konnte nicht abgerufen werden!",
     "message_info-connected": "Verbunden zum Adapter.",
-    "message_info-duplbridge": "Brdige mit ID %id% bereits hinzugefügt, daher ausgelassen.",
+    "message_info-duplbridge": "Bridge mit ID %id% bereits hinzugefügt, daher ausgelassen.",
     "message_info-finished": "ALLES FERTIG. Das Status Protokoll kann nun geschlossen werden.",
     "message_success-gotbridges": "Erfolgreich Bridges geladen! %count% Bridges gefunden.",
     "message_success-gottoken": "Token für Brücke %id% mit IP-Adresse %ip% erfolgreich abgerufen.",
