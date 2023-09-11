@@ -12,6 +12,9 @@
       "email": "zefau@mailbox.org"
     }
   ],
+  "engines": {
+    "node": ">=16.0.0"
+  },
   "dependencies": {
     "@iobroker/adapter-core": "^2.6.8",
     "body-parser": "^1.20.0",
