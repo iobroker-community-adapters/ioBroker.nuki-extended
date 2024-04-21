@@ -507,7 +507,7 @@ Please see [release page](https://github.com/Zefau/ioBroker.nuki-extended/releas
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 2.7.0 (2024-04-21)
 * (mcm1957) Adapter requires node.js 18 and js-controller >= 5 now
 * (mcm1957) Dependencies have been updated
 

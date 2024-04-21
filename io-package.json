@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "nuki-extended",
-    "version": "2.6.5",
+    "version": "2.7.0",
     "titleLang": {
       "en": "Nuki Smartlock & Opener",
       "de": "Nuki Smartlock & Opener",
@@ -27,6 +27,19 @@
       "zh-cn": "控制和监视你的Nuki Smartlock和Nuki开与ioBroker"
     },
     "news": {
+      "2.7.0": {
+        "en": "Adapter requires node.js 18 and js-controller >= 5 now\nDependencies have been updated",
+        "de": "Adapter benötigt node.js 18 und js-controller >= 5 jetzt\nAbhängigkeiten wurden aktualisiert",
+        "ru": "Адаптер требует node.js 18 и js-controller >= 5 сейчас\nЗависимость обновлена",
+        "pt": "Adapter requer node.js 18 e js-controller >= 5 agora\nAs dependências foram atualizadas",
+        "nl": "Adapter vereist node.js 18 en js-controller Nu 5\nAfhankelijkheden zijn bijgewerkt",
+        "fr": "Adaptateur nécessite node.js 18 et js-controller >= 5 maintenant\nLes dépendances ont été actualisées",
+        "it": "Adattatore richiede node.js 18 e js-controller >= 5 ora\nLe dipendenze sono state aggiornate",
+        "es": "Adaptador requiere node.js 18 y js-controller √= 5 ahora\nSe han actualizado las dependencias",
+        "pl": "Adapter wymaga node.js 18 i sterownika js- > = 5 teraz\nZaktualizowano zależności",
+        "uk": "Адаптер вимагає node.js 18 і js-controller >= 5 тепер\nЗалежність було оновлено",
+        "zh-cn": "适配器需要节点.js 18和js控制器 QQ 现在5号\n依赖关系已更新"
+      },
       "2.6.5": {
         "en": "Fix some crash cases reported by Sentry",
         "de": "Beheben Sie einige Crashfälle gemeldet von Sentry",
@@ -98,18 +111,6 @@
         "es": "Hacer una actualización adicional después de la devolución de llamada configurable\nOptimizaciones y arreglos",
         "pl": "Dokonaj dodatkowego odświeżenia po skonfigurowaniu wywołania zwrotnego\nOptymalizacje i poprawki",
         "zh-cn": "可配置回调后进行额外刷新\n优化和修复"
-      },
-      "2.5.0": {
-        "en": "Allow web-api-only operation\nMake compatible with Node.js 18.x\nAdd Sentry for crash reporting",
-        "de": "Nur-Web-API-Betrieb zulassen\nMit Node.js 18.x kompatibel machen\nFügen Sie Sentry für Absturzberichte hinzu",
-        "ru": "Разрешить работу только с веб-API\nСделать совместимым с Node.js 18.x\nДобавьте Sentry для отчетов о сбоях",
-        "pt": "Permitir operação somente de API da Web\nTornar compatível com Node.js 18.x\nAdicionar Sentinela para relatórios de falhas",
-        "nl": "Alleen web-api-bewerking toestaan\nCompatibel maken met Node.js 18.x\nSentry toevoegen voor crashrapportage",
-        "fr": "Autoriser le fonctionnement de l'API Web uniquement\nRendre compatible avec Node.js 18.x\nAjouter Sentry pour les rapports de plantage",
-        "it": "Consenti il funzionamento solo dell'api Web\nRendi compatibile con Node.js 18.x\nAggiungi Sentinella per la segnalazione degli arresti anomali",
-        "es": "Permitir la operación solo de API web\nHacer compatible con Node.js 18.x\nAgregar Sentry para informes de fallas",
-        "pl": "Zezwalaj tylko na działanie web-api\nZapewnij kompatybilność z Node.js 18.x\nDodaj Sentry do zgłaszania awarii",
-        "zh-cn": "允许仅 web-api 操作\n与 Node.js 18.x 兼容\n添加 Sentry 以进行崩溃报告"
       }
     },
     "authors": [

@@ -79,5 +79,5 @@
     "translate": "translate-adapter",
     "release": "release-script"
   },
-  "version": "2.6.5"
+  "version": "2.7.0"
 }
