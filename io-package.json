@@ -2,7 +2,6 @@
   "common": {
     "name": "nuki-extended",
     "version": "2.6.5",
-    "title": "Nuki Smartlock & Opener",
     "titleLang": {
       "en": "Nuki Smartlock & Opener",
       "de": "Nuki Smartlock & Opener",
@@ -116,7 +115,10 @@
     "authors": [
       "Zefau <zefau@mailbox.org>"
     ],
-    "license": "MIT",
+    "licenseInformation": {
+      "license": "MIT",
+      "type": "free"
+    },
     "platform": "Javascript/Node.js",
     "mode": "daemon",
     "icon": "nuki-extended.png",
@@ -138,7 +140,12 @@
         "web": ">=1.7.1"
       },
       {
-        "js-controller": ">=2.0.0"
+        "js-controller": ">=5.0.19"
+      }
+    ],
+    "globalDependencies": [
+      {
+        "admin": ">=6.0.0"
       }
     ],
     "localLink": "%web_protocol%://%ip%:%web_port%/nuki-extended/index.html",

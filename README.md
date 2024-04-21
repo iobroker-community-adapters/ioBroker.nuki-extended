@@ -508,8 +508,8 @@ Please see [release page](https://github.com/Zefau/ioBroker.nuki-extended/releas
     ### **WORK IN PROGRESS**
 -->
 ### **WORK IN PROGRESS**
--   (mcm1957) changed: Testing has been changed to support node 16, 18 and 20
--   (mcm1957) changed: Dependencies have been updated
+* (mcm1957) Adapter requires node.js 18 and js-controller >= 5 now
+* (mcm1957) Dependencies have been updated
 
 ### 2.6.5 (2022-06-17)
 * (Apollon77) Fix some crash cases reported by Sentry
@@ -609,6 +609,7 @@ Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smash
 ## License
 The MIT License (MIT)
 
+Copyright (c) 2024 iobroker-community-adapters <iobroker-community-adapters@gmx.de>
 Copyright (c) 2019-2022 Zefau <zefau@mailbox.org>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
