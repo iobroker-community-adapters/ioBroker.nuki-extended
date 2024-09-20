@@ -17,8 +17,8 @@
   },
   "dependencies": {
     "@iobroker/adapter-core": "^3.1.6",
-    "body-parser": "^1.20.0",
-    "express": "^4.19.2",
+    "body-parser": "^1.20.3",
+    "express": "^4.21.0",
     "ip": "^2.0.1",
     "nuki-bridge-api": "^1.8.0",
     "nuki-web-api": "^2.2.1",
