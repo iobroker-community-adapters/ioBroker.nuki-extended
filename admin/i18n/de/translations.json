@@ -1,6 +1,6 @@
 {
     "add_bridge": "Bridge hinzufügen",
-    "additionalWebApiCall": "Führen Sie nach jedem Rückruf eine zusätzliche Aktualisierung über die WebAPI durch",
+    "additionalWebApiCall": "Nach jedem Rückruf eine zusätzliche Aktualisierung über die WebAPI durchführen",
     "additionalWebApiTimeout": "Aktualisierungsverzögerung (in Sekunden)",
     "api_token": "API Token",
     "bridge": "Verbindungseinstellungen der Nuki Bridge",
