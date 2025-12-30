@@ -1,17 +1,12 @@
 {
-  "author": {
-    "name": "Zefau",
-    "email": "zefau@mailbox.org"
-  },
+  "author": "Zefau <zefau@mailbox.org>",
+  "contributors": [
+    "Zefau <zefau@mailbox.org>",
+    "iobroker-community-adapters <iobroker-community-adapters@gmx.de>"
+  ],
   "bugs": {
     "url": "https://github.com/iobroker-community-adapters/ioBroker.nuki-extended/issues"
   },
-  "contributors": [
-    {
-      "name": "Zefau",
-      "email": "zefau@mailbox.org"
-    }
-  ],
   "engines": {
     "node": ">=18"
   },
