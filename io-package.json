@@ -114,7 +114,8 @@
       }
     },
     "authors": [
-      "Zefau <zefau@mailbox.org>"
+      "Zefau <zefau@mailbox.org>",
+      "iobroker-community-adapters <iobroker-community-adapters@gmx.de>"
     ],
     "licenseInformation": {
       "license": "MIT",
@@ -141,12 +142,12 @@
         "web": ">=1.7.1"
       },
       {
-        "js-controller": ">=5.0.19"
+        "js-controller": ">=6.0.11"
       }
     ],
     "globalDependencies": [
       {
-        "admin": ">=6.0.0"
+        "admin": ">=7.6.17"
       }
     ],
     "localLink": "%web_protocol%://%ip%:%web_port%/nuki-extended/index.html",
