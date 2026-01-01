@@ -612,7 +612,7 @@ Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smash
 ## License
 The MIT License (MIT)
 
-Copyright (c) 2024 iobroker-community-adapters <iobroker-community-adapters@gmx.de>
+Copyright (c) 2024-2026 iobroker-community-adapters <iobroker-community-adapters@gmx.de>
 Copyright (c) 2019-2022 Zefau <zefau@mailbox.org>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
