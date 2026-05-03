@@ -604,6 +604,8 @@ Please see [release page](https://github.com/Zefau/ioBroker.nuki-extended/releas
 - (Zefau) added support for multiple devices (including Nuki Opener) on adapter web interface
 - (Zefau) added option to not retrieve all information (by deselecting `config` or `users`) via Nuki Web API
 
+[Older changelogs can be found there](CHANGELOG_OLD.md)
+
 ## Credits
 Thanks to [@Mik13](https://github.com/Mik13) for the [Nuki Bridge API implementation](https://github.com/Mik13/nuki-bridge-api#nuki-bridge-api).
 
