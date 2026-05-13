@@ -8,3 +8,5 @@ node_modules
 test
 .travis.yml
 appveyor.yml
+eslint.config.mjs
+prettier.config.mjs
