@@ -507,6 +507,7 @@ Please see [release page](https://github.com/Zefau/ioBroker.nuki-extended/releas
 -->
 ### **WORK IN PROGRESS**
 - (copilot) **ENHANCED**: Migrated linting setup to ESLint 9 with the shared `@iobroker/eslint-config`.
+- (copilot) **FIXED**: Resolved ESLint error findings in adapter core files and aligned linting ignores for legacy frontend scripts.
 
 ### 2.8.0 (2026-05-13)
 - (copilot) Adapter requires node.js >= 22 now
