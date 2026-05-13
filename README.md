@@ -510,7 +510,9 @@ Please see [release page](https://github.com/Zefau/ioBroker.nuki-extended/releas
 - (copilot) Adapter requires node.js >= 22 now
 - (copilot) Adapter requires admin >= 7.7.22 now
 - (copilot) Adapter requires js-controller >= 6.0.11 now
-- (copilot) Adapter requires admin >= 7.6.17 now
+- (VierlingMt) Adding Nuki Smartlock 4.X and Pro Support, "toLowerCase" error fixed
+- (sbormann) Added deviceType 5 and fixed empty type variable
+- (mcm1957) Dependencies have been updated
 
 ### 2.7.0 (2024-04-21)
 * (mcm1957) Adapter requires node.js 18 and js-controller >= 5 now
