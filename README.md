@@ -505,6 +505,9 @@ Please see [release page](https://github.com/Zefau/ioBroker.nuki-extended/releas
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+- (copilot) **ENHANCED**: Migrated linting setup to ESLint 9 with the shared `@iobroker/eslint-config`.
+
 ### 2.8.0 (2026-05-13)
 - (copilot) Adapter requires node.js >= 22 now
 - (copilot) Adapter requires admin >= 7.7.22 now
