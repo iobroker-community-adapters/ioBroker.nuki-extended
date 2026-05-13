@@ -161,7 +161,7 @@ function startAdapter(options) {
                     })
                     .catch(err => adapter.log.debug(`Error removing callback (${err.message})!`));
             } else {
-                adapter.log.warn(`Error deleting callback with URL ${url}: No Callback ID given!`);
+                adapter.log.warn(`Error deleting callback with URL ${url}: callback entry could not be resolved.`);
             }
         }
 
@@ -420,7 +420,9 @@ function initNukiAPIs() {
                             }, adapter.config.additionalWebApiTimeout * 1000);
                         }
                     } else {
-                        adapter.log.warn('main(): Empty callback request payload.');
+                        adapter.log.warn(
+                            `main(): Unable to process callback request payload (${JSON.stringify(req && req.body)}).`,
+                        );
                         res.sendStatus(500);
                         res.end();
                     }
