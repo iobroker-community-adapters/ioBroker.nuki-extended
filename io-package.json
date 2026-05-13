@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "nuki-extended",
-    "version": "2.7.0",
+    "version": "2.8.0",
     "titleLang": {
       "en": "Nuki Smartlock & Opener",
       "de": "Nuki Smartlock & Opener",
@@ -27,6 +27,19 @@
       "zh-cn": "控制和监视你的Nuki Smartlock和Nuki开与ioBroker"
     },
     "news": {
+      "2.8.0": {
+        "en": "Adapter requires node.js >= 22 now\nAdapter requires admin >= 7.7.22 now\nAdapter requires js-controller >= 6.0.11 now\nAdding Nuki Smartlock 4.X and Pro Support, \"toLowerCase\" error fixed\nAdded deviceType 5 and fixed empty type variable\nDependencies have been updated",
+        "de": "Adapter benötigt node.js >= 22 jetzt\nAdapter benötigt admin >= 7.7.22 jetzt\nAdapter benötigt jetzt js-controller >= 6.0.11\nHinzufügen von Nuki Smartlock 4.X und Pro Support, \"toLowerCase\" Fehler behoben\nHinzugefügt deviceTyp 5 und feste Leertypvariable\nAbhängigkeiten wurden aktualisiert",
+        "ru": "Адаптер требует node.js >= 22 сейчас\nАдаптер требует администратора >= 7.7.22\nАдаптер требует js-контроллер >= 6.0.11\nДобавлена поддержка Nuki Smartlock 4.X и Pro, исправлена ошибка «toLowerCase»\nДобавлено устройство Тип 5 и фиксированная переменная пустого типа\nЗависимости были обновлены",
+        "pt": "Adaptador requer nod.js >= 22 agora\nAdaptador requer admin >= 7.7.22 agora\nAdaptador requer js-controlador >= 6.0.11 agora\nAdicionando Nuki Smartlock 4.X e suporte Pro, erro \"paraLowerCase\" corrigido\nDispositivo adicionadoTipo 5 e variável tipo vazio fixo\nAs dependências foram atualizadas",
+        "nl": "Voor de adapter zijn node.js < 22 nu nodig\nAdapter vereist admin < 7.7.22 nu\nAdapter vereist js-controller < 6,0.11 nu\nHet toevoegen van Nuki Smartlock 4.X en Pro Support, \"to LowerCase\" fout vastgesteld\nToegevoegd apparaatType 5 en vaste lege type variabele\nAfhankelijkheden zijn bijgewerkt",
+        "fr": "Adaptateur nécessite node.js >= 22 maintenant\nAdaptateur nécessite admin >= 7.7.22 maintenant\nAdaptateur nécessite js-controller >= 6.0.11 maintenant\nAjout de la prise en charge Nuki Smartlock 4.X et Pro, erreur \"toLowerCase\" corrigée\nAjout de l'appareilType 5 et variable de type vide fixe\nLes dépendances ont été actualisées",
+        "it": "Adattatore richiede node.js >= 22 ora\nAdattatore richiede admin >= 7.7.22 ora\nAdattatore richiede js-controller >= 6.0.11 ora\nAggiungendo Nuki Smartlock 4.X e supporto Pro, \"toLowerCase\" errore fisso\nDispositivo AggiuntoTipo 5 e tipo vuoto fisso variabile\nLe dipendenze sono state aggiornate",
+        "es": "Adaptador requiere node.js ю= 22 ahora\nEl adaptador requiere administrador= 7.7.22 ahora\nAdaptador requiere js-controller >= 6.0.11\nAñadiendo Nuki Smartlock 4.X y Pro Support, error \"toLowerCase\" fijo\nTipo 5 y variable tipo vacío fijo\nSe han actualizado las dependencias",
+        "pl": "Adapter wymaga node.js > = 22\nAdapter wymaga admin > = 7.7.22\nAdapter wymaga sterownika js- > = 6.0.11\nDodanie błędu Nuki Smartlock 4.X i Pro Support, \"toLowerCase\"\nDodano deviceType 5 i ustawiono zmienną typu pustego\nZaktualizowano zależności",
+        "uk": "Адаптер вимагає node.js >= 22 тепер\nАдаптер вимагає адмін >= 7.7.22 тепер\nАдаптер вимагає js-controller >=6.0.11 тепер\nДодавання Nuki Smartlock 4.X і Pro Підтримка, \"toLowerCase\" виправлено помилку\nДодано пристрійТип 5 і фіксований порожній тип змінної\nЗалежність було оновлено",
+        "zh-cn": "适配器需要节点.js 现在22\n适任者需要管理员 \\ 7.7.22 现在\n适配器需要js控制器 现在6.0.11\n添加 Nuki Smartlock 4. X 和 Pro Support, “ to LowerCase” 错误固定\n添加设备 Type 5 和固定空类型变量\n依赖关系已更新"
+      },
       "2.7.0": {
         "en": "Adapter requires node.js 18 and js-controller >= 5 now\nDependencies have been updated",
         "de": "Adapter benötigt node.js 18 und js-controller >= 5 jetzt\nAbhängigkeiten wurden aktualisiert",
@@ -99,18 +112,6 @@
         "es": "Función del puente fijo\nVisualización de Admin fijo en modo oscuro",
         "pl": "Fix Bridge\nFix Admin wyświetlacz w trybie mrocznym",
         "zh-cn": "Fix Bridge功能\nFix Admin在黑暗中展示"
-      },
-      "2.6.0": {
-        "en": "Make additional refresh after callback configurable\nOptimizations and fixes",
-        "de": "Zusätzliche Aktualisierung nach Rückruf konfigurierbar machen\nOptimierungen und Korrekturen",
-        "ru": "Сделать дополнительное обновление после обратного вызова настраиваемым\nОптимизации и исправления",
-        "pt": "Tornar a atualização adicional após o retorno de chamada configurável\nOtimizações e correções",
-        "nl": "Extra verversen na terugbellen configureerbaar\nOptimalisaties en reparaties",
-        "fr": "Rendre l'actualisation supplémentaire après le rappel configurable\nOptimisations et correctifs",
-        "it": "Rendi configurabile un aggiornamento aggiuntivo dopo la richiamata\nOttimizzazioni e correzioni",
-        "es": "Hacer una actualización adicional después de la devolución de llamada configurable\nOptimizaciones y arreglos",
-        "pl": "Dokonaj dodatkowego odświeżenia po skonfigurowaniu wywołania zwrotnego\nOptymalizacje i poprawki",
-        "zh-cn": "可配置回调后进行额外刷新\n优化和修复"
       }
     },
     "authors": [
