@@ -14,10 +14,12 @@ export default [
             '*.config.mjs',
             'build',
             'dist',
-            'admin/build', 
+            'admin/build',
+            'admin/admin.js',
             'admin/words.js',
             'admin/admin.d.ts',
             'admin/blockly.js',
+            'www/**/*.js',
             '**/adapter-config.d.ts',
         ],
     },
@@ -30,6 +32,10 @@ export default [
             // 'jsdoc/require-param-description': 'off',
             // 'jsdoc/require-returns-description': 'off',
             // 'jsdoc/require-returns-check': 'off',
+            // legacy code style in existing adapter sources, keep enabled in new code where feasible
+            'brace-style': 'off',
+            // existing JSDoc blocks are intentionally empty in multiple legacy modules
+            'jsdoc/no-blank-blocks': 'off',
         },
     },
 ];

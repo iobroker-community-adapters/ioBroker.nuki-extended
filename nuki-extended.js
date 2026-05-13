@@ -27,7 +27,7 @@ const MAX_RETRY_ACTIONS = 3;
 let adapter;
 let library;
 let unloaded;
-let refreshCycleWebApi, refreshCycleBridgeApi;
+let refreshCycleBridgeApi;
 
 let setup = [];
 let BRIDGES = {};
@@ -108,7 +108,7 @@ function startAdapter(options) {
             }
 
             callback();
-        } catch (err) {
+        } catch {
             callback();
         }
     });
@@ -161,9 +161,7 @@ function startAdapter(options) {
                     })
                     .catch(err => adapter.log.debug(`Error removing callback (${err.message})!`));
             } else {
-                adapter.log.warn(
-                    `Error deleting callback with URL ${url}: ${err ? err.message : 'No Callback ID given!'}`,
-                );
+                adapter.log.warn(`Error deleting callback with URL ${url}: callback entry could not be resolved.`);
             }
         }
 
@@ -334,7 +332,7 @@ function initNukiAPIs() {
     setup.push('bridge_api');
 
     // go through bridges
-    listener = adapter.config.bridges.map((device, i) => {
+    listener = adapter.config.bridges.map(device => {
         // check if API settings are set
         if (!device.bridge_name || !device.bridge_ip || !device.bridge_token) {
             adapter.log.warn(
@@ -422,7 +420,9 @@ function initNukiAPIs() {
                             }, adapter.config.additionalWebApiTimeout * 1000);
                         }
                     } else {
-                        adapter.log.warn(`main(): ${e.message}`);
+                        adapter.log.warn(
+                            `main(): Unable to process callback request payload (${JSON.stringify(req && req.body)}).`,
+                        );
                         res.sendStatus(500);
                         res.end();
                     }
