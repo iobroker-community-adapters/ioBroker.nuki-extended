@@ -1,4 +1,12 @@
 # Older changes
+## 2.6.3 (2022-06-13)
+* (theimo1221) Fix Web Api SetAction Call
+
+[Older changelogs can be found there](CHANGELOG_OLD.md)## Credits
+Thanks to [@Mik13](https://github.com/Mik13) for the [Nuki Bridge API implementation](https://github.com/Mik13/nuki-bridge-api#nuki-bridge-api).
+
+Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a> ([Essential Set](https://www.flaticon.com/packs/essential-set-2)) and <a href="https://www.freepik.com/" title="Freepik">Freepik</a> ([Doors](https://www.flaticon.com/packs/doors)) from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
+
 ## 2.6.2 (2022-06-13)
 * (theimo1221) Fix Web Api Polling
 
