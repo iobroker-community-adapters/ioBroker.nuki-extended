@@ -1,4 +1,7 @@
 # Older changes
+## 2.6.4 (2022-06-16)
+* (Apollon77) Fix some crash cases reported by Sentry
+
 ## 2.6.3 (2022-06-13)
 * (theimo1221) Fix Web Api SetAction Call
 

@@ -505,7 +505,7 @@ Please see [release page](https://github.com/Zefau/ioBroker.nuki-extended/releas
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 2.8.2 (2026-05-14)
 - (mcm1957) Missing translations have been added.
 - (mcm1957) Dependencies have been updated
 
@@ -526,9 +526,6 @@ Please see [release page](https://github.com/Zefau/ioBroker.nuki-extended/releas
 * (mcm1957) Dependencies have been updated
 
 ### 2.6.5 (2022-06-17)
-* (Apollon77) Fix some crash cases reported by Sentry
-
-### 2.6.4 (2022-06-16)
 * (Apollon77) Fix some crash cases reported by Sentry
 
 ## License

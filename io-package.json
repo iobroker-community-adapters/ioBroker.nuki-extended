@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "nuki-extended",
-    "version": "2.8.1",
+    "version": "2.8.2",
     "titleLang": {
       "en": "Nuki Smartlock & Opener",
       "de": "Nuki Smartlock & Opener",
@@ -29,6 +29,19 @@
       "uk": "Контролюйте та контролюйте свої Nuki Smartlock і Nuki Opener за допомогою ioBroker"
     },
     "news": {
+      "2.8.2": {
+        "en": "Missing translations have been added.\nDependencies have been updated",
+        "de": "Fehlende Übersetzungen wurden hinzugefügt.\nAbhängigkeiten wurden aktualisiert",
+        "ru": "Были добавлены недостающие переводы.\nЗависимости были обновлены",
+        "pt": "As traduções em falta foram adicionadas.\nAs dependências foram atualizadas",
+        "nl": "Er zijn ontbrekende vertalingen toegevoegd.\nAfhankelijkheden zijn bijgewerkt",
+        "fr": "Des traductions manquantes ont été ajoutées.\nLes dépendances ont été actualisées",
+        "it": "Sono state aggiunte traduzioni scomparse.\nLe dipendenze sono state aggiornate",
+        "es": "Se han añadido traducciones perdidas.\nSe han actualizado las dependencias",
+        "pl": "Dodano brakujące tłumaczenia.\nZaktualizowano zależności",
+        "uk": "Додані переклади.\nЗалежність було оновлено",
+        "zh-cn": "增加了缺少的译文.\n依赖关系已更新"
+      },
       "2.8.1": {
         "en": "Migrated linting setup to ESLint 9 with the shared `@iobroker/eslint-config`.\nResolved ESLint error findings in adapter core files and aligned linting ignores for legacy frontend scripts.",
         "de": "Migrated linting setup to ESLint 9 mit dem gemeinsamen `@iobroker/eslint-config`.\nResolved ESLint Fehlerbefunde in Adapter-Kerndateien und ausgerichtete Linting ignoriert für ältere Frontend-Skripte.",
@@ -106,19 +119,6 @@
         "pl": "Strona internetowa Api SetA (ang.)",
         "zh-cn": "Fix网站Api SetAction呼吁",
         "uk": "Виправити виклик SetAction Web Api"
-      },
-      "2.6.2": {
-        "en": "Fix Web Api Polling",
-        "de": "Web Api Polling",
-        "ru": "Fix Веб Апи Поллинг",
-        "pt": "Fix Web Api Polling",
-        "nl": "Fix Web Api Pol",
-        "fr": "Fix Web Api Polling",
-        "it": "Fissare Web Api Polling",
-        "es": "Fijar encuestas Web Api",
-        "pl": "Strona internetowa Api Poll",
-        "zh-cn": "Fix网站Api Polling",
-        "uk": "Виправити опитування Web Api"
       }
     },
     "authors": [
