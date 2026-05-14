@@ -12,7 +12,8 @@
       "it": "Nuki Smartlock & Opener",
       "es": "Nuki Smartlock & Opener",
       "pl": "Nuki Smartlock & Opener",
-      "zh-cn": "Nuki Smartlock & Opener"
+      "zh-cn": "Nuki Smartlock & Opener",
+      "uk": "Nuki Smartlock & Opener"
     },
     "desc": {
       "en": "Control and monitor your Nuki Smartlock and Nuki Opener with ioBroker",
@@ -24,7 +25,8 @@
       "it": "Controllo e monitoraggio del Nuki Smartlock e Nuki Lettore con ioBroker",
       "es": "Control y monitoreo de su Nuki Smartlock y Nuki Abridor con ioBroker",
       "pl": "Kontrola i monitorowanie twojego Smartlock Нуки i Нуки otwieracz do butelek z ioBroker",
-      "zh-cn": "控制和监视你的Nuki Smartlock和Nuki开与ioBroker"
+      "zh-cn": "控制和监视你的Nuki Smartlock和Nuki开与ioBroker",
+      "uk": "Контролюйте та контролюйте свої Nuki Smartlock і Nuki Opener за допомогою ioBroker"
     },
     "news": {
       "2.8.1": {
@@ -76,7 +78,8 @@
         "it": "Fissa alcuni casi di crash segnalati da Sentry",
         "es": "Arreglar algunos casos de accidentes reportados por Sentry",
         "pl": "Fix niektóre przypadki katastrofy odnotowane przez Sentry'a",
-        "zh-cn": "九例Sentry报告的一些事故"
+        "zh-cn": "九例Sentry报告的一些事故",
+        "uk": "Виправте деякі випадки збоїв, про які повідомляє Sentry"
       },
       "2.6.4": {
         "en": "Fix some crash cases reported by Sentry",
@@ -88,7 +91,8 @@
         "it": "Fissa alcuni casi di crash segnalati da Sentry",
         "es": "Arreglar algunos casos de accidentes reportados por Sentry",
         "pl": "Fix niektóre przypadki katastrofy odnotowane przez Sentry'a",
-        "zh-cn": "九例Sentry报告的一些事故"
+        "zh-cn": "九例Sentry报告的一些事故",
+        "uk": "Виправте деякі випадки збоїв, про які повідомляє Sentry"
       },
       "2.6.3": {
         "en": "Fix Web Api SetAction Call",
@@ -100,7 +104,8 @@
         "it": "Fissare Web Api SetAction Call",
         "es": "Corregir Web Api SetAction Call",
         "pl": "Strona internetowa Api SetA (ang.)",
-        "zh-cn": "Fix网站Api SetAction呼吁"
+        "zh-cn": "Fix网站Api SetAction呼吁",
+        "uk": "Виправити виклик SetAction Web Api"
       },
       "2.6.2": {
         "en": "Fix Web Api Polling",
@@ -112,7 +117,8 @@
         "it": "Fissare Web Api Polling",
         "es": "Fijar encuestas Web Api",
         "pl": "Strona internetowa Api Poll",
-        "zh-cn": "Fix网站Api Polling"
+        "zh-cn": "Fix网站Api Polling",
+        "uk": "Виправити опитування Web Api"
       }
     },
     "authors": [
