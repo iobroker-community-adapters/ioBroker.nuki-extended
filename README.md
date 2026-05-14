@@ -530,7 +530,7 @@ Please see [release page](https://github.com/Zefau/ioBroker.nuki-extended/releas
 ## License
 The MIT License (MIT)
 
-Copyright (c) 2024-2026 iobroker-community-adapters <iobroker-community-adapters@gmx.de>
+Copyright (c) 2024-2026 iobroker-community-adapters <iobroker-community-adapters@gmx.de>  
 Copyright (c) 2019-2022 Zefau <zefau@mailbox.org>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
