@@ -505,6 +505,10 @@ Please see [release page](https://github.com/Zefau/ioBroker.nuki-extended/releas
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+- (mcm1957) Missing translations have been added.
+- (mcm1957) Dependencies have been updated
+
 ### 2.8.1 (2026-05-13)
 - (copilot) Migrated linting setup to ESLint 9 with the shared `@iobroker/eslint-config`.
 - (copilot) Resolved ESLint error findings in adapter core files and aligned linting ignores for legacy frontend scripts.
