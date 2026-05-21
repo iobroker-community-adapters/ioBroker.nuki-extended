@@ -30,7 +30,7 @@
     "@iobroker/eslint-config": "^2.3.4",
     "@iobroker/testing": "^5.2.2",
     "@tsconfig/node14": "^14.1.8",
-    "@types/node": "^20.14.9",
+    "@types/node": "^22.19.19",
     "typescript": "~5.7.2"
   },
   "homepage": "https://github.com/iobroker-community-adapters/ioBroker.nuki-extended",
