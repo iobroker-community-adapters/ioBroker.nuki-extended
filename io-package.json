@@ -142,7 +142,6 @@
     "readme": "https://github.com/iobroker-community-adapters/ioBroker.nuki-extended/blob/master/README.md",
     "loglevel": "info",
     "type": "hardware",
-    "materialize": true,
     "compact": true,
     "enabled": true,
     "dependencies": [
@@ -170,6 +169,9 @@
       "sentry": {
         "dsn": "https://a6ad1250ae2d4f95bade8638024aa984@sentry.iobroker.net/198"
       }
+    },
+    "adminUI": {
+      "config": "materialize"
     }
   },
   "native": {
